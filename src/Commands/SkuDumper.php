@@ -35,6 +35,6 @@ class SkuDumper extends ContainerAwareCommand
                 $this->files->append($file, $skus);
             });
 
-        $output->writeln("Dumped all skus to file:\n$file\nExecution time: " . (microtime(true) - $start));
+        $output->writeln("Dumped all skus (if any) to file:\n$file\nExecution time: " . (microtime(true) - $start));
     }
 }
