@@ -3,14 +3,16 @@
 namespace Profounder\Commands;
 
 use Profounder\ContainerAwareCommand;
+use Psr\Http\Message\MessageInterface;
+use Profounder\Exceptions\InvalidSession;
 use GuzzleHttp\Exception\RequestException;
+use Profounder\Exceptions\InvalidQueryResponse;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Query extends ContainerAwareCommand
 {
-
     protected function configure()
     {
         $this
@@ -40,17 +42,10 @@ class Query extends ContainerAwareCommand
         $order   = $input->getOption('order');
         $range   = $input->getOption('date');
         $session = $this->identityPool->retrieve(intval($id - 1));
-        $date    = date('md,His');
-        $logfile = storage_path("$id--o$offset-c$chunk-l$loop-$date.log");
         $count   = 0;
         $bench   = ['exec' => [microtime(true)]];
 
-        if (empty($session)) {
-            $output->writeln('Could not receive a session! What the fuck man!?');
-            exit;
-        }
-
-        $output->writeln("Acting as {$session['username']}...");
+        $output->writeln("Acting as {$session->username}...");
 
         for ($i = 1; $i <= $loop; $i++) {
             $output->writeln("Loop #$i; offset: $offset, chunk: $chunk");
@@ -60,7 +55,7 @@ class Query extends ContainerAwareCommand
                 $response = $this->http->post('http://www.profound.com/home/FilterSearchResults', [
                     'headers'     => [
                         'Content-Type'     => 'application/x-www-form-urlencoded; charset=UTF-8',
-                        'Cookie'           => $session['cookies'],
+                        'Cookie'           => $session->cookies,
                         'Referer'          => 'http://www.profound.com/home/search',
                         'User-Agent'       => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36',
                         'X-Requested-With' => 'XMLHttpRequest',
@@ -80,43 +75,15 @@ class Query extends ContainerAwareCommand
 
                 $count++;
 
-                $exitCode = 0;
-                $responseBody = (string) $response->getBody();
-                $json = json_decode($responseBody, true);
-
-                if (is_null($json)) {
-                    $output->writeln('Retrieved invalid JSON response.');
-                    $exitCode = 1;
-                }
-
-                if ($json['UserIsLoggedOut']) {
-                    $output->writeln("Session ({$session['username']}) has been expired! exiting...");
-                    $exitCode = -1;
-                }
-
-                if (! empty($json['ErrorMessage'])) {
-                    $output->writeln('Encountered remote error: ' . $json['ErrorMessage']);
-                    $exitCode = 2;
-                }
-
-                if (strpos($responseBody, 'web server encountered a critical error')) {
-                    $output->writeln('Remote webserver hiccup! critical what the fuck! You may need to restart me with a new session.');
-                    $exitCode = 3;
-                }
-
-                if ($exitCode) {
-                    $this->files->put($logfile, $responseBody);
-                    $this->log->error("Errrr: $logfile");
-                    exit($exitCode);
-                }
+                $json = $this->parseAndValidateJsonResopnse($response);
 
                 if (is_null($json['Results'])) {
-                    $output->writeln('No [more] results found, skipping...');
+                    $output->writeln('No results found, skipping...');
                     continue;
                 }
 
                 $resultCount = count($json['Results']);
-                $output->writeln("Found $resultCount article results...");
+                $output->writeln("Found <info>$resultCount</> article results...");
 
                 $bench["db#$i"] = [microtime(true)];
                 foreach ($json['Results'] as $article) {
@@ -150,5 +117,66 @@ class Query extends ContainerAwareCommand
         foreach ($bench as $key => $timestamps) {
             $output->writeln("Time of $key: " . ($timestamps[1] - $timestamps[0]));
         }
+    }
+
+    /**
+     * Parses and validates a Guzzle response.
+     *
+     * @param  MessageInterface $response
+     *
+     * @return array
+     */
+    private function parseAndValidateJsonResopnse(MessageInterface $response)
+    {
+        $this->validateJsonResponse($json = $this->parseJsonResopnse($response));
+
+        return $json;
+    }
+
+    /**
+     * Parses a Guzzle response into an array.
+     *
+     * @param  MessageInterface $response
+     *
+     * @return array
+     *
+     * @throws InvalidQueryResponse
+     */
+    private function parseJsonResopnse(MessageInterface $response)
+    {
+        $content = (string) $response->getBody();
+        if (strpos($content, 'web server encountered a critical error')) {
+            throw new InvalidQueryResponse('Remote webserver critical hiccup! damn.');
+        }
+
+        $json = json_decode($content, true);
+        if (is_null($json)) {
+            throw new InvalidQueryResponse('Retrieved invalid JSON response.');
+        }
+
+        return $json;
+    }
+
+    /**
+     * Validates a JSON-decoded response array.
+     *
+     * @param  array $response
+     *
+     * @return bool
+     *
+     * @throws InvalidSession
+     * @throws InvalidQueryResponse
+     */
+    private function validateJsonResponse(array $response)
+    {
+        if ($response['UserIsLoggedOut']) {
+            throw new InvalidSession('Current session has been expired! you need to feed me some new sessions.');
+        }
+
+        if (! empty($response['ErrorMessage'])) {
+            throw new InvalidQueryResponse("Remote error: {$response['ErrorMessage']}");
+        }
+
+        return true;
     }
 }
