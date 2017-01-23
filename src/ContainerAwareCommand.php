@@ -4,6 +4,13 @@ namespace App;
 
 use Illuminate\Contracts\Container\Container;
 
+/**
+ * @property \Illuminate\Log\Writer $log
+ * @property \Illuminate\Config\Repository $config
+ * @property \Illuminate\Events\Dispatcher $events
+ * @property \Illuminate\Filesystem\Filesystem $files
+ * @property \Illuminate\Database\Capsule\Manager $db
+ */
 abstract class ContainerAwareCommand extends Command
 {
     /**
