@@ -42,4 +42,14 @@ $container->singleton('db', function ($container) use ($config) {
     return $capsule;
 });
 
+$container->bind('http', function ($container) {
+    return new GuzzleHttp\Client();
+});
+
+$container->singleton('sessionPool', function () {
+    return new App\Services\SessionPool;
+});
+
+$container->singleton('Illuminate\Contracts\Debug\ExceptionHandler', 'App\Exceptions\Handler');
+
 return $container;
