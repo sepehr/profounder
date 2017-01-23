@@ -42,7 +42,8 @@ class Query extends ContainerAwareCommand
         $order   = $input->getOption('order');
         $range   = $input->getOption('date');
         $session = $this->identityPool->retrieve(intval($id - 1));
-        $count   = 0;
+
+        $requestCount = $insertCount = 0;
 
         $output->writeln("Acting as {$session->username}...");
         $this->watch->start('execution');
@@ -51,8 +52,9 @@ class Query extends ContainerAwareCommand
             $output->writeln("Loop#$i; offset: $offset; chunk: $chunk");
 
             try {
-                $this->watch->start("request#$i");
+                $this->watch->start("req#$i");
 
+                $requestCount++;
                 $response = $this->http->post('http://www.profound.com/home/FilterSearchResults', [
                     'headers'     => [
                         'Content-Type'     => 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -73,9 +75,7 @@ class Query extends ContainerAwareCommand
                     //'sink' => storage_path('sink.txt'),
                 ]);
 
-                $output->writeln("Request#$i time: {$this->watch->stop("request#$i")->getDuration()}ms");
-
-                $count++;
+                $output->writeln("Request#$i time: {$this->watch->stop("req#$i")->getDuration()}ms");
 
                 $json = $this->parseAndValidateJsonResopnse($response);
 
@@ -87,24 +87,18 @@ class Query extends ContainerAwareCommand
                 $resultCount = count($json['Results']);
                 $output->writeln("Found <info>$resultCount</> article results...");
 
-                $this->watch->start("database#$i");
-
+                $loopInserts = 0;
+                $this->watch->start("db#$i");
                 foreach ($json['Results'] as $article) {
-                    $this->db->table('articles')->updateOrInsert(
-                        ['internal_id' => $article['InternalId']],
-                        [
-                            'internal_id' => $article['InternalId'],
-                            'content_id'  => $article['ContentId'],
-                            'title'       => $article['Title'],
-                            'date'        => date('Y-m-d H:i:s', strtotime($article['DocDateTime'])),
-                            'publisher'   => $article['Publisher'],
-                            'sku'         => $article['Sku'],
-                            'price'       => intval(preg_replace('/([^0-9\\.])/i', '', $article['Price']) * 100),
-                        ]
-                    );
+                    if ($this->insertIfNotExists($article)) {
+                        $loopInserts++;
+                        $insertCount++;
+                    }
                 }
 
-                $output->writeln("Database#$i time: {$this->watch->stop("database#$i")->getDuration()}ms");
+                $output->writeln(
+                    "Database#$i: <info>$loopInserts</> new entries in {$this->watch->stop("db#$i")->getDuration()}ms"
+                );
 
                 $offset += $chunk;
             } catch (RequestException $e) {
@@ -114,7 +108,7 @@ class Query extends ContainerAwareCommand
         } // for
 
         $output->writeln(
-            "Performed a total of <info>$count</> requests, gathering a max of " . $chunk * $loop . "articles."
+            "Performed a total of <info>$requestCount</> requests, gathering a max of " . $chunk * $loop . "articles."
         );
         $output->writeln("Total execution time: <info>{$this->watch->stop('execution')->getDuration()}</>ms");
     }
@@ -178,5 +172,29 @@ class Query extends ContainerAwareCommand
         }
 
         return true;
+    }
+
+    /**
+     * Inserts a new article record into the database if necessary.
+     *
+     * @param  array $article
+     *
+     * @return bool
+     */
+    private function insertIfNotExists(array $article)
+    {
+        if ($this->db->table('articles')->where(['internal_id' => $article['InternalId']])->exists()) {
+            return false;
+        }
+
+        return $this->db->table('articles')->insert([
+            'internal_id' => $article['InternalId'],
+            'content_id'  => $article['ContentId'],
+            'title'       => $article['Title'],
+            'date'        => date('Y-m-d H:i:s', strtotime($article['DocDateTime'])),
+            'publisher'   => $article['Publisher'],
+            'sku'         => $article['Sku'],
+            'price'       => intval(preg_replace('/([^0-9\\.])/i', '', $article['Price']) * 100),
+        ]);
     }
 }
