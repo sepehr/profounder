@@ -50,10 +50,7 @@ class Seeker extends ContainerAwareCommand
 
             $output->writeln("\n>> Running profounder command with --date={$commandInput['--date']}");
 
-            if ($command->run(new ArrayInput($commandInput), $output) === -1) {
-                $output->writeln("\n>> Session expired, halting...");
-                exit(-1);
-            }
+            $command->run(new ArrayInput($commandInput), $output);
 
             $periods++;
         }
