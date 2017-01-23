@@ -12,7 +12,7 @@ class SkuDumper extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('profounder:sku')
+            ->setName('profounder:dump')
             ->setDescription('Dump article SKUs from database to file.')
             ->addArgument('file', InputArgument::REQUIRED, 'File path to dump to.');
     }
