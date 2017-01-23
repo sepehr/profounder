@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder\Commands\Profounder;
+namespace Profounder\Commands;
 
 use Profounder\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;

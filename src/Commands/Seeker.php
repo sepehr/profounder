@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder\Commands\Profounder;
+namespace Profounder\Commands;
 
 use Carbon\Carbon;
 use Profounder\ContainerAwareCommand;

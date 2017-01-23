@@ -24,9 +24,9 @@ return [
 
     'commands' => [
         'container-aware' => [
-            Profounder\Commands\Profounder\Seeker::class,
-            Profounder\Commands\Profounder\SkuDumper::class,
-            Profounder\Commands\Profounder\Query::class,
+            Profounder\Commands\Query::class,
+            Profounder\Commands\Seeker::class,
+            Profounder\Commands\SkuDumper::class,
         ],
     ],
 
