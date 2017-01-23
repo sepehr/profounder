@@ -57,6 +57,7 @@ class Seeker extends ContainerAwareCommand
 
         $periods = 0;
         $period  = $input->getOption('period');
+        $watch   = $this->watch->start('seek');
 
         while ($next->lessThan($end)) {
             $commandInput['--date'] = "$next," . $next = $next->addDays($period);
@@ -68,6 +69,8 @@ class Seeker extends ContainerAwareCommand
             $periods++;
         }
 
-        $output->writeln("\nDone! Ran through $periods $period-days periods from $start to $end.");
+        $output->writeln(
+            "\nDone! Ran through $periods $period-days periods from $start to $end in {$watch->getDuration()}ms."
+        );
     }
 }

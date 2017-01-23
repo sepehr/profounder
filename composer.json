@@ -14,7 +14,8 @@
         "illuminate/container": "^5.3",
         "vlucas/phpdotenv": "^2.4",
         "illuminate/config": "^5.3",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "symfony/stopwatch": "^3.2"
     },
     "autoload": {
         "psr-4": {

@@ -3,9 +3,9 @@
 namespace Profounder\Commands;
 
 use Profounder\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Dumper extends ContainerAwareCommand
@@ -36,14 +36,15 @@ class Dumper extends ContainerAwareCommand
 
         $output->writeln("Dumping $count records to the file... It takes a few minutes...");
 
-        $start = microtime(true);
         $file  = $input->getArgument('file');
+        $watch = $this->watch->start('dump');
 
         $input->getOption('sku')
             ? $this->dumpSkus($file)
             : $this->dumpCsv($file);
 
-        $output->writeln("Dumped to file:\n$file\nExecution time: " . (microtime(true) - $start));
+        $output->writeln("Dumped to file: $file");
+        $output->writeln("Execution time: {$watch->getDuration()}ms");
     }
 
     /**

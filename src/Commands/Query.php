@@ -43,15 +43,16 @@ class Query extends ContainerAwareCommand
         $range   = $input->getOption('date');
         $session = $this->identityPool->retrieve(intval($id - 1));
         $count   = 0;
-        $bench   = ['exec' => [microtime(true)]];
 
         $output->writeln("Acting as {$session->username}...");
+        $this->watch->start('execution');
 
         for ($i = 1; $i <= $loop; $i++) {
-            $output->writeln("Loop #$i; offset: $offset, chunk: $chunk");
+            $output->writeln("Loop#$i; offset: $offset; chunk: $chunk");
 
             try {
-                $bench["req#$i"] = [microtime(true)];
+                $this->watch->start("request#$i");
+
                 $response = $this->http->post('http://www.profound.com/home/FilterSearchResults', [
                     'headers'     => [
                         'Content-Type'     => 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -71,7 +72,8 @@ class Query extends ContainerAwareCommand
                     ],
                     //'sink' => storage_path('sink.txt'),
                 ]);
-                $bench["req#$i"][] = microtime(true);
+
+                $output->writeln("Request#$i time: {$this->watch->stop("request#$i")->getDuration()}ms");
 
                 $count++;
 
@@ -85,7 +87,8 @@ class Query extends ContainerAwareCommand
                 $resultCount = count($json['Results']);
                 $output->writeln("Found <info>$resultCount</> article results...");
 
-                $bench["db#$i"] = [microtime(true)];
+                $this->watch->start("database#$i");
+
                 foreach ($json['Results'] as $article) {
                     $this->db->table('articles')->updateOrInsert(
                         ['internal_id' => $article['InternalId']],
@@ -100,7 +103,8 @@ class Query extends ContainerAwareCommand
                         ]
                     );
                 }
-                $bench["db#$i"][] = microtime(true);
+
+                $output->writeln("Database#$i time: {$this->watch->stop("database#$i")->getDuration()}ms");
 
                 $offset += $chunk;
             } catch (RequestException $e) {
@@ -109,14 +113,10 @@ class Query extends ContainerAwareCommand
             }
         } // for
 
-        $total = $chunk * $loop;
-        $bench['exec'][] = microtime(true);
-
-        $output->writeln("Performed a total of $count requests, gathering a max of $total articles.");
-
-        foreach ($bench as $key => $timestamps) {
-            $output->writeln("Time of $key: " . ($timestamps[1] - $timestamps[0]));
-        }
+        $output->writeln(
+            "Performed a total of <info>$count</> requests, gathering a max of " . $chunk * $loop . "articles."
+        );
+        $output->writeln("Total execution time: <info>{$this->watch->stop('execution')->getDuration()}</>ms");
     }
 
     /**
