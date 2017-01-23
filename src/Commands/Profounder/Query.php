@@ -8,22 +8,21 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Profounder extends ContainerAwareCommand
+class Query extends ContainerAwareCommand
 {
 
     protected function configure()
     {
         $this
-            ->setName('profounder')
-            ->setDescription('Dispatches a motherfuckin request to profound.com.')
+            ->setName('profounder:query')
+            ->setDescription('Dispatches a query tp profound.com endpoint and stores the results.')
             ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'Starting offset.', 0)
             ->addOption('chunk', 'c', InputOption::VALUE_OPTIONAL, 'Chunk size.', 5)
             // Accepted: docdatetime, price, mrdclongfalloffextrafresh
             ->addOption('sort', 's', InputOption::VALUE_OPTIONAL, 'Sort by field.', 'docdatetime')
             // Accepted: desc, asc
             ->addOption('order', 'r', InputOption::VALUE_OPTIONAL, 'Sort order.', 'desc')
-            // Format: yyyy-mm-dd,yyyy-mm-dd
-            // MAX is also allowed.
+            // Format: yyyy-mm-dd,yyyy-mm-dd|MAX
             ->addOption('date', 'd', InputOption::VALUE_OPTIONAL, 'Comma separated date range.')
             ->addOption('loop', 'l', InputOption::VALUE_OPTIONAL, 'Loop count.', 1)
             ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Process ID.', 1);

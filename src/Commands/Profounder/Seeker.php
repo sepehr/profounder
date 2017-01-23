@@ -11,6 +11,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Seeker extends ContainerAwareCommand
 {
+
+    private $queryCommandName = 'profounder:query';
+
     protected function configure()
     {
         $this
@@ -26,13 +29,13 @@ class Seeker extends ContainerAwareCommand
     {
         Carbon::setToStringFormat('Y-m-d');
 
-        $command = $this->getApplication()->find('profounder');
+        $command = $this->getApplication()->find($this->queryCommandName);
         $period  = $input->getOption('period');
         $start   = $next = new Carbon($input->getOption('start'));
         $end     = new Carbon($input->getOption('end'));
 
         $commandInput = [
-            'command'  => 'profounder',
+            'command'  => $this->queryCommandName,
             '--id'     => 3,
             '--offset' => 0,
             '--chunk'  => 4019,
