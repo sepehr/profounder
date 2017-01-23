@@ -11,3 +11,7 @@ class Handler
         print $exception->getMessage();
     }
 }
+//$this->log->error($e->getMessage());
+//$this->files->put($logfile, $responseBody);
+//
+//throw $e;

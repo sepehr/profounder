@@ -2,6 +2,8 @@
 
 namespace Profounder\Services;
 
+use Profounder\Exceptions\InvalidSession;
+
 class IdentityPool
 {
     private $pool = [
@@ -30,14 +32,14 @@ class IdentityPool
     public function retrieve(int $id)
     {
         if (isset($this->pool[$id])) {
-            return $this->pool[$id];
+            return (object) $this->pool[$id];
         }
 
-        throw new \Exception('Out of sessions, motherfucker!');
+        throw new InvalidSession('Out of identity sessions. Add more sessions or reduce workers.');
     }
 
     public function random()
     {
-        return $this->pool[array_rand($this->pool)];
+        return (object) $this->pool[array_rand($this->pool)];
     }
 }
