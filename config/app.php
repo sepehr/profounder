@@ -2,10 +2,6 @@
 
 return [
 
-    // Example welcome command's config item;
-    // Feel free to remove this config item alongside its command.
-    'example.config.item' => 'shiva',
-
     /*
     |--------------------------------------------------------------------------
     | Application
@@ -13,11 +9,11 @@ return [
     | CLI app name, version, debug mode, timezone, environment, etc.
     */
 
-    'name'     => env('APP_NAME', 'Illuminate CLI App'),
+    'name'     => env('APP_NAME', 'Profounder'),
     'version'  => env('APP_VERSION', '0.0.1'),
     'env'      => env('APP_ENV', 'production'),
     'debug'    => env('APP_DEBUG', false),
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => env('APP_TIMEZONE', 'Asia/Tehran'),
 
     /*
     |--------------------------------------------------------------------------
@@ -28,13 +24,9 @@ return [
 
     'commands' => [
         'container-aware' => [
-            // Example welcome command;
-            // Feel free to remove this as well as the `src/Commands/Example/` directory.
-            App\Commands\Example\Welcome::class,
-        ],
-
-        'non-container-aware' => [
-            //
+            App\Commands\Profounder\Seeker::class,
+            App\Commands\Profounder\SkuDumper::class,
+            App\Commands\Profounder\Profounder::class,
         ],
     ],
 
