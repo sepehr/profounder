@@ -2,7 +2,7 @@
 
 namespace Profounder\Services;
 
-class SessionPool
+class IdentityPool
 {
     private $pool = [
         [

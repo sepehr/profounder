@@ -46,8 +46,8 @@ $container->bind('http', function ($container) {
     return new GuzzleHttp\Client();
 });
 
-$container->singleton('sessionPool', function () {
-    return new Profounder\Services\SessionPool;
+$container->singleton('identityPool', function () {
+    return new Profounder\Services\IdentityPool;
 });
 
 $container->singleton('Illuminate\Contracts\Debug\ExceptionHandler', 'Profounder\Exceptions\Handler');

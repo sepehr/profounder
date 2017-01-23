@@ -4,8 +4,8 @@ namespace Profounder\Commands;
 
 use Profounder\ContainerAwareCommand;
 use GuzzleHttp\Exception\RequestException;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Query extends ContainerAwareCommand
@@ -39,7 +39,7 @@ class Query extends ContainerAwareCommand
         $sort    = $input->getOption('sort');
         $order   = $input->getOption('order');
         $range   = $input->getOption('date');
-        $session = $this->sessionPool->retrieve(intval($id - 1));
+        $session = $this->identityPool->retrieve(intval($id - 1));
         $date    = date('md,His');
         $logfile = storage_path("$id--o$offset-c$chunk-l$loop-$date.log");
         $count   = 0;
