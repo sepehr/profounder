@@ -27,6 +27,8 @@ class Dumper extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->outputFiglet($output);
+
         if (! $count = $this->db->table('articles')->count()) {
             $output->writeln('No results in the database.');
             exit(1);

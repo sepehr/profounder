@@ -37,6 +37,8 @@ class Seeker extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->outputFiglet($output);
+
         Carbon::setToStringFormat('Y-m-d');
 
         $command = $this->getApplication()->find($this->queryCommandName);
