@@ -11,9 +11,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Seeker extends ContainerAwareCommand
 {
-
+    /**
+     * Query command name.
+     *
+     * @var string
+     */
     private $queryCommandName = 'profounder:query';
 
+    /**
+     * @inheritdoc
+     */
     protected function configure()
     {
         $this
@@ -25,12 +32,14 @@ class Seeker extends ContainerAwareCommand
             ->addOption('order', 'r', InputOption::VALUE_OPTIONAL, 'Date sort order.', 'desc');
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         Carbon::setToStringFormat('Y-m-d');
 
         $command = $this->getApplication()->find($this->queryCommandName);
-        $period  = $input->getOption('period');
         $start   = $next = new Carbon($input->getOption('start'));
         $end     = new Carbon($input->getOption('end'));
 
@@ -45,6 +54,8 @@ class Seeker extends ContainerAwareCommand
         ];
 
         $periods = 0;
+        $period  = $input->getOption('period');
+
         while ($next->lessThan($end)) {
             $commandInput['--date'] = "$next," . $next = $next->addDays($period);
 

@@ -10,6 +10,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Dumper extends ContainerAwareCommand
 {
+    /**
+     * @inheritdoc
+     */
     protected function configure()
     {
         $this
@@ -19,6 +22,9 @@ class Dumper extends ContainerAwareCommand
             ->addArgument('file', InputArgument::REQUIRED, 'File path to dump to.');
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (! $count = $this->db->table('articles')->count()) {
@@ -38,6 +44,13 @@ class Dumper extends ContainerAwareCommand
         $output->writeln("Dumped to file:\n$file\nExecution time: " . (microtime(true) - $start));
     }
 
+    /**
+     * Dumps article SKUs to file.
+     *
+     * @param  string $file File path to dump to.
+     *
+     * @return void
+     */
     private function dumpSkus($file)
     {
         $this->files->put($file, '');
@@ -54,6 +67,13 @@ class Dumper extends ContainerAwareCommand
             });
     }
 
+    /**
+     * Dumps articles to CSV file.
+     *
+     * @param  string $file File path to dump to.
+     *
+     * @return void
+     */
     private function dumpCsv($file)
     {
         $this->files->put($file, 'ContentID,Title,Date,Price,Publisher,SKU' . PHP_EOL);

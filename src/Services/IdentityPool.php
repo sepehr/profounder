@@ -6,6 +6,11 @@ use Profounder\Exceptions\InvalidSession;
 
 class IdentityPool
 {
+    /**
+     * Sessions array of username, password and cookies.
+     *
+     * @var array
+     */
     private $pool = [
         [
             'username' => 'tgvnlvbbbdthcibtrtdergtekdice@dispostable.com',
@@ -29,6 +34,15 @@ class IdentityPool
         ],
     ];
 
+    /**
+     * Returns a session object by ID.
+     *
+     * @param  int $id
+     *
+     * @return object
+     *
+     * @throws InvalidSession
+     */
     public function retrieve(int $id)
     {
         if (isset($this->pool[$id])) {
@@ -38,8 +52,13 @@ class IdentityPool
         throw new InvalidSession('Out of identity sessions. Add more sessions or reduce workers.');
     }
 
+    /**
+     * Retrieves a random session.
+     *
+     * @return object
+     */
     public function random()
     {
-        return (object) $this->pool[array_rand($this->pool)];
+        return $this->retrieve(array_rand($this->pool));
     }
 }
