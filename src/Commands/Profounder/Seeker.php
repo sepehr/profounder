@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Commands\Profounder;
+namespace Profounder\Commands\Profounder;
 
 use Carbon\Carbon;
-use App\ContainerAwareCommand;
+use Profounder\ContainerAwareCommand;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Seeker extends ContainerAwareCommand

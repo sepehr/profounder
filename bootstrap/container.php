@@ -47,9 +47,9 @@ $container->bind('http', function ($container) {
 });
 
 $container->singleton('sessionPool', function () {
-    return new App\Services\SessionPool;
+    return new Profounder\Services\SessionPool;
 });
 
-$container->singleton('Illuminate\Contracts\Debug\ExceptionHandler', 'App\Exceptions\Handler');
+$container->singleton('Illuminate\Contracts\Debug\ExceptionHandler', 'Profounder\Exceptions\Handler');
 
 return $container;

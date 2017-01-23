@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Commands\Profounder;
+namespace Profounder\Commands\Profounder;
 
-use App\ContainerAwareCommand;
+use Profounder\ContainerAwareCommand;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Profounder;
 
 use Symfony\Component\Console\Command\Command as ConsoleCommand;
 

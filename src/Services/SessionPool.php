@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Profounder\Services;
 
 class SessionPool
 {

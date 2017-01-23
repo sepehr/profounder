@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Commands\Profounder;
+namespace Profounder\Commands\Profounder;
 
-use App\ContainerAwareCommand;
+use Profounder\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
