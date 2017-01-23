@@ -42,14 +42,6 @@ $container->singleton('db', function ($container) use ($config) {
     return $capsule;
 });
 
-$container->bind('http', function ($container) {
-    return new GuzzleHttp\Client();
-});
-
-$container->singleton('identityPool', function () {
-    return new Profounder\Services\IdentityPool;
-});
-
-$container->singleton('Illuminate\Contracts\Debug\ExceptionHandler', 'Profounder\Exceptions\Handler');
+require_once 'bindings.php';
 
 return $container;
