@@ -19,15 +19,13 @@ return [
     |--------------------------------------------------------------------------
     | Commands
     |--------------------------------------------------------------------------
-    | An array of container-aware and non-container-aware command classes to register.
+    | An array of command classes to register.
     */
 
     'commands' => [
-        'container-aware' => [
-            Profounder\Commands\Query::class,
-            Profounder\Commands\Seeker::class,
-            Profounder\Commands\Dumper::class,
-        ],
+        Profounder\Commands\Query::class,
+        Profounder\Commands\Seeker::class,
+        Profounder\Commands\Dumper::class,
     ],
 
     /*
