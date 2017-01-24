@@ -47,7 +47,7 @@ class Seeker extends ContainerAwareCommand
 
         $commandInput = [
             'command'  => $this->queryCommandName,
-            '--id'     => 3,
+            '--id'     => 1,
             '--offset' => 0,
             '--chunk'  => 4019,
             '--loop'   => 1,
