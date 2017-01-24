@@ -1,0 +1,12 @@
+[
+    {
+        "username": "user@example.com",
+        "password": "password",
+        "cookies": "key1=value; key2=value; key3=another_value"
+    },
+    {
+        "username": "another_user@example.com",
+        "password": "another_password",
+        "cookies": "key1=value; key2=value; key3=another_value"
+    }
+]

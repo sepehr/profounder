@@ -2,6 +2,7 @@
 storage/*
 storage/logs/*
 !storage/logs/.gitkeep
+!storage/sessions.example.json
 
 vendor
 docs/build
