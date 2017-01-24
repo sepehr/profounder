@@ -108,7 +108,7 @@ class Query extends ContainerAwareCommand
         } // for
 
         $output->writeln(
-            "Performed a total of <info>$requestCount</> requests, gathering a max of " . $chunk * $loop . "articles."
+            "Performed a total of <info>$requestCount</> requests, gathering a max of " . $chunk * $loop . " articles."
         );
         $output->writeln("Total execution time: <info>{$this->watch->stop('execution')->getDuration()}</>ms");
     }
