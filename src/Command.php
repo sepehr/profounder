@@ -26,12 +26,12 @@ abstract class Command extends ConsoleCommand
      */
     protected function outputFiglet(OutputInterface $output)
     {
-        $output->writeln("
+        $output->writeln("<info>
  ____  ____   ___  _____ ___  _   _ _   _ ____  _____ ____
 |  _ \|  _ \ / _ \|  ___/ _ \| | | | \ | |  _ \| ____|  _ \
 | |_) | |_) | | | | |_ | | | | | | |  \| | | | |  _| | |_) |
 |  __/|  _ <| |_| |  _|| |_| | |_| | |\  | |_| | |___|  _ <
 |_|   |_| \_\\___/|_|   \___/ \___/|_| \_|____/|_____|_| \_\
-        ");
+        </>");
     }
 }
