@@ -6,15 +6,15 @@ use Profounder\Benchmarkable;
 use Profounder\Query\ResultStorer;
 use Profounder\Query\ResponseParser;
 use Profounder\ContainerAwareCommand;
+use Profounder\Query\QueryableInputOptions;
 use Profounder\Query\Builder as QueryBuilder;
 use Profounder\Query\Request as QueryRequest;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Query extends ContainerAwareCommand
 {
-    use Benchmarkable;
+    use Benchmarkable, QueryableInputOptions;
 
     /**
      * An object of input options.
@@ -38,14 +38,7 @@ class Query extends ContainerAwareCommand
         $this
             ->setName('profounder:query')
             ->setDescription('Dispatches a query to profound.com search endpoint and stores the results.')
-            ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Process ID.', 1)
-            ->addOption('loop', 'l', InputOption::VALUE_OPTIONAL, 'Loop count.', 1)
-            ->addOption('order', 'r', InputOption::VALUE_OPTIONAL, 'Sort order.', 'desc')
-            ->addOption('limit', 'c', InputOption::VALUE_OPTIONAL, 'Chunk limit size.', 5)
-            ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'Starting offset.', 0)
-            ->addOption('keyword', 'k', InputOption::VALUE_OPTIONAL, 'Search keyword.', '')
-            ->addOption('date', 'd', InputOption::VALUE_OPTIONAL, 'Comma separated date range.')
-            ->addOption('sort', 's', InputOption::VALUE_OPTIONAL, 'Sort by field.', QueryBuilder::DATE);
+            ->registerQueryInputOptions();
     }
 
     /**
@@ -72,7 +65,7 @@ class Query extends ContainerAwareCommand
         }, 'execution');
 
         $output->writeln(
-            "\nCollected <info>{$totalInserts}</> articles within {$this->options->loop} loop(s) ".
+            "Collected <info>{$totalInserts}</> new articles within {$this->options->loop} loop(s) ".
             "in {$this->elapsed('execution')}ms"
         );
     }
