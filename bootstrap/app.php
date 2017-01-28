@@ -9,8 +9,8 @@ $application = new Application($container, $container->config->get('name'), $con
 
 if ($commands = $container->config->get('commands')) {
     $application->addCommands(array_map(
-        function ($command) {
-            return new $command;
+        function ($command) use ($container) {
+            return $container->make($command);
         },
         $commands
     ));
