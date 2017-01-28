@@ -2,7 +2,7 @@
 
 namespace Profounder\Exceptions;
 
-class InvalidQueryResponse extends BaseException
+class InvalidArgument extends BaseException
 {
     //
 }

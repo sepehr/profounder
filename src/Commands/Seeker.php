@@ -49,7 +49,7 @@ class Seeker extends ContainerAwareCommand
             'command'  => $this->queryCommandName,
             '--id'     => 1,
             '--offset' => 0,
-            '--chunk'  => 4019,
+            '--limit'  => 4019,
             '--loop'   => 1,
             '--sort'   => 'docdatetime',
             '--order'  => $input->getOption('order'),

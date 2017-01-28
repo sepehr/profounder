@@ -2,199 +2,149 @@
 
 namespace Profounder\Commands;
 
+use Profounder\Benchmarkable;
+use Profounder\Query\ResultStorer;
+use Profounder\Query\ResponseParser;
 use Profounder\ContainerAwareCommand;
-use Psr\Http\Message\MessageInterface;
-use Profounder\Exceptions\InvalidSession;
-use GuzzleHttp\Exception\RequestException;
-use Profounder\Exceptions\InvalidQueryResponse;
+use Profounder\Query\Builder as QueryBuilder;
+use Profounder\Query\Request as QueryRequest;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Query extends ContainerAwareCommand
 {
+    use Benchmarkable;
+
+    /**
+     * An object of input options.
+     *
+     * @var object
+     */
+    private $options;
+
+    /**
+     * An object of identity session.
+     *
+     * @var object
+     */
+    private $session;
+
+    /**
+     * @inheritdoc
+     */
     protected function configure()
     {
         $this
             ->setName('profounder:query')
-            ->setDescription('Dispatches a query tp profound.com endpoint and stores the results.')
-            ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'Starting offset.', 0)
-            ->addOption('chunk', 'c', InputOption::VALUE_OPTIONAL, 'Chunk size.', 5)
-            // Accepted: docdatetime, price, mrdclongfalloffextrafresh
-            ->addOption('sort', 's', InputOption::VALUE_OPTIONAL, 'Sort by field.', 'docdatetime')
-            // Accepted: desc, asc
-            ->addOption('order', 'r', InputOption::VALUE_OPTIONAL, 'Sort order.', 'desc')
-            // Format: yyyy-mm-dd,yyyy-mm-dd|MAX
-            ->addOption('date', 'd', InputOption::VALUE_OPTIONAL, 'Comma separated date range.')
+            ->setDescription('Dispatches a query to profound.com search endpoint and stores the results.')
+            ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Process ID.', 1)
             ->addOption('loop', 'l', InputOption::VALUE_OPTIONAL, 'Loop count.', 1)
-            ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Process ID.', 1);
+            ->addOption('order', 'r', InputOption::VALUE_OPTIONAL, 'Sort order.', 'desc')
+            ->addOption('limit', 'c', InputOption::VALUE_OPTIONAL, 'Chunk limit size.', 5)
+            ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'Starting offset.', 0)
+            ->addOption('keyword', 'k', InputOption::VALUE_OPTIONAL, 'Search keyword.', '')
+            ->addOption('date', 'd', InputOption::VALUE_OPTIONAL, 'Comma separated date range.')
+            ->addOption('sort', 's', InputOption::VALUE_OPTIONAL, 'Sort by field.', QueryBuilder::DATE);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // HERE'S SOME SPAGHETTI FOR YOU!
+        $this->options = (object) $input->getOptions();
+        $this->session = $this->identityPool->retrieve(intval($this->options->id - 1));
 
-        $offset  = $input->getOption('offset');
-        $chunk   = $input->getOption('chunk');
-        $loop    = $input->getOption('loop');
-        $id      = $input->getOption('id');
-        $sort    = $input->getOption('sort');
-        $order   = $input->getOption('order');
-        $range   = $input->getOption('date');
-        $session = $this->identityPool->retrieve(intval($id - 1));
+        $totalInserts = 0;
+        $this->benchmark(function () use ($output, &$totalInserts) {
+            for ($i = 1; $i <= $this->options->loop; $i++) {
+                $output->writeln("Loop#$i; offset: {$this->options->offset}; limit: {$this->options->limit}");
 
-        $requestCount = $insertCount = 0;
+                $results = $this->query();
+                $output->writeln('Fetched <info>' . count($results) . "</> articles in {$this->elapsed()}ms");
 
-        $output->writeln("Acting as {$session->username}...");
-        $this->watch->start('execution');
+                $totalInserts += $inserts = $this->store($results);
+                $output->writeln("Stored <info>$inserts</> new articles in {$this->elapsed()}ms");
 
-        for ($i = 1; $i <= $loop; $i++) {
-            $output->writeln("Loop#$i; offset: $offset; chunk: $chunk");
-
-            try {
-                $this->watch->start("req#$i");
-
-                $requestCount++;
-                $response = $this->http->post('http://www.profound.com/home/FilterSearchResults', [
-                    'headers'     => [
-                        'Content-Type'     => 'application/x-www-form-urlencoded; charset=UTF-8',
-                        'Cookie'           => $session->cookies,
-                        'Referer'          => 'http://www.profound.com/home/search',
-                        'User-Agent'       => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36',
-                        'X-Requested-With' => 'XMLHttpRequest',
-                    ],
-                    'form_params' => [
-                        // Few examples:
-                        //&filters=+sitelist,PI,,+boolsalebysliceallowed,1,,+forsale,1
-                        //querystring=&offset=0&sortby=mrdclongfalloffextrafresh&sortorder=desc&filters=+sitelist,PI,,+forsale,1&hits=25&searchcontent=(israel )
-                        //querystring=&offset=0&hits=25&sortby=mrdclongfalloffextrafresh&sortorder=desc&filters=<>docdatetime,2016-12-22,MAX
-                        'SearchFilter'      => "querystring=&offset=$offset&hits=$chunk&sortby=$sort&sortorder=$order&filters=<>docdatetime,$range",
-                        'HasUsedNavFilters' => 'false',
-                        'searchMethod'      => '/home/FilterSearchResults',
-                    ],
-                    //'sink' => storage_path('sink.txt'),
-                ]);
-
-                $output->writeln("Request#$i time: {$this->watch->stop("req#$i")->getDuration()}ms");
-
-                $json = $this->parseAndValidateJsonResopnse($response);
-
-                if (is_null($json['Results'])) {
-                    $output->writeln('No results found, skipping...');
-                    continue;
-                }
-
-                $resultCount = count($json['Results']);
-                $output->writeln("Found <info>$resultCount</> article results...");
-
-                $loopInserts = 0;
-                $this->watch->start("db#$i");
-                foreach ($json['Results'] as $article) {
-                    if ($this->insertIfNotExists($article)) {
-                        $loopInserts++;
-                        $insertCount++;
-                    }
-                }
-
-                $output->writeln(
-                    "Database#$i: <info>$loopInserts</> new entries in {$this->watch->stop("db#$i")->getDuration()}ms"
-                );
-
-                $offset += $chunk;
-            } catch (RequestException $e) {
-                $this->log->error($e->getMessage());
-                $output->writeln('An error has occured: ' . $e->getMessage());
+                $this->options->offset += $this->options->limit;
             }
-        } // for
+        }, 'execution');
 
         $output->writeln(
-            "Performed a total of <info>$requestCount</> requests, gathering a max of " . $chunk * $loop . " articles."
+            "\nCollected <info>{$totalInserts}</> articles within {$this->options->loop} loop(s) ".
+            "in {$this->elapsed('execution')}ms"
         );
-        $output->writeln("Total execution time: <info>{$this->watch->stop('execution')->getDuration()}</>ms");
     }
 
     /**
-     * Parses and validates a Guzzle response.
-     *
-     * @param  MessageInterface $response
+     * Queries the remote search endpoint.
      *
      * @return array
      */
-    private function parseAndValidateJsonResopnse(MessageInterface $response)
+    private function query()
     {
-        $this->validateJsonResponse($json = $this->parseJsonResopnse($response));
+        return $this->benchmark(function () {
+            $response = $this->dispatchRequest(
+                $this->buildQuery(), $this->session->cookies
+            );
 
-        return $json;
+            return $this->parseResponse($response);
+        });
     }
 
     /**
-     * Parses a Guzzle response into an array.
+     * Stores the query results.
      *
-     * @param  MessageInterface $response
+     * @param  array $results
+     *
+     * @return int
+     */
+    private function store($results)
+    {
+        return $this->benchmark(function () use ($results) {
+            return ResultStorer::create($this->db)->store($results);
+        });
+    }
+
+    /**
+     * Builds the querystring from the input options.
+     *
+     * @return string
+     */
+    private function buildQuery()
+    {
+        return QueryBuilder::create()
+            ->searchFor($this->options->keyword)
+            ->byDateString($this->options->date)
+            ->orderBy($this->options->sort, $this->options->order)
+            ->offset($this->options->offset)
+            ->take($this->options->limit)
+            ->build();
+    }
+
+    /**
+     * Dispatches the query request.
+     *
+     * @param  string $query
+     * @param  string $cookies
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    private function dispatchRequest($query, $cookies)
+    {
+        return QueryRequest::create($this->http, $query, $cookies)->dispatch();
+    }
+
+    /**
+     * Parses the response into an array.
+     *
+     * @param  \Psr\Http\Message\ResponseInterface $response
      *
      * @return array
-     *
-     * @throws InvalidQueryResponse
      */
-    private function parseJsonResopnse(MessageInterface $response)
+    private function parseResponse($response)
     {
-        $content = (string) $response->getBody();
-        if (strpos($content, 'web server encountered a critical error')) {
-            throw new InvalidQueryResponse('Remote webserver critical hiccup! damn.');
-        }
-
-        $json = json_decode($content, true);
-        if (is_null($json)) {
-            throw new InvalidQueryResponse('Retrieved invalid JSON response.');
-        }
-
-        return $json;
-    }
-
-    /**
-     * Validates a JSON-decoded response array.
-     *
-     * @param  array $response
-     *
-     * @return bool
-     *
-     * @throws InvalidSession
-     * @throws InvalidQueryResponse
-     */
-    private function validateJsonResponse(array $response)
-    {
-        if ($response['UserIsLoggedOut']) {
-            throw new InvalidSession('Current session has been expired! you need to feed me some new sessions.');
-        }
-
-        if (! empty($response['ErrorMessage'])) {
-            throw new InvalidQueryResponse("Remote error: {$response['ErrorMessage']}");
-        }
-
-        return true;
-    }
-
-    /**
-     * Inserts a new article record into the database if necessary.
-     *
-     * @param  array $article
-     *
-     * @return bool
-     */
-    private function insertIfNotExists(array $article)
-    {
-        if ($this->db->table('articles')->where(['internal_id' => $article['InternalId']])->exists()) {
-            return false;
-        }
-
-        return $this->db->table('articles')->insert([
-            'internal_id' => $article['InternalId'],
-            'content_id'  => $article['ContentId'],
-            'title'       => $article['Title'],
-            'date'        => date('Y-m-d H:i:s', strtotime($article['DocDateTime'])),
-            'publisher'   => $article['Publisher'],
-            'sku'         => $article['Sku'],
-            'price'       => intval(preg_replace('/([^0-9\\.])/i', '', $article['Price']) * 100),
-        ]);
+        return ResponseParser::create($response)->parse();
     }
 }
