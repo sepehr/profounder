@@ -18,6 +18,7 @@ trait QueryableInputOptions {
     private function registerQueryInputOptions($addDateOption = true)
     {
         $this
+            ->addOption('debug', null, InputOption::VALUE_NONE, 'Debug mode.')
             ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Process ID.', 1)
             ->addOption('loop', 'l', InputOption::VALUE_OPTIONAL, 'Loop count.', 1)
             ->addOption('order', 'r', InputOption::VALUE_OPTIONAL, 'Sort order.', 'desc')

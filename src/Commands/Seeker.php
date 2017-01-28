@@ -58,6 +58,7 @@ class Seeker extends ContainerAwareCommand
                 '--limit'  => $input->getOption('limit'),
                 '--order'  => $input->getOption('order'),
                 '--offset' => $input->getOption('offset'),
+                '--debug'  => $input->getOption('debug'),
             ];
 
             $periods = 0;

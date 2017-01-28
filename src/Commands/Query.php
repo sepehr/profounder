@@ -57,6 +57,8 @@ class Query extends ContainerAwareCommand
                 $results = $this->query();
                 $output->writeln('Fetched <info>' . count($results) . "</> articles in {$this->elapsed()}ms");
 
+                $this->outputDebug($output);
+
                 $totalInserts += $inserts = $this->store($results);
                 $output->writeln("Stored <info>$inserts</> new articles in {$this->elapsed()}ms");
 
@@ -139,5 +141,19 @@ class Query extends ContainerAwareCommand
     private function parseResponse($response)
     {
         return ResponseParser::create($response)->parse();
+    }
+
+    /**
+     * Outputs debug information about the query.
+     *
+     * @param  OutputInterface $output
+     *
+     * @return void
+     */
+    private function outputDebug(OutputInterface $output)
+    {
+        if ($this->options->debug) {
+            $output->writeln('<comment>[DEBUG][QUERY] ' . urldecode($this->buildQuery()) . '</>');
+        }
     }
 }
