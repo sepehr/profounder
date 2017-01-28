@@ -8,11 +8,22 @@ namespace Profounder;
  * @property-read \Illuminate\Events\Dispatcher $events
  * @property-read \Illuminate\Filesystem\Filesystem $files
  * @property-read \Illuminate\Database\Capsule\Manager $db
- * @property-read \Symfony\Component\Stopwatch\Stopwatch $watch
- * @property-read \Profounder\Services\IdentityPool $identityPool
  */
 abstract class ContainerAwareCommand extends Command
 {
+    /**
+     * Resolves a resource out of the container.
+     *
+     * @param  string $abstract
+     * @param  array $params
+     *
+     * @return mixed
+     */
+    public function make($abstract, array $params = [])
+    {
+        return $this->getApplication()->getContainer()->make($abstract, $params);
+    }
+
     /**
      * Magic container resource accessor.
      *
