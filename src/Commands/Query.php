@@ -81,7 +81,8 @@ class Query extends ContainerAwareCommand
     {
         return $this->benchmark(function () {
             $response = $this->dispatchRequest(
-                $this->buildQuery(), $this->session->cookies
+                $this->buildQuery(),
+                $this->session->cookies
             );
 
             return $this->parseResponse($response);

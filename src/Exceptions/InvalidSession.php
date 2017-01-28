@@ -2,6 +2,7 @@
 
 namespace Profounder\Exceptions;
 
-class InvalidSession extends BaseException {
+class InvalidSession extends BaseException
+{
     //
 }

@@ -4,7 +4,8 @@ namespace Profounder;
 
 use Symfony\Component\Stopwatch\Stopwatch;
 
-trait Benchmarkable {
+trait Benchmarkable
+{
     /**
      * Stopwatch instance.
      *

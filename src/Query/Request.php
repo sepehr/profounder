@@ -174,7 +174,8 @@ class Request
     private function randomUserAgent()
     {
         $uas = [
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) ' .
+            'Chrome/54.0.2840.98 Safari/537.36',
             // Add more user agents here, if needed...
         ];
 

@@ -6,8 +6,8 @@ use Profounder\Command;
 use Profounder\Query\Builder as QueryBuilder;
 use Symfony\Component\Console\Input\InputOption;
 
-trait QueryableInputOptions {
-
+trait QueryableInputOptions
+{
     /**
      * Registers query input options.
      *
