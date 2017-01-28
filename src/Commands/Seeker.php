@@ -45,40 +45,40 @@ class Seeker extends ContainerAwareCommand
 
         Carbon::setToStringFormat('Y-m-d');
 
-        list($periods, $period, $start, $end) = $this->benchmark(function () use ($input, $output) {
+        $options = $input->getOptions();
+        $periods = $this->benchmark(function () use ($input, $output, $options) {
+            $end     = new Carbon($options['end']);
+            $next    = new Carbon($options['start']);
             $command = $this->getApplication()->find($this->queryCommandName);
-            $start   = $next = new Carbon($input->getOption('start'));
-            $end     = new Carbon($input->getOption('end'));
 
             $commandInput = [
                 'command'  => $this->queryCommandName,
-                '--id'     => $input->getOption('id'),
-                '--sort'   => $input->getOption('sort'),
-                '--loop'   => $input->getOption('loop'),
-                '--limit'  => $input->getOption('limit'),
-                '--order'  => $input->getOption('order'),
-                '--offset' => $input->getOption('offset'),
-                '--debug'  => $input->getOption('debug'),
+                '--id'     => $options['id'],
+                '--sort'   => $options['sort'],
+                '--loop'   => $options['loop'],
+                '--limit'  => $options['limit'],
+                '--order'  => $options['order'],
+                '--debug'  => $options['debug'],
+                '--offset' => $options['offset'],
             ];
 
             $periods = 0;
-            $period  = $input->getOption('period');
-
             while ($next->lessThan($end)) {
-                $commandInput['--date'] = "$next," . $next = $next->addDays($period);
+                $commandInput['--date'] = "$next," . $next = $next->addDays($options['period']);
 
                 $output->writeln("\n>> Running profounder command with --date={$commandInput['--date']}");
 
-                $command->run(new ArrayInput($commandInput), $output);
+                $command->run($this->make(ArrayInput::class, $commandInput), $output);
 
                 $periods++;
             }
 
-            return [$periods, $period, $start, $end];
+            return $periods;
         }, 'seeker');
 
         $output->writeln(
-            "\nDone! Ran through $periods $period-days periods from $start to $end in {$this->elapsed('seeker')}ms."
+            "\nDone! Ran through $periods {$options['period']}-days periods from {$options['start']} to " .
+            "{$options['end']} in {$this->elapsed('seeker')}ms"
         );
     }
 }

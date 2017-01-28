@@ -7,7 +7,7 @@ use Profounder\Exceptions\InvalidSession;
 class IdentityPool
 {
     /**
-     * Sessions array of username, password and cookies.
+     * Sessions array of username, password and cookie.
      *
      * @var array
      */

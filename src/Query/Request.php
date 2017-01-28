@@ -39,26 +39,22 @@ class Request
      * Request constructor.
      *
      * @param  ClientInterface $client
-     * @param  string $query Search query string.
-     * @param  string $cookies Cookie header string.
      */
-    public function __construct(ClientInterface $client, $query, $cookies)
+    public function __construct(ClientInterface $client)
     {
-        $this->initialize($client, ['Cookie' => $cookies], ['SearchFilter' => $query]);
+        $this->setClient($client)->initialize();
     }
 
     /**
      * Static factory method.
      *
      * @param  ClientInterface $client
-     * @param  string $query Search query string.
-     * @param  string $cookies Cookie header string.
      *
      * @return Request
      */
-    public static function create(ClientInterface $client, $query, $cookies)
+    public static function create(ClientInterface $client)
     {
-        return new static($client, $query, $cookies);
+        return new static($client);
     }
 
     /**
@@ -66,17 +62,14 @@ class Request
      *
      * Knows how to init a request to profound.com's search endpoint with proper defaults.
      *
-     * @param  ClientInterface $client
      * @param  array $headers
      * @param  array $data
      * @param  string|null $uri
      *
      * @return Request
      */
-    public function initialize(ClientInterface $client, array $headers = [], array $data = [], $uri = null)
+    public function initialize(array $headers = [], array $data = [], $uri = null)
     {
-        $this->setClient($client);
-
         $this->setHeaders(array_replace([
             'Cookie'           => '',
             'X-Requested-With' => 'XMLHttpRequest',
@@ -99,15 +92,49 @@ class Request
     /**
      * Request dispatcher.
      *
+     * @param  string $query
+     * @param  string $cookie
+     *
      * @return ResponseInterface
      */
-    public function dispatch()
+    public function dispatch($query = null, $cookie = null)
     {
+        $query  && $this->withQuery($query);
+        $cookie && $this->withCookie($cookie);
+
         // Always a POST request
         return $this->client->post($this->uri, [
             'form_params' => $this->data,
             'headers'     => $this->headers,
         ]);
+    }
+
+    /**
+     * Sets cookie header.
+     *
+     * @param  string $cookie
+     *
+     * @return Request
+     */
+    public function withCookie($cookie)
+    {
+        $this->headers['Cookie'] = $cookie;
+
+        return $this;
+    }
+
+    /**
+     * Sets "SearchFilter" parameter.
+     *
+     * @param  string $query
+     *
+     * @return Request
+     */
+    public function withQuery($query)
+    {
+        $this->data['SearchFilter'] = $query;
+
+        return $this;
     }
 
     /**

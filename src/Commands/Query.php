@@ -6,6 +6,7 @@ use Profounder\Benchmarkable;
 use Profounder\Query\ResultStorer;
 use Profounder\Query\ResponseParser;
 use Profounder\ContainerAwareCommand;
+use Profounder\Services\IdentityPool;
 use Profounder\Query\QueryableInputOptions;
 use Profounder\Query\Builder as QueryBuilder;
 use Profounder\Query\Request as QueryRequest;
@@ -17,6 +18,41 @@ class Query extends ContainerAwareCommand
     use Benchmarkable, QueryableInputOptions;
 
     /**
+     * IdentityPool instance.
+     *
+     * @var IdentityPool
+     */
+    private $identity;
+
+    /**
+     * ResultStorer instance.
+     *
+     * @var ResultStorer
+     */
+    private $storer;
+
+    /**
+     * QueryBuilder instance.
+     *
+     * @var QueryBuilder
+     */
+    private $builder;
+
+    /**
+     * QueryRequest instance.
+     *
+     * @var QueryRequest
+     */
+    private $request;
+
+    /**
+     * ResponseParser instance.
+     *
+     * @var ResponseParser
+     */
+    private $parser;
+
+    /**
      * An object of input options.
      *
      * @var object
@@ -24,11 +60,36 @@ class Query extends ContainerAwareCommand
     private $options;
 
     /**
-     * An object of identity session.
+     * Identity session object.
      *
      * @var object
      */
     private $session;
+
+    /**
+     * Query constructor.
+     *
+     * @param  ResultStorer $storer
+     * @param  QueryBuilder $builder
+     * @param  QueryRequest $request
+     * @param  IdentityPool $identity
+     * @param  ResponseParser $parser
+     */
+    public function __construct(
+        ResultStorer $storer,
+        QueryBuilder $builder,
+        QueryRequest $request,
+        IdentityPool $identity,
+        ResponseParser $parser
+    ) {
+        $this->storer   = $storer;
+        $this->builder  = $builder;
+        $this->request  = $request;
+        $this->identity = $identity;
+        $this->parser   = $parser;
+
+        parent::__construct(null);
+    }
 
     /**
      * @inheritdoc
@@ -47,7 +108,7 @@ class Query extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->options = (object) $input->getOptions();
-        $this->session = $this->identityPool->retrieve(intval($this->options->id - 1));
+        $this->session = $this->identity->retrieve(intval($this->options->id - 1));
 
         $totalInserts = 0;
         $this->benchmark(function () use ($output, &$totalInserts) {
@@ -82,7 +143,7 @@ class Query extends ContainerAwareCommand
         return $this->benchmark(function () {
             $response = $this->dispatchRequest(
                 $this->buildQuery(),
-                $this->session->cookies
+                $this->session->cookie
             );
 
             return $this->parseResponse($response);
@@ -99,7 +160,7 @@ class Query extends ContainerAwareCommand
     private function store($results)
     {
         return $this->benchmark(function () use ($results) {
-            return ResultStorer::create($this->db)->store($results);
+            return $this->storer->store($results);
         });
     }
 
@@ -110,7 +171,7 @@ class Query extends ContainerAwareCommand
      */
     private function buildQuery()
     {
-        return QueryBuilder::create()
+        return $this->builder
             ->searchFor($this->options->keyword)
             ->byDateString($this->options->date)
             ->orderBy($this->options->sort, $this->options->order)
@@ -123,13 +184,13 @@ class Query extends ContainerAwareCommand
      * Dispatches the query request.
      *
      * @param  string $query
-     * @param  string $cookies
+     * @param  string $cookie
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    private function dispatchRequest($query, $cookies)
+    private function dispatchRequest($query, $cookie)
     {
-        return QueryRequest::create($this->http, $query, $cookies)->dispatch();
+        return $this->request->dispatch($query, $cookie);
     }
 
     /**
@@ -141,7 +202,7 @@ class Query extends ContainerAwareCommand
      */
     private function parseResponse($response)
     {
-        return ResponseParser::create($response)->parse();
+        return $this->parser->parse($response);
     }
 
     /**

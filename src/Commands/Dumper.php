@@ -4,14 +4,45 @@ namespace Profounder\Commands;
 
 use Profounder\Benchmarkable;
 use Profounder\ContainerAwareCommand;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Database\Query\Builder;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Dumper extends ContainerAwareCommand
 {
     use Benchmarkable;
+
+    /**
+     * Query builder instance.
+     *
+     * @var Builder
+     */
+    private $queryBuilder;
+
+    /**
+     * Filesystem instance.
+     *
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * Dumper constructor.
+     *
+     * @param  Capsule $capsule
+     * @param  Filesystem $filesystem
+     */
+    public function __construct(Capsule $capsule, Filesystem $filesystem)
+    {
+        $this->filesystem   = $filesystem;
+        $this->queryBuilder = $capsule->table('articles');
+
+        parent::__construct(null);
+    }
 
     /**
      * @inheritdoc
@@ -21,8 +52,8 @@ class Dumper extends ContainerAwareCommand
         $this
             ->setName('profounder:dump')
             ->setDescription('Dump articles from database to file.')
-            ->addOption('sku', 's', InputOption::VALUE_NONE, 'Plain text SKU dump.')
-            ->addArgument('file', InputArgument::REQUIRED, 'File path to dump to.');
+            ->addArgument('file', InputArgument::REQUIRED, 'File path to dump to.')
+            ->addOption('sku', 's', InputOption::VALUE_NONE, 'Plain text SKU dump.');
     }
 
     /**
@@ -32,7 +63,7 @@ class Dumper extends ContainerAwareCommand
     {
         $this->outputFiglet($output);
 
-        if (! $count = $this->db->table('articles')->count()) {
+        if (! $count = $this->queryBuilder->count()) {
             $output->writeln('No results in the database.');
             exit(1);
         }
@@ -60,17 +91,16 @@ class Dumper extends ContainerAwareCommand
      */
     private function dumpSku($file)
     {
-        $this->files->put($file, '');
+        $this->filesystem->put($file, '');
 
-        $this->db
-            ->table('articles')
+        $this->queryBuilder
             ->select('sku')
             ->chunk(1000, function ($skus) use ($file) {
                 $skus = $skus->reduce(function ($carry, $item) {
                     return $carry .= $item->sku . PHP_EOL;
                 }, '');
 
-                $this->files->append($file, $skus);
+                $this->filesystem->append($file, $skus);
             });
     }
 
@@ -83,17 +113,16 @@ class Dumper extends ContainerAwareCommand
      */
     private function dumpCsv($file)
     {
-        $this->files->put($file, 'ContentID,Title,Date,Price,Publisher,SKU' . PHP_EOL);
+        $this->filesystem->put($file, 'ContentID,Title,Date,Price,Publisher,SKU' . PHP_EOL);
 
-        $this->db
-            ->table('articles')
+        $this->queryBuilder
             ->select('content_id', 'title', 'date', 'price', 'publisher', 'sku')
             ->chunk(1000, function ($articles) use ($file) {
                 $articles = $articles->reduce(function ($carry, $item) {
                     return $carry .= '"' . implode('","', (array) $item) . '"' . PHP_EOL;
                 }, '');
 
-                $this->files->append($file, $articles);
+                $this->filesystem->append($file, $articles);
             });
     }
 }

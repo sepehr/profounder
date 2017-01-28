@@ -1,7 +1,9 @@
 <?php
 
-$container->singleton('identityPool', Profounder\Services\IdentityPool::class);
+use Symfony\Component\Console\Input\ArrayInput;
 
-$container->singleton('watch', Symfony\Component\Stopwatch\Stopwatch::class);
+$container->bind(GuzzleHttp\ClientInterface::class, GuzzleHttp\Client::class);
 
-$container->bind('http', GuzzleHttp\Client::class);
+$container->bind(ArrayInput::class, function ($container, $params) {
+    return new ArrayInput($params);
+});
