@@ -12,9 +12,7 @@ $container = new Container;
 
 $container->instance('config', $config = new Repository(require config_path('app.php')));
 
-$container->singleton('files', function () {
-    return new Filesystem;
-});
+$container->singleton('files', Filesystem::class);
 
 $container->singleton('events', function ($container) {
     return new Dispatcher($container);
@@ -40,6 +38,10 @@ $container->singleton('db', function ($container) use ($config) {
     $capsule->bootEloquent();
 
     return $capsule;
+});
+
+$container->bind(Capsule::class, function ($container) {
+    return $container->make('db');
 });
 
 require_once 'bindings.php';
