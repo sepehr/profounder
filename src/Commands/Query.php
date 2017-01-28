@@ -148,13 +148,18 @@ class Query extends ContainerAwareCommand
      * Outputs debug information about the query.
      *
      * @param  OutputInterface $output
+     * @param  array $results
      *
      * @return void
      */
-    private function outputDebug(OutputInterface $output)
+    private function outputDebug(OutputInterface $output, $results = [])
     {
         if ($this->options->debug) {
-            $output->writeln('<comment>[DEBUG][QUERY] ' . urldecode($this->buildQuery()) . '</>');
+            $output->writeln('<comment>[DEBUG][QUERY]: ' . urldecode($this->buildQuery()) . '</>');
+
+            if (! empty($results)) {
+                $output->writeln("<comment>[DEBUG][RESULTS]:\n" . var_export($results, true) . '</>');
+            }
         }
     }
 }
