@@ -10,12 +10,19 @@
         }
     ],
     "require": {
-        "symfony/console": "^3.2",
-        "illuminate/container": "^5.3",
+        "nesbot/carbon": "^1.22",
+        "monolog/monolog": "^1.22",
         "vlucas/phpdotenv": "^2.4",
-        "illuminate/config": "^5.3",
         "guzzlehttp/guzzle": "^6.2",
-        "symfony/stopwatch": "^3.2"
+        "symfony/console": "3.1.*",
+        "symfony/stopwatch": "3.1.*",
+        "illuminate/container": "5.3.*",
+        "illuminate/config": "5.3.*",
+        "illuminate/console": "5.3.*",
+        "illuminate/database": "5.3.*",
+        "illuminate/events": "5.3.*",
+        "illuminate/log": "5.3.*",
+        "symfony/process": "3.1.*"
     },
     "autoload": {
         "psr-4": {
