@@ -59,6 +59,7 @@ class Seeker extends ContainerAwareCommand
                 '--limit'  => $options['limit'],
                 '--order'  => $options['order'],
                 '--debug'  => $options['debug'],
+                '--delay'  => $options['delay'],
                 '--offset' => $options['offset'],
             ];
 

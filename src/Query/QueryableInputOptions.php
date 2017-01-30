@@ -25,7 +25,8 @@ trait QueryableInputOptions
             ->addOption('limit', 'c', InputOption::VALUE_OPTIONAL, 'Chunk limit size.', 5)
             ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'Starting offset.', 0)
             ->addOption('keyword', 'k', InputOption::VALUE_OPTIONAL, 'Search keyword.', '')
-            ->addOption('sort', 't', InputOption::VALUE_OPTIONAL, 'Sort by field.', QueryBuilder::DATE);
+            ->addOption('sort', 't', InputOption::VALUE_OPTIONAL, 'Sort by field.', QueryBuilder::DATE)
+            ->addOption('delay', 'w', InputOption::VALUE_OPTIONAL, 'Inter-request delay in milliseconds', null);
 
         if ($addDateOption) {
             $this->addOption('date', 'd', InputOption::VALUE_OPTIONAL, 'Comma separated date range.');

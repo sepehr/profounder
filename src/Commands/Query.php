@@ -113,7 +113,9 @@ class Query extends ContainerAwareCommand
         $totalInserts = 0;
         $this->benchmark(function () use ($output, &$totalInserts) {
             for ($i = 1; $i <= $this->options->loop; $i++) {
-                $output->writeln("Loop#$i; offset: {$this->options->offset}; limit: {$this->options->limit}");
+                $output->writeln(
+                    "Loop#$i; offset:{$this->options->offset}; limit:{$this->options->limit}; delay:{$this->options->delay}ms"
+                );
 
                 $results = $this->query();
                 $output->writeln('Fetched <info>' . count($results) . "</> articles in {$this->elapsed()}ms");
@@ -143,7 +145,8 @@ class Query extends ContainerAwareCommand
         return $this->benchmark(function () {
             $response = $this->dispatchRequest(
                 $this->buildQuery(),
-                $this->session->cookie
+                $this->session->cookie,
+                $this->options->delay
             );
 
             return $this->parseResponse($response);
@@ -185,12 +188,13 @@ class Query extends ContainerAwareCommand
      *
      * @param  string $query
      * @param  string $cookie
+     * @param  int|float $delay
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    private function dispatchRequest($query, $cookie)
+    private function dispatchRequest($query, $cookie, $delay = null)
     {
-        return $this->request->dispatch($query, $cookie);
+        return $this->request->dispatch($query, $cookie, $delay);
     }
 
     /**

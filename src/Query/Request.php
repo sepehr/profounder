@@ -22,6 +22,13 @@ class Request
     private $uri;
 
     /**
+     * Delay between requests.
+     *
+     * @var int|float
+     */
+    private $delay;
+
+    /**
      * Request data.
      *
      * @var array
@@ -65,10 +72,11 @@ class Request
      * @param  array $headers
      * @param  array $data
      * @param  string|null $uri
+     * @param  int|float|null $delay
      *
      * @return Request
      */
-    public function initialize(array $headers = [], array $data = [], $uri = null)
+    public function initialize(array $headers = [], array $data = [], $uri = null, $delay = null)
     {
         $this->setHeaders(array_replace([
             'Cookie'           => '',
@@ -86,7 +94,7 @@ class Request
 
         $this->setUri($uri ?: 'http://www.profound.com/home/FilterSearchResults');
 
-        return $this;
+        return $this->setDelay($delay);
     }
 
     /**
@@ -94,17 +102,20 @@ class Request
      *
      * @param  string $query
      * @param  string $cookie
+     * @param  int|float|null $delay
      *
      * @return ResponseInterface
      */
-    public function dispatch($query = null, $cookie = null)
+    public function dispatch($query = null, $cookie = null, $delay = null)
     {
+        $delay  && $this->setDelay($delay);
         $query  && $this->withQuery($query);
         $cookie && $this->withCookie($cookie);
 
         // Always a POST request
         return $this->client->post($this->uri, [
             'form_params' => $this->data,
+            'delay'       => $this->delay,
             'headers'     => $this->headers,
         ]);
     }
@@ -189,6 +200,20 @@ class Request
     public function setUri($uri)
     {
         $this->uri = $uri;
+
+        return $this;
+    }
+
+    /**
+     * Sets request delay.
+     *
+     * @param  int|float $delay
+     *
+     * @return Request
+     */
+    public function setDelay($delay)
+    {
+        $this->delay = $delay;
 
         return $this;
     }
