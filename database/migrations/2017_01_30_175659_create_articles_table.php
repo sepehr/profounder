@@ -22,6 +22,7 @@ class CreateArticlesTable extends Migration
             $table->string('publisher');
             $table->integer('price');
             $table->timestamp('date')->useCurrent = true;
+            $table->string('abstract')->nullable();
 
             $table->index('date');
             $table->index('publisher');
