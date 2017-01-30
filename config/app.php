@@ -71,4 +71,6 @@ return [
         'prefix'    => '',
     ],
 
+    'migration-table' => 'migrations',
+
 ];
