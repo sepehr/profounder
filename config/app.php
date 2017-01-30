@@ -23,6 +23,7 @@ return [
     */
 
     'commands' => [
+        Profounder\Commands\Toc::class,
         Profounder\Commands\Query::class,
         Profounder\Commands\Seeker::class,
         Profounder\Commands\Dumper::class,
