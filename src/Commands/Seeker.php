@@ -5,10 +5,10 @@ namespace Profounder\Commands;
 use Carbon\Carbon;
 use Profounder\Benchmarkable;
 use Profounder\ContainerAwareCommand;
-use Profounder\Query\QueryableInputOptions;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Profounder\Query\Concerns\QueryableInputOptions;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Seeker extends ContainerAwareCommand

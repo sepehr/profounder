@@ -7,10 +7,10 @@ use Profounder\Query\ResultStorer;
 use Profounder\Query\ResponseParser;
 use Profounder\ContainerAwareCommand;
 use Profounder\Services\IdentityPool;
-use Profounder\Query\QueryableInputOptions;
 use Profounder\Query\Builder as QueryBuilder;
 use Profounder\Query\Request as QueryRequest;
 use Symfony\Component\Console\Input\InputInterface;
+use Profounder\Query\Concerns\QueryableInputOptions;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Query extends ContainerAwareCommand

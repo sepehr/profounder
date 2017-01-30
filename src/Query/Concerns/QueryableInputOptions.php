@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder\Query;
+namespace Profounder\Query\Concerns;
 
 use Profounder\Command;
 use Profounder\Query\Builder as QueryBuilder;
