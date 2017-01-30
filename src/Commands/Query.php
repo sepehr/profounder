@@ -114,7 +114,8 @@ class Query extends ContainerAwareCommand
         $this->benchmark(function () use ($output, &$totalInserts) {
             for ($i = 1; $i <= $this->options->loop; $i++) {
                 $output->writeln(
-                    "Loop#$i; offset:{$this->options->offset}; limit:{$this->options->limit}; delay:{$this->options->delay}ms"
+                    "Loop=$i; offset={$this->options->offset}; limit={$this->options->limit}; " .
+                    ($this->options->delay ? "delay={$this->options->delay}ms" : '')
                 );
 
                 $results = $this->query();
