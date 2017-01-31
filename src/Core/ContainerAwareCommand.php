@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder;
+namespace Profounder\Core;
 
 /**
  * @property-read \Illuminate\Log\Writer $log

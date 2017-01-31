@@ -3,9 +3,9 @@
 namespace Profounder\Query;
 
 use Psr\Http\Message\ResponseInterface;
-use Profounder\Exceptions\InvalidSession;
-use Profounder\Exceptions\InvalidResponse;
-use Profounder\Exceptions\InvalidArgument;
+use Profounder\Exception\InvalidSession;
+use Profounder\Exception\InvalidResponse;
+use Profounder\Exception\InvalidArgument;
 
 class ResponseParser
 {
@@ -83,12 +83,13 @@ class ResponseParser
         $content = (string) $this->response->getBody();
 
         if (strpos($content, 'web server encountered a critical error')) {
-            throw new InvalidResponse('Remote webserver critical hiccup! renew the session to work around this.');
+            throw InvalidResponse::critical();
         }
 
         $parsedJson = json_decode($content, true);
+
         if (is_null($parsedJson)) {
-            throw new InvalidResponse('Retrieved invalid JSON response.');
+            throw InvalidResponse::invalidJson();
         }
 
         return $parsedJson;
@@ -107,13 +108,11 @@ class ResponseParser
     private function validate(array $json)
     {
         if ($json['UserIsLoggedOut']) {
-            throw new InvalidSession(
-                'Either the session has expired or its trial period is over. Feed me some fresh sessions.'
-            );
+            throw InvalidSession::expired();
         }
 
         if (! empty($json['ErrorMessage'])) {
-            throw new InvalidResponse("Remote error: {$json['ErrorMessage']}");
+            throw InvalidResponse::remoteError($json['ErrorMessage']);
         }
 
         return $json;

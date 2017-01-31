@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder\Exceptions;
+namespace Profounder\Exception;
 
 class BaseException extends \Exception
 {

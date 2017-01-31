@@ -1,8 +1,10 @@
 <?php
 
-namespace Profounder;
+namespace Profounder\Core;
 
-class Container extends \Illuminate\Container\Container
+use Illuminate\Container\Container as IlluminateContainer;
+
+class Container extends IlluminateContainer
 {
     /**
      * Returns application base path.

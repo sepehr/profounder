@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder;
+namespace Profounder\Core\Concern;
 
 use Symfony\Component\Stopwatch\Stopwatch;
 

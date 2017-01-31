@@ -1,11 +1,11 @@
 <?php
 
-namespace Profounder;
+namespace Profounder\Core;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Command\Command as ConsoleCommand;
+use Symfony\Component\Console\Command\Command as SymfonyConsoleCommand;
 
-abstract class Command extends ConsoleCommand
+abstract class Command extends SymfonyConsoleCommand
 {
     /**
      * Command constructor.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Profounder\Services;
+namespace Profounder\Service;
 
-use Profounder\Exceptions\InvalidSession;
+use Profounder\Exception\InvalidSession;
 
 class IdentityPool
 {

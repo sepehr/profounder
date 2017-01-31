@@ -3,7 +3,7 @@
 namespace Profounder\Query;
 
 use Carbon\Carbon;
-use Profounder\Exceptions\InvalidArgument;
+use Profounder\Exception\InvalidArgument;
 
 class Builder
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Profounder\Commands;
+namespace Profounder\Command;
 
-use Profounder\Benchmarkable;
-use Profounder\ContainerAwareCommand;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\Query\Builder;
+use Profounder\Core\ContainerAwareCommand;
+use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -41,7 +41,7 @@ class Dumper extends ContainerAwareCommand
         $this->filesystem   = $filesystem;
         $this->queryBuilder = $capsule->table('articles');
 
-        parent::__construct(null);
+        parent::__construct();
     }
 
     /**

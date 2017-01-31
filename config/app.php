@@ -23,10 +23,10 @@ return [
     */
 
     'commands' => [
-        Profounder\Commands\Toc::class,
-        Profounder\Commands\Query::class,
-        Profounder\Commands\Seeker::class,
-        Profounder\Commands\Dumper::class,
+        Profounder\Command\Dumper::class,
+        Profounder\Query\Command\Query::class,
+        Profounder\Query\Command\Seeker::class,
+        Profounder\Augment\Command\Augment::class,
     ],
 
     /*

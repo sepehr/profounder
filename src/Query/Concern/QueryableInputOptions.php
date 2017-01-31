@@ -1,8 +1,8 @@
 <?php
 
-namespace Profounder\Query\Concerns;
+namespace Profounder\Query\Concern;
 
-use Profounder\Command;
+use Profounder\Core\Command;
 use Profounder\Query\Builder as QueryBuilder;
 use Symfony\Component\Console\Input\InputOption;
 

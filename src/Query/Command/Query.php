@@ -1,16 +1,16 @@
 <?php
 
-namespace Profounder\Commands;
+namespace Profounder\Query\Command;
 
-use Profounder\Benchmarkable;
 use Profounder\Query\ResultStorer;
+use Profounder\Service\IdentityPool;
 use Profounder\Query\ResponseParser;
-use Profounder\ContainerAwareCommand;
-use Profounder\Services\IdentityPool;
+use Profounder\Core\ContainerAwareCommand;
+use Profounder\Core\Concern\Benchmarkable;
 use Profounder\Query\Builder as QueryBuilder;
 use Profounder\Query\Request as QueryRequest;
+use Profounder\Query\Concern\QueryableInputOptions;
 use Symfony\Component\Console\Input\InputInterface;
-use Profounder\Query\Concerns\QueryableInputOptions;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Query extends ContainerAwareCommand
@@ -88,7 +88,7 @@ class Query extends ContainerAwareCommand
         $this->identity = $identity;
         $this->parser   = $parser;
 
-        parent::__construct(null);
+        parent::__construct();
     }
 
     /**
@@ -195,7 +195,7 @@ class Query extends ContainerAwareCommand
      */
     private function dispatchRequest($query, $cookie, $delay = null)
     {
-        return $this->request->dispatch($query, $cookie, $delay);
+        return $this->request->withQuery($query)->dispatch($cookie, $delay);
     }
 
     /**

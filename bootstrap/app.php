@@ -2,7 +2,7 @@
 
 require_once 'autoload.php';
 
-use Profounder\Application;
+use Profounder\Core\Application;
 use Illuminate\Database\Console\Migrations\ResetCommand;
 use Illuminate\Database\Console\Migrations\StatusCommand;
 use Illuminate\Database\Console\Migrations\InstallCommand;

@@ -1,12 +1,12 @@
 <?php
 
-namespace Profounder;
+namespace Profounder\Core;
 
 use Illuminate\Contracts\Container\Container;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Application as SymfonyConsoleApp;
 
-class Application extends ConsoleApplication
+class Application extends SymfonyConsoleApp
 {
     /**
      * Container instance.
