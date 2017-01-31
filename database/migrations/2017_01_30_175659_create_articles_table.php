@@ -20,8 +20,9 @@ class CreateArticlesTable extends Migration
             $table->string('title');
             $table->string('sku');
             $table->string('publisher');
-            $table->integer('price');
+            $table->unsignedInteger('price');
             $table->timestamp('date')->useCurrent = true;
+            $table->unsignedInteger('length')->nullable();
             $table->string('abstract')->nullable();
 
             $table->index('date');
