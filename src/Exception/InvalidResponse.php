@@ -31,7 +31,7 @@ class InvalidResponse extends BaseException
      */
     public static function notFound()
     {
-        return new static('Entity could not be found.');
+        return new static('Remote entity could not be found.');
     }
 
     /**
