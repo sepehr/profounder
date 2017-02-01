@@ -38,6 +38,13 @@ abstract class Request
     protected $delay;
 
     /**
+     * Whether to throw HTTP errors or not.
+     *
+     * @var bool
+     */
+    protected $httpErrors = false;
+
+    /**
      * Request data.
      *
      * @var array
@@ -236,9 +243,10 @@ abstract class Request
         $dataKey = $this->method == 'get' ? 'query' : 'form_params';
 
         return [
-            $dataKey  => $this->data,
-            'delay'   => $this->delay,
-            'headers' => $this->headers,
+            $dataKey      => $this->data,
+            'delay'       => $this->delay,
+            'headers'     => $this->headers,
+            'http_errors' => $this->httpErrors,
         ];
     }
 
