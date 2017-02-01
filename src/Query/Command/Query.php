@@ -3,8 +3,8 @@
 namespace Profounder\Query\Command;
 
 use Profounder\Query\ResultStorer;
-use Profounder\Service\IdentityPool;
 use Profounder\Query\ResponseParser;
+use Profounder\Service\IdentityPool;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
 use Profounder\Query\Builder as QueryBuilder;
@@ -195,7 +195,9 @@ class Query extends ContainerAwareCommand
      */
     private function dispatchRequest($query, $cookie, $delay = null)
     {
-        return $this->request->withQuery($query)->dispatch($cookie, $delay);
+        return $this->request
+            ->withQuery($query)
+            ->dispatch($cookie, $delay);
     }
 
     /**
