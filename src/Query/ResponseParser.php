@@ -24,16 +24,6 @@ class ResponseParser
     private $resultsKey = 'Results';
 
     /**
-     * Static factory method.
-     *
-     * @return ResponseParser
-     */
-    public static function create()
-    {
-        return new static;
-    }
-
-    /**
      * Parses response into a JSON object.
      *
      * @param  ResponseInterface|null $response
@@ -82,7 +72,7 @@ class ResponseParser
     {
         $content = (string) $this->response->getBody();
 
-        if (strpos($content, 'web server encountered a critical error')) {
+        if (strpos($content, 'web server encountered a critical error') || strpos($content, 'Runtime Error')) {
             throw InvalidResponse::critical();
         }
 
