@@ -2,6 +2,7 @@
 
 namespace Profounder\Service;
 
+use Illuminate\Filesystem\Filesystem;
 use Profounder\Exception\InvalidSession;
 
 class IdentityPool
@@ -14,11 +15,29 @@ class IdentityPool
     private $pool;
 
     /**
-     * IdentityPool constructor.
+     * Filesystem instance.
+     *
+     * @var Filesystem
      */
-    public function __construct()
+    private $files;
+
+    /**
+     * Sessions file name.
+     *
+     * @var string
+     */
+    private $sessionsFile = 'sessions.json';
+
+    /**
+     * IdentityPool constructor.
+     *
+     * @param Filesystem $filesystem
+     */
+    public function __construct(Filesystem $filesystem)
     {
-        $this->pool = json_decode(file_get_contents(storage_path('sessions.json')));
+        $this->files = $filesystem;
+
+        $this->loadFromFile();
     }
 
     /**
@@ -47,5 +66,19 @@ class IdentityPool
     public function random()
     {
         return $this->retrieve(array_rand($this->pool));
+    }
+
+    /**
+     * Loads sessions from file.
+     *
+     * @return $this
+     */
+    private function loadFromFile()
+    {
+        $this->pool = json_decode(
+            $this->files->get(storage_path($this->sessionsFile))
+        );
+
+        return $this;
     }
 }
