@@ -15,15 +15,16 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('internal_id');
             $table->string('content_id');
-            $table->string('title');
+            $table->string('title', 511);
             $table->string('sku');
             $table->string('publisher');
             $table->unsignedInteger('price');
             $table->timestamp('date')->useCurrent = true;
+            $table->string('internal_id');
             $table->unsignedInteger('length')->nullable();
-            $table->string('abstract')->nullable();
+            $table->text('abstract')->nullable();
+            $table->text('toctext')->nullable();
 
             $table->index('date');
             $table->index('publisher');
