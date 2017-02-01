@@ -11,7 +11,9 @@ class Article extends Model
      *
      * @var array
      */
-    protected $fillable = ['internal_id', 'content_id', 'title', 'sku', 'publisher', 'price', 'date', 'abstract'];
+    protected $fillable = [
+        'internal_id', 'content_id', 'title', 'sku', 'publisher', 'price', 'date', 'length', 'abstract', 'toctext'
+    ];
 
     /**
      * Timestamps.
@@ -26,4 +28,14 @@ class Article extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * An article has one TOC.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function toc()
+    {
+        return $this->hasOne(Toc::class);
+    }
 }
