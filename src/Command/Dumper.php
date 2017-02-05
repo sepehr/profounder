@@ -2,13 +2,12 @@
 
 namespace Profounder\Command;
 
+use Profounder\Entity\Article;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Database\Query\Builder;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -17,11 +16,11 @@ class Dumper extends ContainerAwareCommand
     use Benchmarkable;
 
     /**
-     * Query builder instance.
+     * Article repository instance.
      *
-     * @var Builder
+     * @var Article
      */
-    private $queryBuilder;
+    private $repository;
 
     /**
      * Filesystem instance.
@@ -33,13 +32,13 @@ class Dumper extends ContainerAwareCommand
     /**
      * Dumper constructor.
      *
-     * @param  Capsule $capsule
+     * @param  Article $repository
      * @param  Filesystem $filesystem
      */
-    public function __construct(Capsule $capsule, Filesystem $filesystem)
+    public function __construct(Article $repository, Filesystem $filesystem)
     {
-        $this->filesystem   = $filesystem;
-        $this->queryBuilder = $capsule->table('articles');
+        $this->repository = $repository;
+        $this->filesystem = $filesystem;
 
         parent::__construct();
     }
@@ -63,7 +62,7 @@ class Dumper extends ContainerAwareCommand
     {
         $this->outputFiglet($output);
 
-        if (! $count = $this->queryBuilder->count()) {
+        if (! $count = $this->repository->count()) {
             $output->writeln('No results in the database.');
             exit(1);
         }
@@ -93,7 +92,8 @@ class Dumper extends ContainerAwareCommand
     {
         $this->filesystem->put($file, '');
 
-        $this->queryBuilder
+        $this
+            ->repository
             ->select('sku')
             ->chunk(1000, function ($skus) use ($file) {
                 $skus = $skus->reduce(function ($carry, $item) {
@@ -115,11 +115,12 @@ class Dumper extends ContainerAwareCommand
     {
         $this->filesystem->put($file, 'ContentID,Title,Date,Price,Publisher,SKU' . PHP_EOL);
 
-        $this->queryBuilder
+        $this
+            ->repository
             ->select('content_id', 'title', 'date', 'price', 'publisher', 'sku')
             ->chunk(1000, function ($articles) use ($file) {
                 $articles = $articles->reduce(function ($carry, $item) {
-                    return $carry .= '"' . implode('","', (array) $item) . '"' . PHP_EOL;
+                    return $carry .= '"' . implode('","', $item->toArray()) . '"' . PHP_EOL;
                 }, '');
 
                 $this->filesystem->append($file, $articles);

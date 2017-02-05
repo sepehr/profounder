@@ -3,16 +3,16 @@
 namespace Profounder\Query;
 
 use Profounder\Utils;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Profounder\Entity\Article;
 
 class ResultStorer
 {
     /**
-     * Capsule manager instance.
+     * Article repository instance.
      *
-     * @var Capsule
+     * @var Article
      */
-    private $capsule;
+    private $repository;
 
     /**
      * Utils instance.
@@ -24,13 +24,13 @@ class ResultStorer
     /**
      * ResultStorer constructor.
      *
-     * @param  Capsule $capsule
+     * @param  Article $repository
      * @param  Utils $utils
      */
-    public function __construct(Capsule $capsule, Utils $utils)
+    public function __construct(Article $repository, Utils $utils)
     {
-        $this->utils   = $utils;
-        $this->capsule = $capsule;
+        $this->repository = $repository;
+        $this->utils      = $utils;
     }
 
     /**
@@ -71,13 +71,11 @@ class ResultStorer
      */
     private function insertIfNotExists(array $article)
     {
-        $queryBuilder = $this->capsule->table('articles');
-
-        if ($queryBuilder->where(['internal_id' => $article['InternalId']])->exists()) {
+        if ($this->repository->whereInternalId($article['InternalId'])->exists()) {
             return false;
         }
 
-        return $queryBuilder->insert($this->prepareArticle($article));
+        return (bool) $this->repository->create($this->prepareArticle($article));
     }
 
     /**
