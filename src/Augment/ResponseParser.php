@@ -2,27 +2,17 @@
 
 namespace Profounder\Augment;
 
-use Psr\Http\Message\ResponseInterface;
-use Profounder\Exception\InvalidSession;
-use Profounder\Exception\InvalidResponse;
-use Profounder\Exception\InvalidArgument;
+use Profounder\ResponseCrawler;
 use Symfony\Component\DomCrawler\Crawler;
 
-class ResponseParser
+class ResponseParser extends ResponseCrawler
 {
     /**
-     * Response object.
+     * TOC item defaults array.
      *
-     * @var ResponseInterface
+     * @var array
      */
-    private $response;
-
-    /**
-     * Crawler instance.
-     *
-     * @var Crawler
-     */
-    private $crawler;
+    private $defaults = [];
 
     /**
      * TOC, length and abstract elements CSS selectors.
@@ -36,99 +26,42 @@ class ResponseParser
     ];
 
     /**
-     * TOC item defaults array.
-     *
-     * @var array
-     */
-    private $tocItemDefaults = [];
-
-    /**
-     * ResponseParser constructor.
-     *
-     * @param  Crawler $crawler
-     */
-    public function __construct(Crawler $crawler)
-    {
-        $this->crawler = $crawler;
-    }
-
-    /**
-     * Parses the HTML response into an ArticlePage entity.
-     *
-     * @param  ResponseInterface|null $response
+     * @inheritdoc
      *
      * @return ArticlePage
-     *
-     * @throws InvalidArgument
      */
-    public function parse(ResponseInterface $response = null)
+    protected function parseBody($body)
     {
-        $response && $this->setResponse($response);
-
-        if (! $this->response) {
-            throw new InvalidArgument('No response is set for the parser.');
-        }
-
-        $this->validate();
-
         return $this->makeArticlePage();
     }
 
     /**
-     * Response setter.
-     *
-     * @param  ResponseInterface $response
-     *
-     * @return ResponseParser
-     */
-    public function setResponse(ResponseInterface $response)
-    {
-        $this->response = $response;
-
-        $this->crawler->addHtmlContent((string) $response->getBody());
-
-        return $this;
-    }
-
-    /**
-     * Sets tocItemDefaults property.
+     * Sets defaults property.
      *
      * @param  array $defaults
      *
      * @return $this
      */
-    public function withTocItemDefaults(array $defaults)
+    public function withDefaults(array $defaults)
     {
-        $this->tocItemDefaults = $defaults;
+        $this->defaults = $defaults;
 
         return $this;
     }
 
     /**
-     * Validates the HTML response content.
+     * Creates an ArticlePage instance.
      *
-     * @return bool
-     *
-     * @throws InvalidSession
-     * @throws InvalidResponse
+     * @return ArticlePage
      */
-    private function validate()
+    private function makeArticlePage()
     {
-        $content = (string) $this->response->getBody();
-
-        if (strpos($content, 'web server encountered a critical error') || strpos($content, 'Runtime Error')) {
-            throw InvalidResponse::critical();
-        }
-
-        if (strpos($content, 'Sign In')) {
-            throw InvalidSession::expired();
-        }
-
-        if (strpos($content, 'One or more of your selected products were not found')) {
-            throw InvalidResponse::notFound();
-        }
-
-        return true;
+        return new ArticlePage(
+            $this->extractToc(),
+            $this->extractFlatToc(),
+            $this->extractLength(),
+            $this->extractAbstract()
+        );
     }
 
     /**
@@ -196,9 +129,9 @@ class ResponseParser
      */
     private function getTocElement()
     {
-        $crawler = $this->crawler->filter($this->selectors['toc']);
+        $subCrawler = $this->crawler->filter($this->selectors['toc']);
 
-        return $crawler->count() === 1 ? null : $crawler;
+        return $subCrawler->count() === 1 ? null : $subCrawler;
     }
 
     /**
@@ -231,7 +164,7 @@ class ResponseParser
         $built = array_replace([
             'title' => $this->extractTocItemTitle($item),
             'price' => $this->preparePrice($this->extractTocItemPrice($item)),
-        ], $this->tocItemDefaults);
+        ], $this->defaults);
 
         if ($children = $item->filter('ul > li') and $children->count()) {
             $built['children'] = $this->buildTocArray($children);
@@ -268,21 +201,6 @@ class ResponseParser
         }
 
         return null;
-    }
-
-    /**
-     * Creates an ArticlePage instance.
-     *
-     * @return ArticlePage
-     */
-    private function makeArticlePage()
-    {
-        return new ArticlePage(
-            $this->extractToc(),
-            $this->extractFlatToc(),
-            $this->extractLength(),
-            $this->extractAbstract()
-        );
     }
 
     /**

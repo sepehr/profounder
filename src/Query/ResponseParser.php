@@ -2,109 +2,36 @@
 
 namespace Profounder\Query;
 
-use Psr\Http\Message\ResponseInterface;
+use Profounder\JsonResponseParser;
 use Profounder\Exception\InvalidSession;
 use Profounder\Exception\InvalidResponse;
-use Profounder\Exception\InvalidArgument;
 
-class ResponseParser
+class ResponseParser extends JsonResponseParser
 {
     /**
-     * Response object.
-     *
-     * @var ResponseInterface
-     */
-    private $response;
-
-    /**
-     * Results key in remote response.
-     *
-     * @var string
-     */
-    private $resultsKey = 'Results';
-
-    /**
-     * Parses response into a JSON object.
-     *
-     * @param  ResponseInterface|null $response
+     * @inheritdoc
      *
      * @return array
-     *
-     * @throws InvalidArgument
      */
-    public function parse(ResponseInterface $response = null)
+    protected function parseBody($parsedJson)
     {
-        $response && $this->setResponse($response);
-
-        if (! $this->response) {
-            throw new InvalidArgument('No response is set for the parser.');
-        }
-
-        $parsed = $this->validate($this->parseJson());
-
-        $parsed = $parsed[$this->resultsKey] ?: [];
-
-        return $parsed;
+        return $parsedJson['Results'] ?: [];
     }
 
     /**
-     * Response setter.
-     *
-     * @param  ResponseInterface $response
-     *
-     * @return ResponseParser
-     */
-    public function setResponse(ResponseInterface $response)
-    {
-        $this->response = $response;
-
-        return $this;
-    }
-
-    /**
-     * Parses a Guzzle response into an array.
-     *
-     * @return array
-     *
-     * @throws InvalidResponse
-     */
-    private function parseJson()
-    {
-        $content = (string) $this->response->getBody();
-
-        if (strpos($content, 'web server encountered a critical error') || strpos($content, 'Runtime Error')) {
-            throw InvalidResponse::critical();
-        }
-
-        $parsedJson = json_decode($content, true);
-
-        if (is_null($parsedJson)) {
-            throw InvalidResponse::invalidJson();
-        }
-
-        return $parsedJson;
-    }
-
-    /**
-     * Validates the JSON-decoded response array.
-     *
-     * @param  array $json
-     *
-     * @return array
+     * @inheritdoc
      *
      * @throws InvalidResponse
      * @throws InvalidSession
      */
-    private function validate(array $json)
+    protected function validateJson(array $parsedJson)
     {
-        if ($json['UserIsLoggedOut']) {
+        if ($parsedJson['UserIsLoggedOut']) {
             throw InvalidSession::expired();
         }
 
-        if (! empty($json['ErrorMessage'])) {
-            throw InvalidResponse::remoteError($json['ErrorMessage']);
+        if (! empty($parsedJson['ErrorMessage'])) {
+            throw InvalidResponse::remoteError($parsedJson['ErrorMessage']);
         }
-
-        return $json;
     }
 }
