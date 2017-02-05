@@ -45,13 +45,13 @@ class Builder
     /**
      * Static factory method.
      *
-     * @param  array $params
+     * @param  array $args
      *
      * @return Builder
      */
-    public static function create(array $params = [])
+    public static function create(...$args)
     {
-        return new static($params);
+        return new static(...$args);
     }
 
     /**

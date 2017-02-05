@@ -2,17 +2,32 @@
 
 namespace Profounder\Augment;
 
+use Profounder\Utils;
 use Profounder\ResponseCrawler;
 use Symfony\Component\DomCrawler\Crawler;
 
 class ResponseParser extends ResponseCrawler
 {
     /**
+     * Utils instance.
+     *
+     * @var Utils
+     */
+    private $utils;
+
+    /**
      * TOC item defaults array.
      *
      * @var array
      */
     private $defaults = [];
+
+    public function __construct(Crawler $crawler, Utils $utils)
+    {
+        parent::__construct($crawler);
+
+        $this->utils = $utils;
+    }
 
     /**
      * TOC, length and abstract elements CSS selectors.
@@ -87,7 +102,7 @@ class ResponseParser extends ResponseCrawler
      */
     private function extractAbstract()
     {
-        $abstract = $this->normalizeWhitespace(
+        $abstract = $this->utils->normalizeWhitespace(
             $this->crawler->filter($this->selectors['abstract'])->html()
         );
 
@@ -116,7 +131,7 @@ class ResponseParser extends ResponseCrawler
     private function extractFlatToc()
     {
         if ($toc = $this->getTocElement()) {
-            return $this->normalizeWhitespace($toc->parents()->text());
+            return $this->utils->normalizeWhitespace($toc->parents()->text());
         }
 
         return null;
@@ -163,7 +178,7 @@ class ResponseParser extends ResponseCrawler
     {
         $built = array_replace([
             'title' => $this->extractTocItemTitle($item),
-            'price' => $this->preparePrice($this->extractTocItemPrice($item)),
+            'price' => $this->utils->preparePrice($this->extractTocItemPrice($item)),
         ], $this->defaults);
 
         if ($children = $item->filter('ul > li') and $children->count()) {
@@ -182,7 +197,7 @@ class ResponseParser extends ResponseCrawler
      */
     private function extractTocItemTitle(Crawler $item)
     {
-        return $this->normalizeWhitespace(
+        return $this->utils->normalizeWhitespace(
             str_replace($this->extractTocItemPrice($item), '', $item->filter('span.rtIn')->text())
         );
     }
@@ -197,35 +212,9 @@ class ResponseParser extends ResponseCrawler
     private function extractTocItemPrice(Crawler $item)
     {
         if ($price = $item->filter('span.rtIn > b') and $price->count()) {
-            return $this->normalizeWhitespace($price->text());
+            return $this->utils->normalizeWhitespace($price->text());
         }
 
         return null;
-    }
-
-    /**
-     * Converts a price string to equivalent integer.
-     *
-     * @param  string|null $price
-     *
-     * @return int|null
-     */
-    private function preparePrice($price)
-    {
-        return empty($price)
-            ? $price
-            : intval(preg_replace('/([^0-9\\.])/i', '', $price) * 100);
-    }
-
-    /**
-     * Normalizes whitespace characters in a string.
-     *
-     * @param  string $string
-     *
-     * @return string
-     */
-    private function normalizeWhitespace($string)
-    {
-        return trim(preg_replace('!\s+!', ' ', str_replace("\xC2\xA0", ' ', $string)));
     }
 }

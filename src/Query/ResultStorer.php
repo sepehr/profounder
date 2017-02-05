@@ -2,6 +2,7 @@
 
 namespace Profounder\Query;
 
+use Profounder\Utils;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class ResultStorer
@@ -14,25 +15,34 @@ class ResultStorer
     private $capsule;
 
     /**
+     * Utils instance.
+     *
+     * @var Utils
+     */
+    private $utils;
+
+    /**
      * ResultStorer constructor.
      *
      * @param  Capsule $capsule
+     * @param  Utils $utils
      */
-    public function __construct(Capsule $capsule)
+    public function __construct(Capsule $capsule, Utils $utils)
     {
+        $this->utils   = $utils;
         $this->capsule = $capsule;
     }
 
     /**
      * Static factory method.
      *
-     * @param  Capsule $capsule
+     * @param  array $args
      *
      * @return ResultStorer
      */
-    public static function create(Capsule $capsule)
+    public static function create(...$args)
     {
-        return new static($capsule);
+        return new static(...$args);
     }
 
     /**
@@ -84,45 +94,9 @@ class ResultStorer
             'content_id'  => $article['ContentId'],
             'publisher'   => $article['Publisher'],
             'internal_id' => $article['InternalId'],
-            'title'       => $this->prepareTitle($article['Title']),
-            'price'       => $this->preparePrice($article['Price']),
-            'date'        => $this->prepareDate($article['DocDateTime']),
+            'title'       => $this->utils->stripTags($article['Title']),
+            'price'       => $this->utils->preparePrice($article['Price']),
+            'date'        => $this->utils->reformatDate($article['DocDateTime']),
         ];
-    }
-
-    /**
-     * Reformats a valid date string for insertion.
-     *
-     * @param  string $date
-     *
-     * @return string
-     */
-    private function prepareDate($date)
-    {
-        return date('Y-m-d H:i:s', strtotime($date));
-    }
-
-    /**
-     * Converts a price string to equivalent integer.
-     *
-     * @param  string $price
-     *
-     * @return int
-     */
-    private function preparePrice($price)
-    {
-        return intval(preg_replace('/([^0-9\\.])/i', '', $price) * 100);
-    }
-
-    /**
-     * Prepares article title for insertion.
-     *
-     * @param  string $title
-     *
-     * @return string
-     */
-    private function prepareTitle($title)
-    {
-        return strip_tags($title);
     }
 }

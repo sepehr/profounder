@@ -71,13 +71,13 @@ abstract class Request
     /**
      * Static factory method.
      *
-     * @param  ClientInterface $client
+     * @param  array $args
      *
-     * @return $this
+     * @return Request
      */
-    public static function create(ClientInterface $client)
+    public static function create(...$args)
     {
-        return new static($client);
+        return new static(...$args);
     }
 
     /**
