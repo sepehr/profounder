@@ -2,9 +2,9 @@
 
 namespace Profounder\Augment;
 
-use Profounder\Request as BaseRequest;
+use Profounder\Request as AbstractRequest;
 
-class Request extends BaseRequest
+class Request extends AbstractRequest
 {
     /**
      * @inheritdoc

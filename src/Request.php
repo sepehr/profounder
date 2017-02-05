@@ -4,8 +4,9 @@ namespace Profounder;
 
 use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
+use Profounder\Contracts\Request as RequestContract;
 
-abstract class Request
+abstract class Request implements RequestContract
 {
     /**
      * HTTP client instance.
@@ -81,7 +82,7 @@ abstract class Request
     }
 
     /**
-     * Class initializor.
+     * Request initializor.
      *
      * Knows how to init a request to profound.com's search endpoint with proper defaults.
      *
