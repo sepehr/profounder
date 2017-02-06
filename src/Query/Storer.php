@@ -6,7 +6,7 @@ use Profounder\Entity\Article;
 use Profounder\Entity\Publisher;
 use Illuminate\Support\Collection;
 
-class ResultStorer
+class Storer
 {
     /**
      * Article repository instance.
@@ -23,7 +23,7 @@ class ResultStorer
     private $publisherRepo;
 
     /**
-     * ResultStorer constructor.
+     * Storer constructor.
      *
      * @param  Article $articleRepo
      * @param  Publisher $publisherRepo
@@ -39,7 +39,7 @@ class ResultStorer
      *
      * @param  array $args
      *
-     * @return ResultStorer
+     * @return Storer
      */
     public static function create(...$args)
     {

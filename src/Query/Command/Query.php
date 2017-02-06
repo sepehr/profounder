@@ -2,8 +2,8 @@
 
 namespace Profounder\Query\Command;
 
+use Profounder\Query\Storer;
 use Illuminate\Support\Collection;
-use Profounder\Query\ResultStorer;
 use Profounder\Query\ResponseParser;
 use Profounder\Service\IdentityPool;
 use Profounder\Core\ContainerAwareCommand;
@@ -26,9 +26,9 @@ class Query extends ContainerAwareCommand
     private $identity;
 
     /**
-     * ResultStorer instance.
+     * Storer instance.
      *
-     * @var ResultStorer
+     * @var Storer
      */
     private $storer;
 
@@ -70,14 +70,14 @@ class Query extends ContainerAwareCommand
     /**
      * Query constructor.
      *
-     * @param  ResultStorer $storer
+     * @param  Storer $storer
      * @param  QueryBuilder $builder
      * @param  QueryRequest $request
      * @param  IdentityPool $identity
      * @param  ResponseParser $parser
      */
     public function __construct(
-        ResultStorer $storer,
+        Storer $storer,
         QueryBuilder $builder,
         QueryRequest $request,
         IdentityPool $identity,
