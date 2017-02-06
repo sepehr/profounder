@@ -142,7 +142,7 @@ class Augment extends ContainerAwareCommand
     private function getArticlePage()
     {
         return $this->benchmark(function () {
-            return $this->parseResponse($this->fetchArticlePage());
+            return $this->parseResponse($this->requestArticlePage());
         });
     }
 
@@ -151,7 +151,7 @@ class Augment extends ContainerAwareCommand
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    private function fetchArticlePage()
+    private function requestArticlePage()
     {
         return $this->request
             ->withArticle($this->articleId)
