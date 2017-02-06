@@ -22,13 +22,6 @@ class ResponseParser extends ResponseCrawler
      */
     private $defaults = [];
 
-    public function __construct(Crawler $crawler, Utils $utils)
-    {
-        parent::__construct($crawler);
-
-        $this->utils = $utils;
-    }
-
     /**
      * TOC, length and abstract elements CSS selectors.
      *
@@ -39,6 +32,19 @@ class ResponseParser extends ResponseCrawler
         'length'   => '#BodyArea_MainContentArea_multiItemRepeater_TOCKwicInfotd_0 > div.basicInfoSection',
         'toc'      => '#BodyArea_MainContentArea_multiItemRepeater_TOC_0_TOCTree_0 > ul > li > ul.rtUL > li',
     ];
+
+    /**
+     * ResponseParser constructor.
+     *
+     * @param  Crawler $crawler
+     * @param  Utils $utils
+     */
+    public function __construct(Crawler $crawler, Utils $utils)
+    {
+        parent::__construct($crawler);
+
+        $this->utils = $utils;
+    }
 
     /**
      * @inheritdoc
