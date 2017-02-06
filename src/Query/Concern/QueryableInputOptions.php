@@ -2,20 +2,19 @@
 
 namespace Profounder\Query\Concern;
 
-use Profounder\Core\Command;
 use Profounder\Query\Builder as QueryBuilder;
 use Symfony\Component\Console\Input\InputOption;
 
 trait QueryableInputOptions
 {
     /**
-     * Registers query input options.
+     * Registers query command input options.
      *
      * @param  bool $addDateOption
      *
-     * @return Command
+     * @return $this
      */
-    private function registerQueryInputOptions($addDateOption = true)
+    private function registerInputOptions($addDateOption = true)
     {
         $this
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Debug mode.')
@@ -38,10 +37,10 @@ trait QueryableInputOptions
     /**
      * Registers all query options but --date.
      *
-     * @return Command
+     * @return $this
      */
-    private function registerQueryInputOptionsWithoutDate()
+    private function registerInputOptionsWithoutDate()
     {
-        return $this->registerQueryInputOptions(false);
+        return $this->registerInputOptions(false);
     }
 }

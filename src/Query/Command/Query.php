@@ -99,7 +99,7 @@ class Query extends ContainerAwareCommand
         $this
             ->setName('profounder:query')
             ->setDescription('Dispatches a query to profound.com search endpoint and stores the results.')
-            ->registerQueryInputOptions();
+            ->registerInputOptions();
     }
 
     /**
@@ -179,7 +179,7 @@ class Query extends ContainerAwareCommand
             ->searchFor($this->options->keyword)
             ->byDateString($this->options->date)
             ->orderBy($this->options->sort, $this->options->order)
-            ->offset($this->options->offset)
+            ->skip($this->options->offset)
             ->take($this->options->limit)
             ->build();
     }
