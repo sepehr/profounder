@@ -47,7 +47,7 @@ class Augmentor
      */
     public function augment($articleId, ArticlePage $articlePage)
     {
-        if ($article = $this->articleRepo->whereContentId($articleId)->first()) {
+        if ($article = $this->getArticle($articleId)) {
             if ($this->updateArticle($article, $articlePage)) {
                 return $this->syncTocItems($article, $articlePage);
             }
@@ -56,6 +56,18 @@ class Augmentor
         }
 
         throw InvalidArgument::notFound("Article could not be found: $articleId");
+    }
+
+    /**
+     * Returns article from the database by its content ID.
+     *
+     * @param  string $articleId
+     *
+     * @return Article
+     */
+    private function getArticle($articleId)
+    {
+        return $this->articleRepo->whereContentId($articleId)->first();
     }
 
     /**
