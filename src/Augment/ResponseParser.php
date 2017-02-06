@@ -77,12 +77,12 @@ class ResponseParser extends ResponseCrawler
      */
     private function makeArticlePage()
     {
-        return new ArticlePage(
-            $this->extractToc(),
-            $this->extractFlatToc(),
-            $this->extractLength(),
-            $this->extractAbstract()
-        );
+        return ArticlePage::create([
+            'toc'      => $this->extractToc(),
+            'length'   => $this->extractLength(),
+            'toctext'  => $this->extractTocText(),
+            'abstract' => $this->extractAbstract(),
+        ]);
     }
 
     /**
@@ -134,7 +134,7 @@ class ResponseParser extends ResponseCrawler
      *
      * @return string|null
      */
-    private function extractFlatToc()
+    private function extractTocText()
     {
         if ($toc = $this->getTocElement()) {
             return $this->utils->normalizeWhitespace($toc->parents()->text());

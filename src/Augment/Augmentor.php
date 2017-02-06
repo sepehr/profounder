@@ -68,11 +68,7 @@ class Augmentor
      */
     private function updateArticle(Article $article, ArticlePage $articlePage)
     {
-        $article->length   = $articlePage->length;
-        $article->toctext  = $articlePage->flatToc;
-        $article->abstract = $articlePage->abstract;
-
-        return $article->save();
+        return $article->fill($articlePage->toArray())->save();
     }
 
     /**

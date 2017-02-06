@@ -2,50 +2,26 @@
 
 namespace Profounder\Augment;
 
-class ArticlePage
+use Illuminate\Support\Fluent;
+
+/**
+ * @property  array $toc
+ * @property  int $length
+ * @property  string $abstract
+ * @property  string $toctext
+ */
+class ArticlePage extends Fluent
 {
     /**
-     * Article TOC.
+     * Static factory method.
      *
-     * @var array
-     */
-    public $toc;
-
-    /**
-     * Article flat TOC.
+     * @param  array $args
      *
-     * @var string
+     * @return $this
      */
-    public $flatToc;
-
-    /**
-     * Article length.
-     *
-     * @var int|null
-     */
-    public $length;
-
-    /**
-     * Article abstract.
-     *
-     * @var string|null
-     */
-    public $abstract;
-
-    /**
-     * ArticlePage constructor.
-     *
-     * @param  array|null $toc
-     * @param  string|null $flatToc
-     * @param  int|null $length
-     * @param  string|null $abstract
-     */
-    public function __construct(array $toc = null, $flatToc = null, $length = null, $abstract = null)
+    public static function create(...$args)
     {
-        $this->toc      = $toc;
-        $this->flatToc  = $flatToc;
-        $this->length   = $length;
-        $this->abstract = $abstract;
+        return new static(...$args);
     }
 
     /**
@@ -60,7 +36,7 @@ class ArticlePage
             $this->length,
             strlen($this->abstract),
             count($this->toc),
-            strlen($this->flatToc)
+            strlen($this->toctext)
         );
     }
 }
