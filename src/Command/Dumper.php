@@ -3,6 +3,7 @@
 namespace Profounder\Command;
 
 use Profounder\Entity\Article;
+use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
@@ -95,7 +96,7 @@ class Dumper extends ContainerAwareCommand
         $this
             ->repository
             ->select('sku')
-            ->chunk(1000, function ($skus) use ($file) {
+            ->chunk(1000, function (Collection $skus) use ($file) {
                 $skus = $skus->reduce(function ($carry, $item) {
                     return $carry .= $item->sku . PHP_EOL;
                 }, '');
@@ -118,7 +119,7 @@ class Dumper extends ContainerAwareCommand
         $this
             ->repository
             ->select('content_id', 'title', 'date', 'price', 'publisher', 'sku')
-            ->chunk(1000, function ($articles) use ($file) {
+            ->chunk(1000, function (Collection $articles) use ($file) {
                 $articles = $articles->reduce(function ($carry, $item) {
                     return $carry .= '"' . implode('","', $item->toArray()) . '"' . PHP_EOL;
                 }, '');
