@@ -27,6 +27,7 @@ return [
         Profounder\Query\Command\Query::class,
         Profounder\Query\Command\Seeker::class,
         Profounder\Augment\Command\Augment::class,
+        Profounder\Augment\Command\MassAugment::class,
     ],
 
     /*

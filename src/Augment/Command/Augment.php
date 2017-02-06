@@ -9,14 +9,14 @@ use Profounder\Service\IdentityPool;
 use Profounder\Augment\ResponseParser;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Profounder\Augment\Concern\AugmentableInputOptions;
 
 class Augment extends ContainerAwareCommand
 {
-    use Benchmarkable;
+    use Benchmarkable, AugmentableInputOptions;
 
     /**
      * Request instance.
@@ -92,9 +92,7 @@ class Augment extends ContainerAwareCommand
             ->setName('profounder:augment')
             ->setDescription('Augments article entities with TOC, page length and abstract text.')
             ->addArgument('content-id', InputArgument::OPTIONAL, 'Article content ID.')
-            ->addOption('debug', null, InputOption::VALUE_NONE, 'Debug mode.')
-            ->addOption('id', 'i', InputOption::VALUE_OPTIONAL, 'Process ID.', 1)
-            ->addOption('delay', 'w', InputOption::VALUE_OPTIONAL, 'Inter-request delay in milliseconds', null);
+            ->registerInputOptions();
     }
 
     /**
@@ -105,8 +103,6 @@ class Augment extends ContainerAwareCommand
         $this->options   = (object)$input->getOptions();
         $this->articleId = $input->getArgument('content-id');
         $this->session   = $this->identity->retrieve(intval($this->options->id - 1));
-
-        $output->writeln("Processing article #{$this->articleId}");
 
         $this->benchmark(function () use ($output) {
             $articlePage = $this->getArticlePage();
