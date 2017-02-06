@@ -2,6 +2,7 @@
 
 namespace Profounder\Query;
 
+use Illuminate\Support\Collection;
 use Profounder\JsonResponseParser;
 use Profounder\Exception\InvalidSession;
 use Profounder\Exception\InvalidResponse;
@@ -9,13 +10,15 @@ use Profounder\Exception\InvalidResponse;
 class ResponseParser extends JsonResponseParser
 {
     /**
+     * Parses response into a collection of CollectedArticle objects.
+     *
      * @inheritdoc
      *
-     * @return array
+     * @return Collection
      */
     protected function parseBody($parsedJson)
     {
-        return $parsedJson['Results'] ?: [];
+        return $this->makeCollection($parsedJson);
     }
 
     /**
@@ -33,5 +36,19 @@ class ResponseParser extends JsonResponseParser
         if (! empty($parsedJson['ErrorMessage'])) {
             throw InvalidResponse::remoteError($parsedJson['ErrorMessage']);
         }
+    }
+
+    /**
+     * Creates a collection of CollectedArticle objects out of the JSON results.
+     *
+     * @param  array $parsedJson
+     *
+     * @return Collection
+     */
+    private function makeCollection(array $parsedJson)
+    {
+        return Collection::make($parsedJson['Results'])->map(function ($result) {
+            return CollectedArticle::create($result);
+        });
     }
 }

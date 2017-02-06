@@ -2,6 +2,7 @@
 
 namespace Profounder\Query\Command;
 
+use Illuminate\Support\Collection;
 use Profounder\Query\ResultStorer;
 use Profounder\Query\ResponseParser;
 use Profounder\Service\IdentityPool;
@@ -119,7 +120,7 @@ class Query extends ContainerAwareCommand
                 );
 
                 $results = $this->query();
-                $output->writeln('Fetched <info>' . count($results) . "</> articles in {$this->elapsed()}ms");
+                $output->writeln("Fetched <info>{$results->count()}</> articles in {$this->elapsed()}ms");
 
                 $this->outputDebug($output);
 
@@ -139,7 +140,7 @@ class Query extends ContainerAwareCommand
     /**
      * Queries the remote search endpoint.
      *
-     * @return array
+     * @return Collection
      */
     private function query()
     {
@@ -157,11 +158,11 @@ class Query extends ContainerAwareCommand
     /**
      * Stores the query results.
      *
-     * @param  array $results
+     * @param  Collection $results
      *
      * @return int
      */
-    private function store($results)
+    private function store(Collection $results)
     {
         return $this->benchmark(function () use ($results) {
             return $this->storer->store($results);
@@ -179,7 +180,7 @@ class Query extends ContainerAwareCommand
             ->searchFor($this->options->keyword)
             ->byDateString($this->options->date)
             ->orderBy($this->options->sort, $this->options->order)
-            ->skip($this->options->offset)
+            ->offset($this->options->offset)
             ->take($this->options->limit)
             ->build();
     }
@@ -195,17 +196,15 @@ class Query extends ContainerAwareCommand
      */
     private function dispatchRequest($query, $cookie, $delay = null)
     {
-        return $this->request
-            ->withQuery($query)
-            ->dispatch($cookie, $delay);
+        return $this->request->withQuery($query)->dispatch($cookie, $delay);
     }
 
     /**
-     * Parses the response into an array.
+     * Parses the response into a collection of CollectedArticle objects.
      *
      * @param  \Psr\Http\Message\ResponseInterface $response
      *
-     * @return array
+     * @return Collection
      */
     private function parseResponse($response)
     {
@@ -216,16 +215,16 @@ class Query extends ContainerAwareCommand
      * Outputs debug information about the query.
      *
      * @param  OutputInterface $output
-     * @param  array $results
+     * @param  Collection|null $results
      *
      * @return void
      */
-    private function outputDebug(OutputInterface $output, $results = [])
+    private function outputDebug(OutputInterface $output, Collection $results = null)
     {
         if ($this->options->debug) {
             $output->writeln('<comment>[DEBUG][QUERY]: ' . urldecode($this->buildQuery()) . '</>');
 
-            if (! empty($results)) {
+            if ($results) {
                 $output->writeln("<comment>[DEBUG][RESULTS]:\n" . var_export($results, true) . '</>');
             }
         }

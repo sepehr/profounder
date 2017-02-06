@@ -16,9 +16,9 @@ class CreateArticlesTable extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('content_id');
+            $table->unsignedInteger('publisher_id');
             $table->string('title', 511);
             $table->string('sku');
-            $table->string('publisher');
             $table->unsignedInteger('price');
             $table->timestamp('date')->useCurrent = true;
             $table->string('internal_id');
@@ -27,9 +27,13 @@ class CreateArticlesTable extends Migration
             $table->text('toctext')->nullable();
 
             $table->index('date');
-            $table->index('publisher');
             $table->unique('content_id');
             $table->unique('internal_id');
+
+            $table->foreign('publisher_id')
+                ->references('id')
+                ->on('publishers')
+                ->onDelete('cascade');
         });
     }
 

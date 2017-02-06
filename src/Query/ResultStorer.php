@@ -2,8 +2,9 @@
 
 namespace Profounder\Query;
 
-use Profounder\Utils;
 use Profounder\Entity\Article;
+use Profounder\Entity\Publisher;
+use Illuminate\Support\Collection;
 
 class ResultStorer
 {
@@ -12,25 +13,25 @@ class ResultStorer
      *
      * @var Article
      */
-    private $repository;
+    private $articleRepo;
 
     /**
-     * Utils instance.
+     * Publisher repository instance.
      *
-     * @var Utils
+     * @var Publisher
      */
-    private $utils;
+    private $publisherRepo;
 
     /**
      * ResultStorer constructor.
      *
-     * @param  Article $repository
-     * @param  Utils $utils
+     * @param  Article $articleRepo
+     * @param  Publisher $publisherRepo
      */
-    public function __construct(Article $repository, Utils $utils)
+    public function __construct(Article $articleRepo, Publisher $publisherRepo)
     {
-        $this->repository = $repository;
-        $this->utils      = $utils;
+        $this->articleRepo   = $articleRepo;
+        $this->publisherRepo = $publisherRepo;
     }
 
     /**
@@ -46,55 +47,112 @@ class ResultStorer
     }
 
     /**
-     * Stores a collection of articles into the database.
+     * Stores a collection of CollectedArticle objects into the database.
      *
-     * @param  array $articles
+     * @param  Collection $articles
      *
      * @return int Number of successful inserts.
      */
-    public function store(array $articles)
+    public function store(Collection $articles)
     {
         $count = 0;
-        foreach ($articles as $article) {
-            $this->insertIfNotExists($article) and $count++;
-        }
+        $articles->each(function (CollectedArticle $article) use (&$count) {
+            $this->storeIfNotExists($article) and $count++;
+        });
 
         return $count;
     }
 
     /**
-     * Inserts a new article record into the database if necessary.
+     * Normalizes and stores the collected article into database, if not exists.
      *
-     * @param  array $article
+     * @param  CollectedArticle $article
      *
      * @return bool
      */
-    private function insertIfNotExists(array $article)
+    private function storeIfNotExists(CollectedArticle $article)
     {
-        if ($this->repository->whereInternalId($article['InternalId'])->exists()) {
-            return false;
-        }
+        return $this->articleExists($article)
+            ? false
+            : $this->normalizeAndStore($article);
+    }
 
-        return (bool) $this->repository->create($this->prepareArticle($article));
+    /**
+     * Checks if the article exists in the database or not.
+     *
+     * @param  CollectedArticle $article
+     *
+     * @return mixed
+     */
+    private function articleExists(CollectedArticle $article)
+    {
+        return $this->articleRepo->whereContentId($article->content_id)->exists();
+    }
+
+    /**
+     * Normalizes the CollectedArticle object into Article/Publisher entities and stores them.
+     *
+     * @param  CollectedArticle $article
+     *
+     * @return bool
+     */
+    private function normalizeAndStore(CollectedArticle $article)
+    {
+        $publisher = $this->fetchOrCreatePublisher($article);
+
+        return $publisher
+            ? $this->createPublisherArticle($publisher, $article)
+            : false;
+    }
+
+    /**
+     * Fetches publisher from the database or creates a new one.
+     *
+     * @param  CollectedArticle $article
+     *
+     * @return mixed
+     */
+    private function fetchOrCreatePublisher(CollectedArticle $article)
+    {
+        return $this->publisherRepo->firstOrCreate($this->preparePublisher($article));
+    }
+
+    /**
+     * Creates an article associated with the passed publisher object.
+     *
+     * @param  Publisher $publisher
+     * @param  CollectedArticle $article
+     *
+     * @return mixed
+     */
+    private function createPublisherArticle(Publisher $publisher, CollectedArticle $article)
+    {
+        return $publisher->articles()->create($this->prepareArticle($article));
     }
 
     /**
      * Prepares an article array for insertion.
      *
-     * @param  array $article
+     * @param  CollectedArticle $article
      *
      * @return array
      */
-    private function prepareArticle(array $article)
+    private function prepareArticle(CollectedArticle $article)
     {
-        return [
-            'sku'         => $article['Sku'],
-            'content_id'  => $article['ContentId'],
-            'publisher'   => $article['Publisher'],
-            'internal_id' => $article['InternalId'],
-            'title'       => $this->utils->stripTags($article['Title']),
-            'price'       => $this->utils->preparePrice($article['Price']),
-            'date'        => $this->utils->reformatDate($article['DocDateTime']),
-        ];
+        unset($article->publisher);
+
+        return $article->toArray();
+    }
+
+    /**
+     * Prepares a publisher array for insertion.
+     *
+     * @param  CollectedArticle $article
+     *
+     * @return array
+     */
+    private function preparePublisher(CollectedArticle $article)
+    {
+        return ['name' => $article->publisher];
     }
 }

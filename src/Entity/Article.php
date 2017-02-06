@@ -12,7 +12,7 @@ class Article extends Model
      * @var array
      */
     protected $fillable = [
-        'internal_id', 'content_id', 'title', 'sku', 'publisher', 'price', 'date', 'length', 'abstract', 'toctext'
+        'content_id', 'publisher_id', 'title', 'sku', 'price', 'date', 'internal_id', 'length', 'abstract', 'toctext'
     ];
 
     /**
@@ -37,5 +37,15 @@ class Article extends Model
     public function toc()
     {
         return $this->hasOne(Toc::class);
+    }
+
+    /**
+     * An article belongs to a publisher.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function publisher()
+    {
+        return $this->belongsTo(Publisher::class);
     }
 }
