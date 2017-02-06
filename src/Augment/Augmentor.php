@@ -49,7 +49,7 @@ class Augmentor
     {
         if ($article = $this->articleRepo->whereContentId($articleId)->first()) {
             if ($this->updateArticle($article, $articlePage)) {
-                return $this->createTocItems($article, $articlePage);
+                return $this->syncTocItems($article, $articlePage);
             }
 
             throw new \RuntimeException("Could not augment the article: $articleId");
@@ -83,12 +83,15 @@ class Augmentor
      *
      * @return bool
      */
-    private function createTocItems(Article $article, ArticlePage $articlePage)
+    private function syncTocItems(Article $article, ArticlePage $articlePage)
     {
         if ($articlePage->toc) {
+            // First, delete any existing toc items
+            $article->toc()->delete();
+
+            // Then, associate new toc items under a parent wrapper node
             $articlePage->toc = $this->associateTocItemsWithArticle($articlePage->toc, $article->id);
 
-            // Wrap under a parent node
             return (bool) $this->tocRepo->create([
                 'article_id' => $article->id,
                 'children'   => $articlePage->toc,
