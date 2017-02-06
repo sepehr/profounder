@@ -33,7 +33,7 @@ abstract class ResponseParser implements ResponseParserContract
      *
      * @param  ResponseInterface|null $response
      *
-     * @return array
+     * @return mixed
      *
      * @throws InvalidArgument
      */
