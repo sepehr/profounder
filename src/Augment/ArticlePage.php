@@ -57,7 +57,10 @@ class ArticlePage
     {
         return sprintf(
             "Length: %s pages; Abstract: %s chars; TOC: %d top-level sections in %d chars",
-            $this->length, strlen($this->abstract), count($this->toc), strlen($this->flatToc)
+            $this->length,
+            strlen($this->abstract),
+            count($this->toc),
+            strlen($this->flatToc)
         );
     }
 }

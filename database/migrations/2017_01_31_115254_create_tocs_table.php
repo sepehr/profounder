@@ -1,5 +1,7 @@
 <?php
 
+namespace Profounder\Migration;
+
 use Kalnoy\Nestedset\NestedSet;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;

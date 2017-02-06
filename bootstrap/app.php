@@ -21,7 +21,8 @@ $application->addCommands(array_map(
         $command->setLaravel($container);
 
         return $command;
-    }, [
+    },
+    [
         ResetCommand::class,
         StatusCommand::class,
         MigrateCommand::class,

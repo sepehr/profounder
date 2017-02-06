@@ -3,7 +3,6 @@
 namespace Profounder\Augment\Command;
 
 use Profounder\Entity\Article;
-use Illuminate\Support\Collection;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -87,7 +86,7 @@ class MassAugment extends ContainerAwareCommand
             ->whereBetween('id', [$minId, $maxId])
             ->orderBy('id')
             ->chunk($options['chunk'], function ($articles) use ($command, $commandInput, $output, &$count) {
-                $articles->each(function ($article)  use ($command, $commandInput, $output, &$count) {
+                $articles->each(function ($article) use ($command, $commandInput, $output, &$count) {
                     $commandInput['content-id'] = $article->content_id;
 
                     $output->writeln("\n>> Processing article #{$article->id} ({$article->content_id})");
@@ -116,5 +115,4 @@ class MassAugment extends ContainerAwareCommand
             ->take(1)
             ->value('id');
     }
-
 }
