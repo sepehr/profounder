@@ -25,6 +25,20 @@ abstract class ContainerAwareCommand extends Command
     }
 
     /**
+     * Resolves a callable dependencies out of the container and calls it.
+     *
+     * @param  callable|string $callback
+     * @param  array $params
+     * @param  string|null $defaultMethod
+     *
+     * @return mixed
+     */
+    public function call($callback, array $params = [], $defaultMethod = null)
+    {
+        return $this->getApplication()->getContainer()->call($callback, $params);
+    }
+
+    /**
      * Magic container resource accessor.
      *
      * @param  string $key
