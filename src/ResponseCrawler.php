@@ -31,6 +31,10 @@ abstract class ResponseCrawler extends ResponseParser
     {
         parent::setResponse($response);
 
+        // Crawler does not support loading multiple documents anymore,
+        // See: https://github.com/symfony/symfony/pull/16057/files
+        $this->crawler->clear();
+
         $this->crawler->addContent($this->responseBody());
 
         return $this;
