@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 use Profounder\Exception\InvalidSession;
 use Profounder\Exception\InvalidResponse;
 use Profounder\Exception\InvalidArgument;
-use Profounder\Contracts\ResponseParser as ResponseParserContract;
 
 abstract class ResponseParser implements ResponseParserContract
 {
@@ -18,24 +17,7 @@ abstract class ResponseParser implements ResponseParserContract
     protected $response;
 
     /**
-     * Actual response body parser.
-     *
-     * Derived classes should override this method to implement their own parsing logic.
-     *
-     * @param  mixed $body
-     *
-     * @return mixed
-     */
-    abstract protected function parseBody($body);
-
-    /**
-     * Validates and parses a response instance.
-     *
-     * @param  ResponseInterface|null $response
-     *
-     * @return mixed
-     *
-     * @throws InvalidArgument
+     * @inheritdoc
      */
     public function parse(ResponseInterface $response = null)
     {
@@ -51,11 +33,7 @@ abstract class ResponseParser implements ResponseParserContract
     }
 
     /**
-     * Response setter.
-     *
-     * @param  ResponseInterface $response
-     *
-     * @return ResponseParser
+     * @inheritdoc
      */
     public function setResponse(ResponseInterface $response)
     {
@@ -63,6 +41,17 @@ abstract class ResponseParser implements ResponseParserContract
 
         return $this;
     }
+
+    /**
+     * Actual response body parser.
+     *
+     * Derived classes should override this method to implement their own parsing logic.
+     *
+     * @param  mixed $body
+     *
+     * @return mixed
+     */
+    abstract protected function parseBody($body);
 
     /**
      * Runs basic checks against response instance.

@@ -5,12 +5,8 @@ namespace Profounder\Query;
 use Carbon\Carbon;
 use Profounder\Exception\InvalidArgument;
 
-class Builder
+class Builder implements BuilderContract
 {
-    const PRICE = 'price';
-    const DATE = 'docdatetime';
-    const RELEVANCE = 'mrdclongfalloffextrafresh';
-
     /**
      * Query parameters array.
      *
@@ -43,11 +39,7 @@ class Builder
     }
 
     /**
-     * Static factory method.
-     *
-     * @param  array $args
-     *
-     * @return Builder
+     * @inheritdoc
      */
     public static function create(...$args)
     {
@@ -55,11 +47,7 @@ class Builder
     }
 
     /**
-     * Builds the query in one go.
-     *
-     * @param  array $params
-     *
-     * @return string
+     * @inheritdoc
      */
     public static function buildFromArray(array $params)
     {
@@ -67,11 +55,7 @@ class Builder
     }
 
     /**
-     * Initializes class properties.
-     *
-     * @param  array $params
-     *
-     * @return Builder
+     * @inheritdoc
      */
     public function initialize(array $params)
     {
@@ -87,11 +71,7 @@ class Builder
     }
 
     /**
-     * Sets query keyword.
-     *
-     * @param  string $keyword
-     *
-     * @return Builder
+     * @inheritdoc
      */
     public function searchFor($keyword)
     {
@@ -101,12 +81,7 @@ class Builder
     }
 
     /**
-     * Sets query order.
-     *
-     * @param  string $field
-     * @param  string $direction Accepted values are: asc, desc
-     *
-     * @return Builder
+     * @inheritdoc
      */
     public function orderBy($field, $direction = 'desc')
     {
@@ -117,11 +92,7 @@ class Builder
     }
 
     /**
-     * Sets query offset.
-     *
-     * @param  int $offset
-     *
-     * @return Builder
+     * @inheritdoc
      */
     public function offset($offset)
     {
@@ -131,11 +102,7 @@ class Builder
     }
 
     /**
-     * Sets query limit.
-     *
-     * @param  int $limit
-     *
-     * @return Builder
+     * @inheritdoc
      */
     public function take($limit)
     {
@@ -145,12 +112,7 @@ class Builder
     }
 
     /**
-     * Sets query date condition.
-     *
-     * @param  Carbon $start
-     * @param  Carbon|null $end
-     *
-     * @return Builder
+     * @inheritdoc
      */
     public function byDate(Carbon $start, Carbon $end = null)
     {
@@ -160,13 +122,7 @@ class Builder
     }
 
     /**
-     * Sets query date condition string.
-     *
-     * @param  string $date Format: {start-date-string-1}[{$glue}{end-date-string}]
-     *
-     * @return Builder
-     *
-     * @throws InvalidArgument
+     * @inheritdoc
      */
     public function byDateString($date)
     {
@@ -186,13 +142,7 @@ class Builder
     }
 
     /**
-     * Slightly more flexible date setter.
-     *
-     * @param  string|array|Carbon $date
-     *
-     * @return Builder
-     *
-     * @throws InvalidArgument
+     * @inheritdoc
      */
     public function setDate($date)
     {
@@ -212,11 +162,7 @@ class Builder
     }
 
     /**
-     * Sets default date format.
-     *
-     * @param  $format
-     *
-     * @return Builder
+     * @inheritdoc
      */
     public function setDateFormat($format)
     {
@@ -226,9 +172,7 @@ class Builder
     }
 
     /**
-     * Builds the querystring.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function build()
     {

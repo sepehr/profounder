@@ -6,7 +6,7 @@ use Profounder\Entity\Toc;
 use Profounder\Entity\Article;
 use Profounder\Exception\InvalidArgument;
 
-class Augmentor
+class Augmentor implements AugmentorContract
 {
     /**
      * Toc repository instance.
@@ -35,15 +35,7 @@ class Augmentor
     }
 
     /**
-     * Augments an article by ID from an ArticlePage instance.
-     *
-     * @param  string $articleId Article content ID.
-     * @param  ArticlePage $articlePage
-     *
-     * @return bool
-     *
-     * @throws InvalidArgument
-     * @throws \RuntimeException
+     * @inheritdoc
      */
     public function augment($articleId, ArticlePage $articlePage)
     {

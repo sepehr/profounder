@@ -1,12 +1,20 @@
 <?php
 
-namespace Profounder\Contracts;
+namespace Profounder;
 
 use GuzzleHttp\ClientInterface;
-use Psr\Http\Message\ResponseInterface;
 
-interface Request
+interface RequestContract
 {
+    /**
+     * Static factory method.
+     *
+     * @param  array $args
+     *
+     * @return Request
+     */
+    public static function create(...$args);
+
     /**
      * Request initializor.
      *
@@ -27,7 +35,7 @@ interface Request
      * @param  string $cookie
      * @param  int|float|null $delay
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function dispatch($cookie = null, $delay = null);
 

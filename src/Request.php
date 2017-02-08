@@ -3,8 +3,6 @@
 namespace Profounder;
 
 use GuzzleHttp\ClientInterface;
-use Psr\Http\Message\ResponseInterface;
-use Profounder\Contracts\Request as RequestContract;
 
 abstract class Request implements RequestContract
 {
@@ -70,11 +68,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Static factory method.
-     *
-     * @param  array $args
-     *
-     * @return Request
+     * @inheritdoc
      */
     public static function create(...$args)
     {
@@ -82,16 +76,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Request initializor.
-     *
-     * Knows how to init a request to profound.com's search endpoint with proper defaults.
-     *
-     * @param  array $headers
-     * @param  array $data
-     * @param  string|null $uri
-     * @param  int|float|null $delay
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function initialize(array $headers = [], array $data = [], $uri = null, $delay = null)
     {
@@ -106,12 +91,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Request dispatcher.
-     *
-     * @param  string $cookie
-     * @param  int|float|null $delay
-     *
-     * @return ResponseInterface
+     * @inheritdoc
      */
     public function dispatch($cookie = null, $delay = null)
     {
@@ -122,12 +102,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Sets a data item.
-     *
-     * @param  string $key
-     * @param  mixed $value
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function withData($key, $value)
     {
@@ -137,11 +112,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Sets cookie header.
-     *
-     * @param  string $cookie
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function withCookie($cookie)
     {
@@ -151,11 +122,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Sets User-Agent header.
-     *
-     * @param  string|null $ua
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function withUserAgent($ua = null)
     {
@@ -165,11 +132,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Sets HTTP client instance.
-     *
-     * @param  ClientInterface $client
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setClient(ClientInterface $client)
     {
@@ -179,11 +142,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Sets request headers.
-     *
-     * @param  array $headers
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setHeaders(array $headers)
     {
@@ -193,11 +152,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Sets request data.
-     *
-     * @param  array $data
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setData(array $data)
     {
@@ -207,11 +162,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Sets request target URI.
-     *
-     * @param  string $uri
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setUri($uri)
     {
@@ -221,11 +172,7 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Sets request delay.
-     *
-     * @param  int|float $delay
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setDelay($delay)
     {

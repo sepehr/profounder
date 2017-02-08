@@ -1,17 +1,19 @@
 <?php
 
-namespace Profounder\Contracts;
+namespace Profounder;
 
 use Psr\Http\Message\ResponseInterface;
 
-interface ResponseParser
+interface ResponseParserContract
 {
     /**
-     * Validates and parses the response instance.
+     * Validates and parses a response instance.
      *
      * @param  ResponseInterface|null $response
      *
      * @return mixed
+     *
+     * @throws \Profounder\Exception\ExceptionContract
      */
     public function parse(ResponseInterface $response = null);
 
@@ -20,7 +22,7 @@ interface ResponseParser
      *
      * @param  ResponseInterface $response
      *
-     * @return ResponseParser
+     * @return ResponseParserContract
      */
     public function setResponse(ResponseInterface $response);
 }

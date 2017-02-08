@@ -6,7 +6,7 @@ use Profounder\Entity\Article;
 use Profounder\Entity\Publisher;
 use Illuminate\Support\Collection;
 
-class Storer
+class Storer implements StorerContract
 {
     /**
      * Article repository instance.
@@ -35,11 +35,7 @@ class Storer
     }
 
     /**
-     * Static factory method.
-     *
-     * @param  array $args
-     *
-     * @return Storer
+     * @inheritdoc
      */
     public static function create(...$args)
     {
@@ -47,11 +43,7 @@ class Storer
     }
 
     /**
-     * Stores a collection of CollectedArticle objects into the database.
-     *
-     * @param  Collection $articles
-     *
-     * @return int Number of successful inserts.
+     * @inheritdoc
      */
     public function store(Collection $articles)
     {
