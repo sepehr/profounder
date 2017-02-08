@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder\Augment\Concern;
+namespace Profounder\Augment\Command\Concern;
 
 use Symfony\Component\Console\Input\InputOption;
 

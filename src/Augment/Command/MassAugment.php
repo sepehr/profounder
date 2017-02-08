@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Profounder\Augment\Concern\AugmentableInputOptions;
+use Profounder\Augment\Command\Concern\AugmentableInputOptions;
 
 class MassAugment extends ContainerAwareCommand
 {

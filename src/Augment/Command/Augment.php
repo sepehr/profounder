@@ -12,7 +12,7 @@ use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Profounder\Augment\Concern\AugmentableInputOptions;
+use Profounder\Augment\Command\Concern\AugmentableInputOptions;
 
 class Augment extends ContainerAwareCommand
 {

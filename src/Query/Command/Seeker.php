@@ -7,9 +7,9 @@ use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
-use Profounder\Query\Concern\QueryableInputOptions;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Profounder\Query\Command\Concern\QueryableInputOptions;
 
 class Seeker extends ContainerAwareCommand
 {
