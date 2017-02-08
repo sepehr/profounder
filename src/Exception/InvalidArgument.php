@@ -2,7 +2,7 @@
 
 namespace Profounder\Exception;
 
-class InvalidArgument extends BaseException
+class InvalidArgument extends Exception
 {
 
     /**

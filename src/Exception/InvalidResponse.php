@@ -2,7 +2,7 @@
 
 namespace Profounder\Exception;
 
-class InvalidResponse extends BaseException
+class InvalidResponse extends Exception
 {
     /**
      * Static factory method for invalid JSON responses.

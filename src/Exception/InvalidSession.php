@@ -2,7 +2,7 @@
 
 namespace Profounder\Exception;
 
-class InvalidSession extends BaseException
+class InvalidSession extends Exception
 {
     /**
      * Static factory method for expired sessions.
