@@ -4,7 +4,7 @@ namespace Profounder\Augment;
 
 use Profounder\Request as AbstractRequest;
 
-class Request extends AbstractRequest
+class Request extends AbstractRequest implements RequestContract
 {
     /**
      * @inheritdoc
@@ -17,11 +17,7 @@ class Request extends AbstractRequest
     protected $uri = 'http://www.profound.com/Pages/Search/MultipleItemDetailPage.aspx';
 
     /**
-     * Sets "pidlist" data parameter.
-     *
-     * @param  string $articleId
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function withArticle($articleId)
     {

@@ -4,7 +4,7 @@ namespace Profounder\Query;
 
 use Profounder\Request as AbstractRequest;
 
-class Request extends AbstractRequest
+class Request extends AbstractRequest implements RequestContract
 {
     /**
      * @inheritdoc
@@ -35,11 +35,7 @@ class Request extends AbstractRequest
     ];
 
     /**
-     * Sets "SearchFilter" data parameter.
-     *
-     * @param  string $query
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function withQuery($query)
     {
