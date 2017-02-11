@@ -74,11 +74,11 @@ class Storer implements StorerContract
      *
      * @param  CollectedArticle $article
      *
-     * @return mixed
+     * @return bool
      */
     private function articleExists(CollectedArticle $article)
     {
-        return $this->articleRepo->whereContentId($article->content_id)->exists();
+        return $this->articleRepo->existsByContentId($article->content_id);
     }
 
     /**
@@ -100,51 +100,55 @@ class Storer implements StorerContract
     /**
      * Fetches publisher from the database or creates a new one.
      *
-     * @param  CollectedArticle $article
+     * @param  CollectedArticle $collectedArticle
      *
-     * @return mixed
+     * @return Publisher
      */
-    private function fetchOrCreatePublisher(CollectedArticle $article)
+    private function fetchOrCreatePublisher(CollectedArticle $collectedArticle)
     {
-        return $this->publisherRepo->firstOrCreate($this->preparePublisher($article));
+        return $this->publisherRepo->existsOrCreate(
+            $this->preparePublisher($collectedArticle)
+        );
     }
 
     /**
      * Creates an article associated with the passed publisher object.
      *
      * @param  Publisher $publisher
-     * @param  CollectedArticle $article
+     * @param  CollectedArticle $collectedArticle
      *
-     * @return mixed
+     * @return Article
      */
-    private function createPublisherArticle(Publisher $publisher, CollectedArticle $article)
+    private function createPublisherArticle(Publisher $publisher, CollectedArticle $collectedArticle)
     {
-        return $publisher->articles()->create($this->prepareArticle($article));
+        return $publisher->createArticle(
+            $this->prepareArticle($collectedArticle)
+        );
     }
 
     /**
      * Prepares an article array for insertion.
      *
-     * @param  CollectedArticle $article
+     * @param  CollectedArticle $collectedArticle
      *
      * @return array
      */
-    private function prepareArticle(CollectedArticle $article)
+    private function prepareArticle(CollectedArticle $collectedArticle)
     {
-        unset($article->publisher);
+        unset($collectedArticle->publisher);
 
-        return $article->toArray();
+        return $collectedArticle->toArray();
     }
 
     /**
      * Prepares a publisher array for insertion.
      *
-     * @param  CollectedArticle $article
+     * @param  CollectedArticle $collectedArticle
      *
      * @return array
      */
-    private function preparePublisher(CollectedArticle $article)
+    private function preparePublisher(CollectedArticle $collectedArticle)
     {
-        return ['name' => $article->publisher];
+        return ['name' => $collectedArticle->publisher];
     }
 }

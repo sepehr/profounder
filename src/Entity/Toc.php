@@ -3,9 +3,8 @@
 namespace Profounder\Entity;
 
 use Kalnoy\Nestedset\NodeTrait;
-use Illuminate\Database\Eloquent\Model;
 
-class Toc extends Model
+class Toc extends Entity
 {
     use NodeTrait;
 
@@ -41,5 +40,21 @@ class Toc extends Model
     public function article()
     {
         return $this->belongsTo(Article::class);
+    }
+
+    /**
+     * Creates a Toc associated with the passed article ID.
+     *
+     * @param  array $toc
+     * @param  int $articleId
+     *
+     * @return bool
+     */
+    public function createArticleToc(array $toc, $articleId)
+    {
+        return (bool) $this->create([
+            'children'   => $toc,
+            'article_id' => $articleId,
+        ]);
     }
 }

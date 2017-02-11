@@ -2,9 +2,7 @@
 
 namespace Profounder\Entity;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Publisher extends Model
+class Publisher extends Entity
 {
     /**
      * Mass-assignable attributes.
@@ -28,5 +26,17 @@ class Publisher extends Model
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    /**
+     * Creates an associated article.
+     *
+     * @param  array $article
+     *
+     * @return Article
+     */
+    public function createArticle(array $article)
+    {
+        return $this->articles()->create($article);
     }
 }

@@ -59,7 +59,7 @@ class Augmentor implements AugmentorContract
      */
     private function getArticle($articleId)
     {
-        return $this->articleRepo->whereContentId($articleId)->first();
+        return $this->articleRepo->findByContentId($articleId);
     }
 
     /**
@@ -72,7 +72,7 @@ class Augmentor implements AugmentorContract
      */
     private function updateArticle(Article $article, ArticlePage $articlePage)
     {
-        return $article->fill($articlePage->toArray())->save();
+        return $article->fillAndSave($articlePage->toArray());
     }
 
     /**
@@ -87,15 +87,18 @@ class Augmentor implements AugmentorContract
     {
         if ($articlePage->toc) {
             // First, delete any existing toc items
-            $article->toc()->delete();
+            $article->deleteToc();
 
             // Then, associate new toc items under a parent wrapper node
             $articlePage->toc = $this->associateTocItemsWithArticle($articlePage->toc, $article->id);
 
-            return (bool) $this->tocRepo->create([
-                'article_id' => $article->id,
-                'children'   => $articlePage->toc,
-            ]);
+            // We need to call the create() method on the Toc entity,
+            // as it implements nested sets via traits. If we do call
+            // the create() method on the relationship, nested sets
+            // won't be considered.
+            // This createArticleToc() method is just a wrapper around
+            // the create().
+            return $this->tocRepo->createArticleToc($articlePage->toc, $article->id);
         }
 
         return true;

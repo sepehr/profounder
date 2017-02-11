@@ -2,9 +2,7 @@
 
 namespace Profounder\Entity;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Article extends Model
+class Article extends Entity
 {
     /**
      * Mass-assignable attributes.
@@ -47,5 +45,39 @@ class Article extends Model
     public function publisher()
     {
         return $this->belongsTo(Publisher::class);
+    }
+
+    /**
+     * Finds an article by its content ID.
+     *
+     * @param  string $contentId
+     *
+     * @return Article
+     */
+    public function findByContentId($contentId)
+    {
+        return $this->whereContentId($contentId)->first();
+    }
+
+    /**
+     * Checks whether the article with the passed content ID exists or not.
+     *
+     * @param  string $contentId
+     *
+     * @return bool
+     */
+    public function existsByContentId($contentId)
+    {
+        return $this->whereContentId($contentId)->exists();
+    }
+
+    /**
+     * Deletes associated Toc records.
+     *
+     * @return bool
+     */
+    public function deleteToc()
+    {
+        return $this->toc()->delete();
     }
 }
