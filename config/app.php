@@ -23,9 +23,9 @@ return [
     */
 
     'commands' => [
-        Profounder\Command\Dumper::class,
         Profounder\Query\Command\Query::class,
         Profounder\Query\Command\Seeker::class,
+        Profounder\Dumper\Command\Dumper::class,
         Profounder\Augment\Command\Augment::class,
         Profounder\Augment\Command\MassAugment::class,
     ],

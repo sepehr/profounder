@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder\Command;
+namespace Profounder\Dumper\Command;
 
 use Profounder\Entity\Article;
 use Illuminate\Support\Collection;
@@ -114,11 +114,11 @@ class Dumper extends ContainerAwareCommand
      */
     private function dumpCsv($file)
     {
-        $this->filesystem->put($file, 'ContentID,Title,Date,Price,Publisher,SKU' . PHP_EOL);
+        $this->filesystem->put($file, 'ContentID,Title,Date,Price,SKU,Length' . PHP_EOL);
 
         $this
             ->repository
-            ->select('content_id', 'title', 'date', 'price', 'publisher', 'sku')
+            ->select('content_id', 'title', 'date', 'price', 'sku', 'length')
             ->chunk(1000, function (Collection $articles) use ($file) {
                 $articles = $articles->reduce(function ($carry, $item) {
                     return $carry .= '"' . implode('","', $item->toArray()) . '"' . PHP_EOL;
