@@ -5,7 +5,7 @@ namespace Profounder\Service;
 use Illuminate\Filesystem\Filesystem;
 use Profounder\Exception\InvalidSession;
 
-class IdentityPool
+class IdentityPool implements IdentityPoolContract
 {
     /**
      * Sessions array of username, password and cookie.
@@ -49,7 +49,7 @@ class IdentityPool
      *
      * @throws InvalidSession
      */
-    public function retrieve(int $id)
+    public function retrieve($id)
     {
         if (isset($this->pool[$id])) {
             return (object) $this->pool[$id];
