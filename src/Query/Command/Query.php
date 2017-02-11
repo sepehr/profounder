@@ -2,14 +2,14 @@
 
 namespace Profounder\Query\Command;
 
-use Profounder\Query\Storer;
 use Illuminate\Support\Collection;
-use Profounder\Query\ResponseParser;
-use Profounder\Service\IdentityPool;
+use Profounder\Query\StorerContract;
+use Profounder\Query\BuilderContract;
+use Profounder\Query\RequestContract;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
-use Profounder\Query\Builder as QueryBuilder;
-use Profounder\Query\Request as QueryRequest;
+use Profounder\Query\ResponseParserContract;
+use Profounder\Service\IdentityPoolContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Profounder\Query\Command\Concern\QueryableInputOptions;
@@ -21,35 +21,35 @@ class Query extends ContainerAwareCommand
     /**
      * IdentityPool instance.
      *
-     * @var IdentityPool
+     * @var IdentityPoolContract
      */
     private $identity;
 
     /**
      * Storer instance.
      *
-     * @var Storer
+     * @var StorerContract
      */
     private $storer;
 
     /**
-     * QueryBuilder instance.
+     * Builder instance.
      *
-     * @var QueryBuilder
+     * @var BuilderContract
      */
     private $builder;
 
     /**
-     * QueryRequest instance.
+     * Request instance.
      *
-     * @var QueryRequest
+     * @var RequestContract
      */
     private $request;
 
     /**
      * ResponseParser instance.
      *
-     * @var ResponseParser
+     * @var ResponseParserContract
      */
     private $parser;
 
@@ -70,18 +70,18 @@ class Query extends ContainerAwareCommand
     /**
      * Query constructor.
      *
-     * @param  Storer $storer
-     * @param  QueryBuilder $builder
-     * @param  QueryRequest $request
-     * @param  IdentityPool $identity
-     * @param  ResponseParser $parser
+     * @param  StorerContract $storer
+     * @param  BuilderContract $builder
+     * @param  RequestContract $request
+     * @param  IdentityPoolContract $identity
+     * @param  ResponseParserContract $parser
      */
     public function __construct(
-        Storer $storer,
-        QueryBuilder $builder,
-        QueryRequest $request,
-        IdentityPool $identity,
-        ResponseParser $parser
+        StorerContract $storer,
+        BuilderContract $builder,
+        RequestContract $request,
+        IdentityPoolContract $identity,
+        ResponseParserContract $parser
     ) {
         $this->storer   = $storer;
         $this->builder  = $builder;

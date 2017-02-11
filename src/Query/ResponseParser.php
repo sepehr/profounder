@@ -7,7 +7,7 @@ use Profounder\JsonResponseParser;
 use Profounder\Exception\InvalidSession;
 use Profounder\Exception\InvalidResponse;
 
-class ResponseParser extends JsonResponseParser
+class ResponseParser extends JsonResponseParser implements ResponseParserContract
 {
     /**
      * Parses response into a collection of CollectedArticle objects.

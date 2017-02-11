@@ -2,13 +2,13 @@
 
 namespace Profounder\Augment\Command;
 
-use Profounder\Augment\Request;
-use Profounder\Augment\Augmentor;
 use Profounder\Augment\ArticlePage;
-use Profounder\Service\IdentityPool;
-use Profounder\Augment\ResponseParser;
+use Profounder\Augment\RequestContract;
+use Profounder\Augment\AugmentorContract;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
+use Profounder\Service\IdentityPoolContract;
+use Profounder\Augment\ResponseParserContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,23 +21,30 @@ class Augment extends ContainerAwareCommand
     /**
      * Request instance.
      *
-     * @var Request
+     * @var RequestContract
      */
     private $request;
 
     /**
-     * Instance of ResponseParser.
+     * ResponseParser instance.
      *
-     * @var ResponseParser
+     * @var ResponseParserContract
      */
     private $parser;
 
     /**
-     * Instance of IdentityPool.
+     * IdentityPool instance.
      *
-     * @var IdentityPool
+     * @var IdentityPoolContract
      */
     private $identity;
+
+    /**
+     * Augmentor instance.
+     *
+     * @var AugmentorContract
+     */
+    private $augmentor;
 
     /**
      * An object of input options.
@@ -61,24 +68,23 @@ class Augment extends ContainerAwareCommand
     private $articleId;
 
     /**
-     * @var Augmentor
-     */
-    private $augmentor;
-
-    /**
      * Augment command constructor.
      *
-     * @param  Request $request
-     * @param  ResponseParser $parser
-     * @param  Augmentor $augmentor
-     * @param  IdentityPool $identity
+     * @param  RequestContract $request
+     * @param  AugmentorContract $augmentor
+     * @param  ResponseParserContract $parser
+     * @param  IdentityPoolContract $identity
      */
-    public function __construct(Request $request, ResponseParser $parser, Augmentor $augmentor, IdentityPool $identity)
-    {
-        $this->request   = $request;
+    public function __construct(
+        RequestContract $request,
+        AugmentorContract $augmentor,
+        ResponseParserContract $parser,
+        IdentityPoolContract $identity
+    ) {
         $this->parser    = $parser;
-        $this->augmentor = $augmentor;
+        $this->request   = $request;
         $this->identity  = $identity;
+        $this->augmentor = $augmentor;
 
         parent::__construct();
     }

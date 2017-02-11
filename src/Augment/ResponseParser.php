@@ -6,7 +6,7 @@ use Profounder\Utils;
 use Profounder\ResponseCrawler;
 use Symfony\Component\DomCrawler\Crawler;
 
-class ResponseParser extends ResponseCrawler
+class ResponseParser extends ResponseCrawler implements ResponseParserContract
 {
     /**
      * Utils instance.
