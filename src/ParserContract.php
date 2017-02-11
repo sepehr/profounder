@@ -4,7 +4,7 @@ namespace Profounder;
 
 use Psr\Http\Message\ResponseInterface;
 
-interface ResponseParserContract
+interface ParserContract
 {
     /**
      * Validates and parses a response instance.
@@ -22,7 +22,7 @@ interface ResponseParserContract
      *
      * @param  ResponseInterface $response
      *
-     * @return ResponseParserContract
+     * @return ParserContract
      */
     public function setResponse(ResponseInterface $response);
 }

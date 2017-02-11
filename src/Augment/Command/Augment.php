@@ -3,12 +3,12 @@
 namespace Profounder\Augment\Command;
 
 use Profounder\Augment\ArticlePage;
+use Profounder\Augment\ParserContract;
 use Profounder\Augment\RequestContract;
 use Profounder\Augment\AugmentorContract;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
 use Profounder\Service\IdentityPoolContract;
-use Profounder\Augment\ResponseParserContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,9 +26,9 @@ class Augment extends ContainerAwareCommand
     private $request;
 
     /**
-     * ResponseParser instance.
+     * Parser instance.
      *
-     * @var ResponseParserContract
+     * @var ParserContract
      */
     private $parser;
 
@@ -70,15 +70,15 @@ class Augment extends ContainerAwareCommand
     /**
      * Augment command constructor.
      *
+     * @param  ParserContract $parser
      * @param  RequestContract $request
      * @param  AugmentorContract $augmentor
-     * @param  ResponseParserContract $parser
      * @param  IdentityPoolContract $identity
      */
     public function __construct(
+        ParserContract $parser,
         RequestContract $request,
         AugmentorContract $augmentor,
-        ResponseParserContract $parser,
         IdentityPoolContract $identity
     ) {
         $this->parser    = $parser;

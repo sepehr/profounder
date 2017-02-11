@@ -3,10 +3,10 @@
 namespace Profounder\Augment;
 
 use Profounder\Utils;
-use Profounder\ResponseCrawler;
+use Profounder\CrawlableParser;
 use Symfony\Component\DomCrawler\Crawler;
 
-class ResponseParser extends ResponseCrawler implements ResponseParserContract
+class Parser extends CrawlableParser implements ParserContract
 {
     /**
      * Utils instance.
@@ -34,7 +34,7 @@ class ResponseParser extends ResponseCrawler implements ResponseParserContract
     ];
 
     /**
-     * ResponseParser constructor.
+     * Parser constructor.
      *
      * @param  Crawler $crawler
      * @param  Utils $utils

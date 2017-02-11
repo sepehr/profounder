@@ -7,7 +7,7 @@ use Profounder\Exception\InvalidSession;
 use Profounder\Exception\InvalidResponse;
 use Profounder\Exception\InvalidArgument;
 
-abstract class ResponseParser implements ResponseParserContract
+abstract class Parser implements ParserContract
 {
     /**
      * Response instance.

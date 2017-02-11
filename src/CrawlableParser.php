@@ -5,7 +5,7 @@ namespace Profounder;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
-abstract class ResponseCrawler extends ResponseParser
+abstract class CrawlableParser extends Parser
 {
     /**
      * Crawler instance.
@@ -15,7 +15,7 @@ abstract class ResponseCrawler extends ResponseParser
     protected $crawler;
 
     /**
-     * ResponseParser constructor.
+     * CrawlableParser constructor.
      *
      * @param  Crawler $crawler
      */

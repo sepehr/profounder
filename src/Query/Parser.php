@@ -2,12 +2,12 @@
 
 namespace Profounder\Query;
 
+use Profounder\JsonParser;
 use Illuminate\Support\Collection;
-use Profounder\JsonResponseParser;
 use Profounder\Exception\InvalidSession;
 use Profounder\Exception\InvalidResponse;
 
-class ResponseParser extends JsonResponseParser implements ResponseParserContract
+class Parser extends JsonParser implements ParserContract
 {
     /**
      * Parses response into a collection of CollectedArticle objects.

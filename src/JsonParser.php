@@ -4,7 +4,7 @@ namespace Profounder;
 
 use Profounder\Exception\InvalidResponse;
 
-abstract class JsonResponseParser extends ResponseParser
+abstract class JsonParser extends Parser
 {
     /**
      * Parsed JSON array.

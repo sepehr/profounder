@@ -3,12 +3,12 @@
 namespace Profounder\Query\Command;
 
 use Illuminate\Support\Collection;
+use Profounder\Query\ParserContract;
 use Profounder\Query\StorerContract;
 use Profounder\Query\BuilderContract;
 use Profounder\Query\RequestContract;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
-use Profounder\Query\ResponseParserContract;
 use Profounder\Service\IdentityPoolContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -47,9 +47,9 @@ class Query extends ContainerAwareCommand
     private $request;
 
     /**
-     * ResponseParser instance.
+     * Parser instance.
      *
-     * @var ResponseParserContract
+     * @var ParserContract
      */
     private $parser;
 
@@ -71,17 +71,17 @@ class Query extends ContainerAwareCommand
      * Query constructor.
      *
      * @param  StorerContract $storer
+     * @param  ParserContract $parser
      * @param  BuilderContract $builder
      * @param  RequestContract $request
      * @param  IdentityPoolContract $identity
-     * @param  ResponseParserContract $parser
      */
     public function __construct(
         StorerContract $storer,
+        ParserContract $parser,
         BuilderContract $builder,
         RequestContract $request,
-        IdentityPoolContract $identity,
-        ResponseParserContract $parser
+        IdentityPoolContract $identity
     ) {
         $this->storer   = $storer;
         $this->builder  = $builder;
