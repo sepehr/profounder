@@ -8,7 +8,7 @@ $container->bind(Symfony\Component\Console\Input\ArrayInput::class, function ($c
 });
 
 // Services
-$container->bind(\Profounder\Service\IdentityPoolContract::class, \Profounder\Service\IdentityPool::class);
+$container->bind(\Profounder\Service\Identity\PoolContract::class, \Profounder\Service\Identity\JsonFilePool::class);
 
 // Query
 $container->bind(\Profounder\Query\StorerContract::class, \Profounder\Query\Storer::class);

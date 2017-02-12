@@ -9,7 +9,7 @@ use Profounder\Query\BuilderContract;
 use Profounder\Query\RequestContract;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
-use Profounder\Service\IdentityPoolContract;
+use Profounder\Service\Identity\PoolContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Profounder\Query\Command\Concern\QueryableInputOptions;
@@ -19,9 +19,9 @@ class Query extends ContainerAwareCommand
     use Benchmarkable, QueryableInputOptions;
 
     /**
-     * IdentityPool instance.
+     * PoolContract instance.
      *
-     * @var IdentityPoolContract
+     * @var PoolContract
      */
     private $identity;
 
@@ -54,6 +54,13 @@ class Query extends ContainerAwareCommand
     private $parser;
 
     /**
+     * Identity session object.
+     *
+     * @var \Profounder\Service\Identity\Identity
+     */
+    private $session;
+
+    /**
      * An object of input options.
      *
      * @var object
@@ -61,33 +68,26 @@ class Query extends ContainerAwareCommand
     private $options;
 
     /**
-     * Identity session object.
-     *
-     * @var object
-     */
-    private $session;
-
-    /**
      * Query constructor.
      *
      * @param  StorerContract $storer
      * @param  ParserContract $parser
+     * @param  PoolContract $identity
      * @param  BuilderContract $builder
      * @param  RequestContract $request
-     * @param  IdentityPoolContract $identity
      */
     public function __construct(
         StorerContract $storer,
         ParserContract $parser,
+        PoolContract $identity,
         BuilderContract $builder,
-        RequestContract $request,
-        IdentityPoolContract $identity
+        RequestContract $request
     ) {
         $this->storer   = $storer;
+        $this->parser   = $parser;
         $this->builder  = $builder;
         $this->request  = $request;
         $this->identity = $identity;
-        $this->parser   = $parser;
 
         parent::__construct();
     }

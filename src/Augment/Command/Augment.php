@@ -8,7 +8,7 @@ use Profounder\Augment\RequestContract;
 use Profounder\Augment\AugmentorContract;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
-use Profounder\Service\IdentityPoolContract;
+use Profounder\Service\Identity\PoolContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,9 +33,9 @@ class Augment extends ContainerAwareCommand
     private $parser;
 
     /**
-     * IdentityPool instance.
+     * PoolContract instance.
      *
-     * @var IdentityPoolContract
+     * @var PoolContract
      */
     private $identity;
 
@@ -56,7 +56,7 @@ class Augment extends ContainerAwareCommand
     /**
      * Identity session object.
      *
-     * @var object
+     * @var \Profounder\Service\Identity\Identity
      */
     private $session;
 
@@ -71,15 +71,15 @@ class Augment extends ContainerAwareCommand
      * Augment command constructor.
      *
      * @param  ParserContract $parser
+     * @param  PoolContract $identity
      * @param  RequestContract $request
      * @param  AugmentorContract $augmentor
-     * @param  IdentityPoolContract $identity
      */
     public function __construct(
         ParserContract $parser,
+        PoolContract $identity,
         RequestContract $request,
-        AugmentorContract $augmentor,
-        IdentityPoolContract $identity
+        AugmentorContract $augmentor
     ) {
         $this->parser    = $parser;
         $this->request   = $request;
@@ -106,7 +106,7 @@ class Augment extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->options   = (object)$input->getOptions();
+        $this->options   = (object) $input->getOptions();
         $this->articleId = $input->getArgument('content-id');
         $this->session   = $this->identity->retrieve(intval($this->options->id - 1));
 
