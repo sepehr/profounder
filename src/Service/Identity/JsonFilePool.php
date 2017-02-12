@@ -21,6 +21,13 @@ class JsonFilePool extends Pool
     private $sessionsFile = 'sessions.json';
 
     /**
+     * Cookie domain name.
+     *
+     * @var string
+     */
+    private $cookieDomain = 'www.profound.com';
+
+    /**
      * FilePool constructor.
      *
      * @param  Filesystem $filesystem
@@ -58,6 +65,8 @@ class JsonFilePool extends Pool
      */
     private function normalizeRequestCookies($cookie)
     {
-        return array_map('trim', explode(';', $cookie));
+        return array_map(function ($cookieString) {
+            return trim("$cookieString; domain={$this->cookieDomain}");
+        }, explode(';', $cookie));
     }
 }

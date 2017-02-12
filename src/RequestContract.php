@@ -3,6 +3,7 @@
 namespace Profounder;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Cookie\CookieJarInterface;
 
 interface RequestContract
 {
@@ -32,7 +33,7 @@ interface RequestContract
     /**
      * Request dispatcher.
      *
-     * @param  string $cookie
+     * @param  array|string|null $cookie
      * @param  int|float|null $delay
      *
      * @return \Psr\Http\Message\ResponseInterface
@@ -40,19 +41,29 @@ interface RequestContract
     public function dispatch($cookie = null, $delay = null);
 
     /**
-     * Sets a data item.
+     * Sets a single data item, or an array of them.
      *
-     * @param  string $key
-     * @param  mixed $value
+     * @param  string|array $key
+     * @param  mixed|null $value
      *
      * @return $this
      */
-    public function withData($key, $value);
+    public function withData($key, $value = null);
 
     /**
-     * Sets cookie header.
+     * Sets a single header, or an array of them.
      *
-     * @param  string $cookie
+     * @param  string|array $key
+     * @param  mixed|null $value
+     *
+     * @return $this
+     */
+    public function withHeader($key, $value = null);
+
+    /**
+     * Sets request cookie(s).
+     *
+     * @param  array|string|null $cookie
      *
      * @return $this
      */
@@ -75,6 +86,15 @@ interface RequestContract
      * @return $this
      */
     public function setClient(ClientInterface $client);
+
+    /**
+     * Sets CookieJar instance.
+     *
+     * @param  CookieJarInterface $cookieJar
+     *
+     * @return $this
+     */
+    public function setCookieJar(CookieJarInterface $cookieJar);
 
     /**
      * Sets request headers.

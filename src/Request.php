@@ -3,6 +3,8 @@
 namespace Profounder;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Cookie\SetCookie;
+use GuzzleHttp\Cookie\CookieJarInterface;
 
 abstract class Request implements RequestContract
 {
@@ -12,6 +14,13 @@ abstract class Request implements RequestContract
      * @var ClientInterface
      */
     protected $client;
+
+    /**
+     * CookieJarInterface instance.
+     *
+     * @var CookieJarInterface
+     */
+    protected $cookieJar;
 
     /**
      * Request target URI.
@@ -61,10 +70,11 @@ abstract class Request implements RequestContract
      * Request constructor.
      *
      * @param  ClientInterface $client
+     * @param  CookieJarInterface $cookieJar
      */
-    public function __construct(ClientInterface $client)
+    public function __construct(ClientInterface $client, CookieJarInterface $cookieJar)
     {
-        $this->setClient($client)->initialize();
+        $this->setClient($client)->setCookieJar($cookieJar)->initialize();
     }
 
     /**
@@ -80,10 +90,9 @@ abstract class Request implements RequestContract
      */
     public function initialize(array $headers = [], array $data = [], $uri = null, $delay = null)
     {
-        $this->withUserAgent($this->randomUserAgent());
-        $this->setHeaders(array_replace($this->headers, $headers));
-
-        $this->setData(array_replace($this->data, $data));
+        $this->withUserAgent();
+        $this->withData($data);
+        $this->withHeader($headers);
 
         $uri && $this->setUri($uri);
 
@@ -95,17 +104,21 @@ abstract class Request implements RequestContract
      */
     public function dispatch($cookie = null, $delay = null)
     {
-        $delay  && $this->setDelay($delay);
-        $cookie && $this->withCookie($cookie);
+        $delay  and $this->setDelay($delay);
+        $cookie and $this->withCookie($cookie);
 
-        return $this->client->{$this->method}($this->uri, $this->buildOptions());
+        return $this->dispatchRequest($this->method, $this->uri, $this->buildOptions());
     }
 
     /**
      * @inheritdoc
      */
-    public function withData($key, $value)
+    public function withData($key, $value = null)
     {
+        if (is_array($key)) {
+            return $this->setData(array_replace($this->data, $key));
+        }
+
         $this->data[$key] = $value;
 
         return $this;
@@ -114,9 +127,13 @@ abstract class Request implements RequestContract
     /**
      * @inheritdoc
      */
-    public function withCookie($cookie)
+    public function withHeader($key, $value = null)
     {
-        $this->headers['Cookie'] = $cookie;
+        if (is_array($key)) {
+            return $this->setHeaders(array_replace($this->headers, $key));
+        }
+
+        $this->headers[$key] = $value;
 
         return $this;
     }
@@ -126,7 +143,21 @@ abstract class Request implements RequestContract
      */
     public function withUserAgent($ua = null)
     {
-        $this->headers['User-Agent'] = $ua ?: $this->randomUserAgent();
+        return $this->withHeader('User-Agent', $ua ?: $this->randomUserAgent());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withCookie($cookie)
+    {
+        if (! is_null($cookie)) {
+            is_array($cookie) or $cookie = [$cookie];
+
+            foreach ($cookie as $cookieString) {
+                $this->cookieJar->setCookie(SetCookie::fromString($cookieString));
+            }
+        }
 
         return $this;
     }
@@ -137,6 +168,16 @@ abstract class Request implements RequestContract
     public function setClient(ClientInterface $client)
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCookieJar(CookieJarInterface $cookieJar)
+    {
+        $this->cookieJar = $cookieJar;
 
         return $this;
     }
@@ -182,7 +223,23 @@ abstract class Request implements RequestContract
     }
 
     /**
-     * Builds and returs an array of request options.
+     * Request dispatch helper.
+     *
+     * @param  string $method
+     * @param  string $uri
+     * @param  array|null $options
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function dispatchRequest($method, $uri, array $options = null)
+    {
+        $options or $options = $this->buildOptions();
+
+        return $this->client->$method($uri, $options);
+    }
+
+    /**
+     * Builds and returns an array of request options.
      *
      * @return array
      */
@@ -194,6 +251,7 @@ abstract class Request implements RequestContract
             $dataKey      => $this->data,
             'delay'       => $this->delay,
             'headers'     => $this->headers,
+            'cookies'     => $this->cookieJar,
             'http_errors' => $this->httpErrors,
         ];
     }
@@ -203,7 +261,7 @@ abstract class Request implements RequestContract
      *
      * @return string
      */
-    protected function randomUserAgent()
+    private function randomUserAgent()
     {
         $uas = [
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) ' .

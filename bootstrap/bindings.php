@@ -1,7 +1,12 @@
 <?php
 
+/*
+ * Custom container bindings specific to the application.
+ */
+
 // Vendors
 $container->bind(GuzzleHttp\ClientInterface::class, GuzzleHttp\Client::class);
+$container->bind(\GuzzleHttp\Cookie\CookieJarInterface::class, \GuzzleHttp\Cookie\CookieJar::class);
 
 $container->bind(Symfony\Component\Console\Input\ArrayInput::class, function ($container, $params) {
     return new Symfony\Component\Console\Input\ArrayInput($params);
