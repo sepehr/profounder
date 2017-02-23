@@ -2,9 +2,9 @@
 
 namespace Profounder\Augment;
 
-use Profounder\Request as AbstractRequest;
+use Profounder\Auth\Http\AuthenticatedRequest;
 
-class Request extends AbstractRequest implements RequestContract
+class Request extends AuthenticatedRequest implements RequestContract
 {
     /**
      * @inheritdoc

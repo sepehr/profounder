@@ -7,9 +7,9 @@ use Profounder\Query\ParserContract;
 use Profounder\Query\StorerContract;
 use Profounder\Query\BuilderContract;
 use Profounder\Query\RequestContract;
+use Psr\Http\Message\ResponseInterface;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
-use Profounder\Service\Identity\PoolContract;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Profounder\Query\Command\Concern\QueryableInputOptions;
@@ -17,13 +17,6 @@ use Profounder\Query\Command\Concern\QueryableInputOptions;
 class Query extends ContainerAwareCommand
 {
     use Benchmarkable, QueryableInputOptions;
-
-    /**
-     * PoolContract instance.
-     *
-     * @var PoolContract
-     */
-    private $identity;
 
     /**
      * Storer instance.
@@ -54,13 +47,6 @@ class Query extends ContainerAwareCommand
     private $parser;
 
     /**
-     * Identity session object.
-     *
-     * @var \Profounder\Service\Identity\Identity
-     */
-    private $session;
-
-    /**
      * An object of input options.
      *
      * @var object
@@ -72,14 +58,12 @@ class Query extends ContainerAwareCommand
      *
      * @param  StorerContract $storer
      * @param  ParserContract $parser
-     * @param  PoolContract $identity
      * @param  BuilderContract $builder
      * @param  RequestContract $request
      */
     public function __construct(
         StorerContract $storer,
         ParserContract $parser,
-        PoolContract $identity,
         BuilderContract $builder,
         RequestContract $request
     ) {
@@ -87,7 +71,6 @@ class Query extends ContainerAwareCommand
         $this->parser   = $parser;
         $this->builder  = $builder;
         $this->request  = $request;
-        $this->identity = $identity;
 
         parent::__construct();
     }
@@ -109,7 +92,6 @@ class Query extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->options = (object) $input->getOptions();
-        $this->session = $this->identity->retrieve(intval($this->options->id - 1));
 
         $totalInserts = 0;
         $this->benchmark(function () use ($output, &$totalInserts) {
@@ -145,13 +127,9 @@ class Query extends ContainerAwareCommand
     private function query()
     {
         return $this->benchmark(function () {
-            $response = $this->dispatchRequest(
-                $this->buildQuery(),
-                $this->session->cookie,
-                $this->options->delay
+            return $this->parseResponse(
+                $this->dispatchRequest($this->buildQuery(), $this->options->delay)
             );
-
-            return $this->parseResponse($response);
         });
     }
 
@@ -189,24 +167,23 @@ class Query extends ContainerAwareCommand
      * Dispatches the query request.
      *
      * @param  string $query
-     * @param  string $cookie
      * @param  int|float $delay
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    private function dispatchRequest($query, $cookie, $delay = null)
+    private function dispatchRequest($query, $delay = null)
     {
-        return $this->request->withQuery($query)->dispatch($cookie, $delay);
+        return $this->request->withQuery($query)->dispatch($delay);
     }
 
     /**
      * Parses the response into a collection of CollectedArticle objects.
      *
-     * @param  \Psr\Http\Message\ResponseInterface $response
+     * @param  ResponseInterface $response
      *
      * @return Collection
      */
-    private function parseResponse($response)
+    private function parseResponse(ResponseInterface $response)
     {
         return $this->parser->parse($response);
     }

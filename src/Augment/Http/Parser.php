@@ -53,7 +53,7 @@ class Parser extends CrawlableParser implements ParserContract
      */
     protected function parseBody($body)
     {
-        return $this->makeArticlePage();
+        return $this->makeArticlePageInstance();
     }
 
     /**
@@ -75,7 +75,7 @@ class Parser extends CrawlableParser implements ParserContract
      *
      * @return ArticlePage
      */
-    private function makeArticlePage()
+    private function makeArticlePageInstance()
     {
         return ArticlePage::create([
             'toc'      => $this->extractToc(),

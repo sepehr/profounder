@@ -23,6 +23,9 @@ $container->instance('config', $config = new Repository(require config_path('app
 # Filesystem
 $container->singleton('files', Filesystem::class);
 
+# Storage
+$container->bind(\Profounder\Core\StorageContract::class, \Profounder\Core\Storage::class);
+
 # Events
 $container->singleton('events', function ($container) {
     return new Dispatcher($container);

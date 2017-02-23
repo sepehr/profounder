@@ -28,6 +28,8 @@ return [
         Profounder\Dumper\Command\Dumper::class,
         Profounder\Augment\Command\Augment::class,
         Profounder\Augment\Command\MassAugment::class,
+        // Temporary:
+        Profounder\Auth\Command\Login::class,
     ],
 
     /*

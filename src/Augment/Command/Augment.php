@@ -5,10 +5,10 @@ namespace Profounder\Augment\Command;
 use Profounder\Augment\ArticlePage;
 use Profounder\Augment\ParserContract;
 use Profounder\Augment\RequestContract;
+use Psr\Http\Message\ResponseInterface;
 use Profounder\Augment\AugmentorContract;
 use Profounder\Core\ContainerAwareCommand;
 use Profounder\Core\Concern\Benchmarkable;
-use Profounder\Service\Identity\PoolContract;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,13 +33,6 @@ class Augment extends ContainerAwareCommand
     private $parser;
 
     /**
-     * PoolContract instance.
-     *
-     * @var PoolContract
-     */
-    private $identity;
-
-    /**
      * Augmentor instance.
      *
      * @var AugmentorContract
@@ -54,13 +47,6 @@ class Augment extends ContainerAwareCommand
     private $options;
 
     /**
-     * Identity session object.
-     *
-     * @var \Profounder\Service\Identity\Identity
-     */
-    private $session;
-
-    /**
      * Target article's content ID.
      *
      * @var string
@@ -71,19 +57,13 @@ class Augment extends ContainerAwareCommand
      * Augment command constructor.
      *
      * @param  ParserContract $parser
-     * @param  PoolContract $identity
      * @param  RequestContract $request
      * @param  AugmentorContract $augmentor
      */
-    public function __construct(
-        ParserContract $parser,
-        PoolContract $identity,
-        RequestContract $request,
-        AugmentorContract $augmentor
-    ) {
+    public function __construct(ParserContract $parser, RequestContract $request, AugmentorContract $augmentor)
+    {
         $this->parser    = $parser;
         $this->request   = $request;
-        $this->identity  = $identity;
         $this->augmentor = $augmentor;
 
         parent::__construct();
@@ -108,7 +88,6 @@ class Augment extends ContainerAwareCommand
     {
         $this->options   = (object) $input->getOptions();
         $this->articleId = $input->getArgument('content-id');
-        $this->session   = $this->identity->retrieve(intval($this->options->id - 1));
 
         $this->benchmark(function () use ($output) {
             $articlePage = $this->getArticlePage();
@@ -161,17 +140,17 @@ class Augment extends ContainerAwareCommand
     {
         return $this->request
             ->withArticle($this->articleId)
-            ->dispatch($this->session->cookie, $this->options->delay);
+            ->dispatch($this->options->delay);
     }
 
     /**
      * Parses the response into an array.
      *
-     * @param  \Psr\Http\Message\ResponseInterface $response
+     * @param  ResponseInterface $response
      *
      * @return ArticlePage
      */
-    private function parseResponse($response)
+    private function parseResponse(ResponseInterface $response)
     {
         return $this->parser->parse($response);
     }

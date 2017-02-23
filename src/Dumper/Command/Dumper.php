@@ -51,7 +51,7 @@ class Dumper extends ContainerAwareCommand
     {
         $this
             ->setName('profounder:dump')
-            ->setDescription('Dump articles from database to file.')
+            ->setDescription('Dumps articles from database to file.')
             ->addArgument('file', InputArgument::REQUIRED, 'File path to dump to.')
             ->addOption('sku', 's', InputOption::VALUE_NONE, 'Plain text SKU dump.');
     }

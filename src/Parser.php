@@ -7,7 +7,7 @@ use Profounder\Exception\InvalidSession;
 use Profounder\Exception\InvalidResponse;
 use Profounder\Exception\InvalidArgument;
 
-abstract class Parser implements ParserContract
+class Parser implements ParserContract
 {
     /**
      * Response instance.
@@ -19,7 +19,7 @@ abstract class Parser implements ParserContract
     /**
      * @inheritdoc
      */
-    public function parse(ResponseInterface $response = null)
+    public function parse(ResponseInterface $response = null, $validate = true)
     {
         $response && $this->setResponse($response);
 
@@ -27,7 +27,7 @@ abstract class Parser implements ParserContract
             throw new InvalidArgument('No response is set for the parser.');
         }
 
-        $this->validate();
+        $validate and $this->validate();
 
         return $this->parseBody($this->prepareBodyForParse());
     }
@@ -45,13 +45,16 @@ abstract class Parser implements ParserContract
     /**
      * Actual response body parser.
      *
-     * Derived classes should override this method to implement their own parsing logic.
+     * Derived classes may override this method to implement their own parsing logic.
      *
      * @param  mixed $body
      *
      * @return mixed
      */
-    abstract protected function parseBody($body);
+    protected function parseBody($body)
+    {
+        return $body;
+    }
 
     /**
      * Runs basic checks against response instance.
@@ -63,17 +66,15 @@ abstract class Parser implements ParserContract
      */
     protected function validate()
     {
-        $content = $this->responseBody();
-
-        if (strpos($content, 'web server encountered a critical error') || strpos($content, 'Runtime Error')) {
+        if ($this->responseContains('encountered a critical error') || $this->responseContains('runtime error')) {
             throw InvalidResponse::critical();
         }
 
-        if (strpos($content, 'Sign In')) {
+        if ($this->responseContains('start a free trial') || $this->responseContains('not currently logged in')) {
             throw InvalidSession::expired();
         }
 
-        if (strpos($content, 'One or more of your selected products were not found')) {
+        if ($this->responseContains('one or more of your selected products were not found')) {
             throw InvalidResponse::notFound();
         }
     }
@@ -96,5 +97,29 @@ abstract class Parser implements ParserContract
     protected function responseBody()
     {
         return (string) $this->response->getBody();
+    }
+
+    /**
+     * Checks if the response body contains a specific substring.
+     *
+     * @param  string $needle
+     *
+     * @return bool
+     */
+    protected function responseContains($needle)
+    {
+        return stripos($this->responseBody(), $needle) !== false;
+    }
+
+    /**
+     * Matches the response body text against the passed pattern.
+     *
+     * @param  string $regex
+     *
+     * @return bool
+     */
+    protected function responseMatches($regex)
+    {
+        return (bool) preg_match($regex, $this->responseBody());
     }
 }

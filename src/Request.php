@@ -5,6 +5,7 @@ namespace Profounder;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Cookie\SetCookie;
 use GuzzleHttp\Cookie\CookieJarInterface;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class Request implements RequestContract
 {
@@ -67,6 +68,20 @@ abstract class Request implements RequestContract
     protected $headers = [];
 
     /**
+     * Default request options.
+     *
+     * @var array
+     */
+    protected $requestOptions = [];
+
+    /**
+     * Cookie domain.
+     *
+     * @var string
+     */
+    protected $cookieDomain = 'www.profound.com';
+
+    /**
      * Request constructor.
      *
      * @param  ClientInterface $client
@@ -102,12 +117,14 @@ abstract class Request implements RequestContract
     /**
      * @inheritdoc
      */
-    public function dispatch($cookie = null, $delay = null)
+    public function dispatch($delay = null, $cookie = null)
     {
         $delay  and $this->setDelay($delay);
         $cookie and $this->withCookie($cookie);
 
-        return $this->dispatchRequest($this->method, $this->uri, $this->buildOptions());
+        $response = $this->dispatchRequest($this->method, $this->uri, $this->buildOptions());
+
+        return $this->alterResponse($response);
     }
 
     /**
@@ -155,6 +172,8 @@ abstract class Request implements RequestContract
             is_array($cookie) or $cookie = [$cookie];
 
             foreach ($cookie as $cookieString) {
+                $cookieString = $this->ensureCookieDomain($cookieString);
+
                 $this->cookieJar->setCookie(SetCookie::fromString($cookieString));
             }
         }
@@ -247,13 +266,44 @@ abstract class Request implements RequestContract
     {
         $dataKey = $this->method == 'get' ? 'query' : 'form_params';
 
-        return [
+        return array_replace($this->requestOptions, [
             $dataKey      => $this->data,
             'delay'       => $this->delay,
             'headers'     => $this->headers,
             'cookies'     => $this->cookieJar,
             'http_errors' => $this->httpErrors,
-        ];
+        ]);
+    }
+
+    /**
+     * Alters the response instance before it leaves the context.
+     *
+     * Derived classes may override this method to manipulate the response object;
+     * whatever they do, they must return an instance of ResponseInterface.
+     *
+     * @param  ResponseInterface $response
+     *
+     * @return ResponseInterface
+     */
+    protected function alterResponse(ResponseInterface $response)
+    {
+        return $response;
+    }
+
+    /**
+     * Ensures that the cookie string contains a Domain part.
+     *
+     * @param  string $cookieString
+     *
+     * @return string
+     */
+    private function ensureCookieDomain($cookieString)
+    {
+        if (strpos($cookieString, 'Domain') === false) {
+            $cookieString .= "; domain={$this->cookieDomain}";
+        }
+
+        return trim($cookieString);
     }
 
     /**

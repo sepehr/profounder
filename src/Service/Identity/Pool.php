@@ -36,7 +36,7 @@ class Pool implements PoolContract
     /**
      * @inheritdoc
      */
-    public function retrieve($id)
+    public function retrieve($id = 0)
     {
         if (isset($this->pool[$id])) {
             return Identity::create($this->pool[$id]);

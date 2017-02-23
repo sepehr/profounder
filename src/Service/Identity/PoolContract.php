@@ -23,7 +23,7 @@ interface PoolContract
      *
      * @throws InvalidSession
      */
-    public function retrieve($id);
+    public function retrieve($id = 0);
 
     /**
      * Retrieves a random Identity instance out of the pool.

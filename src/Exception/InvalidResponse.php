@@ -45,4 +45,26 @@ class InvalidResponse extends Exception
     {
         return new static("Remote error: $error");
     }
+
+    /**
+     * Static factory method for invalid credentials responses.
+     *
+     * @return InvalidResponse
+     */
+    public static function invalidCredentials()
+    {
+        return new static('Unsuccessful login, invalid credentials.');
+    }
+
+    /**
+     * Static factory method for responses that require captcha.
+     *
+     * @return InvalidResponse
+     */
+    public static function captchaRequired()
+    {
+        return new static(
+            'Captcha error. Try submitting the form manually to refresh the session or wait a few minutes.'
+        );
+    }
 }

@@ -5,6 +5,8 @@ namespace Profounder\Augment;
 use Illuminate\Support\Fluent;
 
 /**
+ * Class representing an article page.
+ *
  * @property  array $toc
  * @property  int $length
  * @property  string $abstract

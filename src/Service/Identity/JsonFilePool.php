@@ -2,16 +2,16 @@
 
 namespace Profounder\Service\Identity;
 
-use Illuminate\Filesystem\Filesystem;
+use Profounder\Core\StorageContract;
 
 class JsonFilePool extends Pool
 {
     /**
-     * Filesystem instance.
+     * Storage instance.
      *
-     * @var Filesystem
+     * @var StorageContract
      */
-    private $files;
+    private $storage;
 
     /**
      * Sessions file name.
@@ -21,21 +21,14 @@ class JsonFilePool extends Pool
     private $sessionsFile = 'sessions.json';
 
     /**
-     * Cookie domain name.
+     * JsonFilePool constructor.
      *
-     * @var string
-     */
-    private $cookieDomain = 'www.profound.com';
-
-    /**
-     * FilePool constructor.
-     *
-     * @param  Filesystem $filesystem
+     * @param  StorageContract $storage
      * @param  array $pool
      */
-    public function __construct(Filesystem $filesystem, array $pool = null)
+    public function __construct(StorageContract $storage, array $pool = null)
     {
-        $this->files = $filesystem;
+        $this->storage = $storage;
 
         $pool ? parent::__construct($pool) : $this->loadFromFile();
     }
@@ -47,26 +40,6 @@ class JsonFilePool extends Pool
      */
     protected function loadFromFile()
     {
-        $this->pool = json_decode(
-            $this->files->get(storage_path($this->sessionsFile))
-        );
-
-        foreach ($this->pool as &$identity) {
-            $identity->cookie = $this->normalizeRequestCookies($identity->cookie);
-        }
-    }
-
-    /**
-     * Normalizes request cookie string into an array.
-     *
-     * @param  string $cookie
-     *
-     * @return array
-     */
-    private function normalizeRequestCookies($cookie)
-    {
-        return array_map(function ($cookieString) {
-            return trim("$cookieString; domain={$this->cookieDomain}");
-        }, explode(';', $cookie));
+        $this->pool = json_decode($this->storage->get($this->sessionsFile));
     }
 }

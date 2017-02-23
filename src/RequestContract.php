@@ -33,12 +33,12 @@ interface RequestContract
     /**
      * Request dispatcher.
      *
-     * @param  array|string|null $cookie
      * @param  int|float|null $delay
+     * @param  array|string|null $cookie
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function dispatch($cookie = null, $delay = null);
+    public function dispatch($delay = null, $cookie = null);
 
     /**
      * Sets a single data item, or an array of them.

@@ -6,6 +6,8 @@ use Profounder\Utils;
 use Illuminate\Support\Fluent;
 
 /**
+ * Class representing collected article data.
+ *
  * @property  int $price
  * @property  string $sku
  * @property  string $date

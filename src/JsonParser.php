@@ -4,7 +4,7 @@ namespace Profounder;
 
 use Profounder\Exception\InvalidResponse;
 
-abstract class JsonParser extends Parser
+class JsonParser extends Parser
 {
     /**
      * Parsed JSON array.
@@ -42,7 +42,7 @@ abstract class JsonParser extends Parser
     /**
      * Validates the response JSON array.
      *
-     * Derived classes should override this method to implement their JSON validation checks.
+     * Derived classes may override this method to implement their JSON validation checks.
      *
      * @param  array $parsedJson
      *
