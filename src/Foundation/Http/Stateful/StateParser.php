@@ -19,7 +19,7 @@ class StateParser extends CrawlableParser
      *
      * @return State
      */
-    protected function parseBody($body)
+    protected function parseResponse($body)
     {
         return $this->makeStateInstance();
     }

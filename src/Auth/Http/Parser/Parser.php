@@ -29,7 +29,7 @@ class Parser extends BaseParser implements ParserContract
      *
      * @return Session
      */
-    protected function parseBody($body)
+    protected function parseResponse($body)
     {
         return Session::create([
             'cookie' => $this->response->getHeader('Set-Cookie')

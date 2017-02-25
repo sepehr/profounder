@@ -51,7 +51,7 @@ class Parser extends CrawlableParser implements ParserContract
      *
      * @return ArticlePage
      */
-    protected function parseBody($body)
+    protected function parseResponse($body)
     {
         return $this->makeArticlePageInstance();
     }

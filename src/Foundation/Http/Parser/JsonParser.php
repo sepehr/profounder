@@ -30,11 +30,11 @@ class JsonParser extends Parser
     /**
      * @inheritdoc
      *
-     * Let the parseBody() method of derived classes receive the parsed JSON array instead of the raw response body.
+     * Let the parseResponse() method of derived classes receive the parsed JSON array instead of the raw response body.
      *
      * @return array
      */
-    protected function prepareBodyForParse()
+    protected function prepareResponseForParse()
     {
         return $this->jsonResponse();
     }

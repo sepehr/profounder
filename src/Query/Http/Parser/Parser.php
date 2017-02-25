@@ -16,7 +16,7 @@ class Parser extends JsonParser implements ParserContract
      *
      * @return Collection
      */
-    protected function parseBody($parsedJson)
+    protected function parseResponse($parsedJson)
     {
         return $this->makeCollection($parsedJson);
     }

@@ -29,7 +29,7 @@ class Parser implements ParserContract
 
         $validate and $this->validate();
 
-        return $this->parseBody($this->prepareBodyForParse());
+        return $this->parseResponse($this->prepareResopnseForParse());
     }
 
     /**
@@ -43,7 +43,7 @@ class Parser implements ParserContract
     }
 
     /**
-     * Actual response body parser.
+     * Actual response parser.
      *
      * Derived classes may override this method to implement their own parsing logic.
      *
@@ -51,7 +51,7 @@ class Parser implements ParserContract
      *
      * @return mixed
      */
-    protected function parseBody($body)
+    protected function parseResponse($body)
     {
         return $body;
     }
@@ -84,7 +84,7 @@ class Parser implements ParserContract
      *
      * @return mixed
      */
-    protected function prepareBodyForParse()
+    protected function prepareResopnseForParse()
     {
         return $this->responseBody();
     }
