@@ -3,12 +3,12 @@
 namespace Profounder\Query\Command;
 
 use Carbon\Carbon;
-use Profounder\Core\ContainerAwareCommand;
-use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Profounder\Core\Concern\Benchmarkable;
+use Profounder\Core\Console\ContainerAwareCommand;
 use Profounder\Query\Command\Concern\QueryableInputOptions;
 
 class Seeker extends ContainerAwareCommand

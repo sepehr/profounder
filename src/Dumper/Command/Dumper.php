@@ -2,15 +2,15 @@
 
 namespace Profounder\Dumper\Command;
 
-use Profounder\Entity\Article;
 use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
-use Profounder\Core\ContainerAwareCommand;
-use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Profounder\Entity\Article;
+use Profounder\Core\Concern\Benchmarkable;
+use Profounder\Core\Console\ContainerAwareCommand;
 
 class Dumper extends ContainerAwareCommand
 {

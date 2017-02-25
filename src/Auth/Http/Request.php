@@ -2,14 +2,14 @@
 
 namespace Profounder\Auth\Http;
 
-use Profounder\State;
-use Profounder\StateParser;
-use GuzzleHttp\ClientInterface;
-use Profounder\StatefulRequest;
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Cookie\CookieJarInterface;
 use Profounder\Service\Identity\Identity;
 use Profounder\Exception\InvalidResponse;
+use Profounder\Foundation\Http\Stateful\State;
+use Profounder\Foundation\Http\Stateful\StateParser;
+use Profounder\Foundation\Http\Stateful\StatefulRequest;
 
 class Request extends StatefulRequest implements RequestContract
 {

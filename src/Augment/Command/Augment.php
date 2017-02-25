@@ -2,16 +2,16 @@
 
 namespace Profounder\Augment\Command;
 
-use Profounder\Augment\ArticlePage;
-use Profounder\Augment\ParserContract;
-use Profounder\Augment\RequestContract;
 use Psr\Http\Message\ResponseInterface;
-use Profounder\Augment\AugmentorContract;
-use Profounder\Core\ContainerAwareCommand;
-use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Profounder\Core\Concern\Benchmarkable;
+use Profounder\Core\Console\ContainerAwareCommand;
+use Profounder\Augment\Http\RequestContract;
+use Profounder\Augment\Http\Parser\ArticlePage;
+use Profounder\Augment\Http\Parser\ParserContract;
+use Profounder\Augment\Augmentor\AugmentorContract;
 use Profounder\Augment\Command\Concern\AugmentableInputOptions;
 
 class Augment extends ContainerAwareCommand

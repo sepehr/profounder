@@ -20,17 +20,20 @@ $container->bind(\Profounder\Service\Identity\Identity::class, function ($contai
 });
 
 // Auth
-$container->bind(\Profounder\Auth\Http\ParserContract::class, \Profounder\Auth\Http\Parser::class);
 $container->bind(\Profounder\Auth\Http\RequestContract::class, \Profounder\Auth\Http\Request::class);
 $container->bind(\Profounder\Auth\Session\StoreContract::class, \Profounder\Auth\Session\Store::class);
+$container->bind(\Profounder\Auth\Http\Parser\ParserContract::class, \Profounder\Auth\Http\Parser\Parser::class);
 
 // Query
-$container->bind(\Profounder\Query\StorerContract::class, \Profounder\Query\Storer::class);
-$container->bind(\Profounder\Query\ParserContract::class, \Profounder\Query\Parser::class);
-$container->bind(\Profounder\Query\RequestContract::class, \Profounder\Query\Request::class);
-$container->bind(\Profounder\Query\BuilderContract::class, \Profounder\Query\Builder::class);
+$container->bind(\Profounder\Query\Http\RequestContract::class, \Profounder\Query\Http\Request::class);
+$container->bind(\Profounder\Query\Storer\StorerContract::class, \Profounder\Query\Storer\Storer::class);
+$container->bind(\Profounder\Query\Http\Parser\ParserContract::class, \Profounder\Query\Http\Parser\Parser::class);
+$container->bind(\Profounder\Query\Http\Builder\BuilderContract::class, \Profounder\Query\Http\Builder\Builder::class);
 
 // Augment
-$container->bind(\Profounder\Augment\ParserContract::class, \Profounder\Augment\Parser::class);
-$container->bind(\Profounder\Augment\RequestContract::class, \Profounder\Augment\Request::class);
-$container->bind(\Profounder\Augment\AugmentorContract::class, \Profounder\Augment\Augmentor::class);
+$container->bind(\Profounder\Augment\Http\RequestContract::class, \Profounder\Augment\Http\Request::class);
+$container->bind(\Profounder\Augment\Http\Parser\ParserContract::class, \Profounder\Augment\Http\Parser\Parser::class);
+$container->bind(
+    \Profounder\Augment\Augmentor\AugmentorContract::class,
+    \Profounder\Augment\Augmentor\Augmentor::class
+);

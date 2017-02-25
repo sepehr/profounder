@@ -1,8 +1,8 @@
 <?php
 
-namespace Profounder\Augment;
+namespace Profounder\Augment\Http;
 
-interface RequestContract extends \Profounder\RequestContract
+interface RequestContract extends \Profounder\Foundation\Http\RequestContract
 {
     /**
      * Sets "pidlist" data parameter.

@@ -2,12 +2,12 @@
 
 namespace Profounder\Auth\Http;
 
-use Profounder\Request;
-use Profounder\RequestContract;
 use GuzzleHttp\ClientInterface;
-use Profounder\Exception\InvalidSession;
 use GuzzleHttp\Cookie\CookieJarInterface;
+use Profounder\Exception\InvalidSession;
 use Profounder\Auth\Session\StoreContract;
+use Profounder\Foundation\Http\Request;
+use Profounder\Foundation\Http\RequestContract;
 
 abstract class AuthenticatedRequest extends Request implements RequestContract
 {

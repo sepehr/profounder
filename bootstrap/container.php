@@ -12,7 +12,7 @@ use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Migrations\DatabaseMigrationRepository;
 use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 
-$container = new Profounder\Core\Container;
+$container = new Profounder\Core\Console\Container;
 
 # Enable using facades
 Facade::setFacadeApplication($container);

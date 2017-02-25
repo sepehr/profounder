@@ -2,24 +2,14 @@
 
 namespace Profounder\Auth\Session;
 
-use Illuminate\Support\Fluent;
+use Profounder\Foundation\Http\Parser\ParsedObject;
 
 /**
  * Class representing an authenticated session.
  *
  * @property  array $cookie
  */
-class Session extends Fluent
+class Session extends ParsedObject
 {
-    /**
-     * Static factory method.
-     *
-     * @param  array $args
-     *
-     * @return $this
-     */
-    public static function create(...$args)
-    {
-        return new static(...$args);
-    }
+    //
 }

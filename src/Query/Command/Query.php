@@ -3,15 +3,16 @@
 namespace Profounder\Query\Command;
 
 use Illuminate\Support\Collection;
-use Profounder\Query\ParserContract;
-use Profounder\Query\StorerContract;
-use Profounder\Query\BuilderContract;
-use Profounder\Query\RequestContract;
 use Psr\Http\Message\ResponseInterface;
-use Profounder\Core\ContainerAwareCommand;
-use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Profounder\Core\Concern\Benchmarkable;
+use Profounder\Core\Console\ContainerAwareCommand;
+use Profounder\Query\Http\RequestContract;
+use Profounder\Query\Http\Parser\ParserContract;
+use Profounder\Query\Http\Builder\BuilderContract;
+use Profounder\Query\Storer\StorerContract;
+
 use Profounder\Query\Command\Concern\QueryableInputOptions;
 
 class Query extends ContainerAwareCommand

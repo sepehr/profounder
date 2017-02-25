@@ -2,8 +2,8 @@
 
 namespace Profounder\Query\Command\Concern;
 
-use Profounder\Query\Builder as QueryBuilder;
 use Symfony\Component\Console\Input\InputOption;
+use Profounder\Query\Http\Builder\Builder as QueryBuilder;
 
 trait QueryableInputOptions
 {

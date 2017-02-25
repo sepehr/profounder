@@ -2,14 +2,14 @@
 
 namespace Profounder\Augment\Command;
 
-use Profounder\Entity\Article;
-use Profounder\Core\ContainerAwareCommand;
-use Profounder\Core\Concern\Benchmarkable;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Profounder\Augment\Command\Concern\AugmentableInputOptions;
+use Profounder\Core\Concern\Benchmarkable;
+use Profounder\Core\Console\ContainerAwareCommand;
+use Profounder\Entity\Article;
 
 class MassAugment extends ContainerAwareCommand
 {

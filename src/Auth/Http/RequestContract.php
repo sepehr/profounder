@@ -4,7 +4,7 @@ namespace Profounder\Auth\Http;
 
 use Profounder\Service\Identity\Identity;
 
-interface RequestContract extends \Profounder\RequestContract
+interface RequestContract extends \Profounder\Foundation\Http\RequestContract
 {
     /**
      * Updates request data based on the passed Identity instance.

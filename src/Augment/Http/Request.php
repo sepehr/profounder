@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder\Augment;
+namespace Profounder\Augment\Http;
 
 use Profounder\Auth\Http\AuthenticatedRequest;
 

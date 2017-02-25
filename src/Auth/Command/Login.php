@@ -2,16 +2,16 @@
 
 namespace Profounder\Auth\Command;
 
-use Profounder\Auth\Session\Session;
 use Psr\Http\Message\ResponseInterface;
-use Profounder\Auth\Http\ParserContract;
-use Profounder\Auth\Http\RequestContract;
-use Profounder\Service\Identity\Identity;
-use Profounder\Auth\Session\StoreContract;
-use Profounder\Core\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Profounder\Core\Console\ContainerAwareCommand;
+use Profounder\Service\Identity\Identity;
+use Profounder\Auth\Session\Session;
+use Profounder\Auth\Session\StoreContract;
+use Profounder\Auth\Http\RequestContract;
+use Profounder\Auth\Http\Parser\ParserContract;
 
 class Login extends ContainerAwareCommand
 {
