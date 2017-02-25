@@ -5,7 +5,6 @@ namespace Profounder\Augment\Http\Parser;
 use Symfony\Component\DomCrawler\Crawler;
 use Profounder\Foundation\Support\Utils;
 use Profounder\Foundation\Http\Parser\CrawlableParser;
-use Profounder\Augment\Augmentor\ArticlePage;
 
 class Parser extends CrawlableParser implements ParserContract
 {

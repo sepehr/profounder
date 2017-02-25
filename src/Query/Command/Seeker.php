@@ -46,7 +46,7 @@ class Seeker extends ContainerAwareCommand
         Carbon::setToStringFormat('Y-m-d');
 
         $options = $input->getOptions();
-        $periods = $this->benchmark(function () use ($input, $output, $options) {
+        $periods = $this->benchmark(function () use ($output, $options) {
             $end     = new Carbon($options['end']);
             $next    = new Carbon($options['start']);
             $command = $this->getApplication()->find($this->queryCommandName);
