@@ -41,9 +41,9 @@ class Parser extends CrawlableParser implements ParserContract
      */
     public function __construct(Crawler $crawler, Utils $utils)
     {
-        parent::__construct($crawler);
-
         $this->utils = $utils;
+
+        parent::__construct($crawler);
     }
 
     /**
@@ -57,11 +57,7 @@ class Parser extends CrawlableParser implements ParserContract
     }
 
     /**
-     * Sets defaults property.
-     *
-     * @param  array $defaults
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function withDefaults(array $defaults)
     {

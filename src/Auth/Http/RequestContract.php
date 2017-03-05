@@ -2,16 +2,16 @@
 
 namespace Profounder\Auth\Http;
 
-use Profounder\Service\Identity\Identity;
+use Profounder\Service\Identity\IdentityContract;
 
 interface RequestContract extends \Profounder\Foundation\Http\RequestContract
 {
     /**
      * Updates request data based on the passed Identity instance.
      *
-     * @param  Identity $identity
+     * @param  IdentityContract  $identity
      *
      * @return RequestContract
      */
-    public function actAs(Identity $identity);
+    public function actAs(IdentityContract $identity);
 }

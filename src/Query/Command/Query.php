@@ -178,7 +178,7 @@ class Query extends ContainerAwareCommand
     }
 
     /**
-     * Parses the response into a collection of CollectedArticle objects.
+     * Parses the response into a collection of CollectedArticle instances.
      *
      * @param  ResponseInterface $response
      *

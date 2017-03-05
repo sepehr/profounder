@@ -11,15 +11,10 @@ use Profounder\Foundation\Support\Fluent;
  * @property  string $username
  * @property  string $password
  */
-class Identity extends Fluent
+class Identity extends Fluent implements IdentityContract
 {
     /**
-     * Static factory method to create an instance with username and password.
-     *
-     * @param  string  $username
-     * @param  string  $password
-     *
-     * @return $this
+     * @inheritdoc
      */
     public static function createWithCredentials($username, $password)
     {
@@ -28,5 +23,29 @@ class Identity extends Fluent
             'password' => $password,
             'cookie'   => [],
         ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCookie()
+    {
+        return $this->cookie;
     }
 }

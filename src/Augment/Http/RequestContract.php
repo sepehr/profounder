@@ -7,9 +7,9 @@ interface RequestContract extends \Profounder\Foundation\Http\RequestContract
     /**
      * Sets "pidlist" data parameter.
      *
-     * @param  string $articleId
+     * @param  string  $articleContentId
      *
      * @return RequestContract
      */
-    public function withArticle($articleId);
+    public function withArticle($articleContentId);
 }

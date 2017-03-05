@@ -12,7 +12,7 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
     /**
      * State instance.
      *
-     * @var State
+     * @var StateContract
      */
     protected $state;
 
@@ -26,7 +26,7 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
     /**
      * StateParser instance.
      *
-     * @var StateParser
+     * @var StateParserContract
      */
     protected $stateParser;
 
@@ -54,11 +54,11 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
     /**
      * StatefulRequest constructor.
      *
-     * @param  ClientInterface $client
-     * @param  CookieJarInterface $cookieJar
-     * @param  StateParser $parser
+     * @param  ClientInterface  $client
+     * @param  CookieJarInterface  $cookieJar
+     * @param  StateParserContract  $parser
      */
-    public function __construct(ClientInterface $client, CookieJarInterface $cookieJar, StateParser $parser)
+    public function __construct(ClientInterface $client, CookieJarInterface $cookieJar, StateParserContract $parser)
     {
         $this->stateParser = $parser;
         $this->initializeStateProperties();
@@ -75,8 +75,8 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
 
         $this->validateState($this->state, $this->stateResponse);
 
-        $this->withData($this->state->data);
-        $this->withCookie($this->state->cookie);
+        $this->withData($this->state->getData());
+        $this->withCookie($this->state->getCookie());
 
         return parent::dispatch($delay, $cookie);
     }
@@ -92,12 +92,12 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
     /**
      * Validates the extracted state instance and the response.
      *
-     * @param  State $state
+     * @param  StateContract  $state
      * @param  ResponseInterface $response
      *
      * @return void
      */
-    protected function validateState(State $state, ResponseInterface $response)
+    protected function validateState(StateContract $state, ResponseInterface $response)
     {
         //
     }
@@ -121,7 +121,7 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
      *
      * @param  ResponseInterface $response
      *
-     * @return State
+     * @return StateContract
      */
     protected function parseStateResponse(ResponseInterface $response)
     {

@@ -2,53 +2,54 @@
 
 namespace Profounder\Augment\Augmentor;
 
-use Profounder\Entity\Toc;
-use Profounder\Entity\Article;
 use Profounder\Exception\InvalidArgument;
-use Profounder\Augment\Http\Parser\ArticlePage;
+use Profounder\Augment\Http\Parser\ArticlePageContract;
+use Profounder\Persistence\Entity\ArticleContract;
+use Profounder\Persistence\Repository\TocRepositoryContract;
+use Profounder\Persistence\Repository\ArticleRepositoryContract;
 
 class Augmentor implements AugmentorContract
 {
     /**
      * Toc repository instance.
      *
-     * @var Article
+     * @var TocRepositoryContract
      */
-    private $tocRepo;
+    private $tocRepository;
 
     /**
      * Article repository instance.
      *
-     * @var Article
+     * @var ArticleRepositoryContract
      */
-    private $articleRepo;
+    private $articleRepository;
 
     /**
      * Augmentor constructor.
      *
-     * @param  Toc $tocRepo
-     * @param  Article $articleRepo
+     * @param  TocRepositoryContract $tocRepository
+     * @param  ArticleRepositoryContract $articleRepository
      */
-    public function __construct(Toc $tocRepo, Article $articleRepo)
+    public function __construct(TocRepositoryContract $tocRepository, ArticleRepositoryContract $articleRepository)
     {
-        $this->tocRepo     = $tocRepo;
-        $this->articleRepo = $articleRepo;
+        $this->tocRepository     = $tocRepository;
+        $this->articleRepository = $articleRepository;
     }
 
     /**
      * @inheritdoc
      */
-    public function augment($articleId, ArticlePage $articlePage)
+    public function augment($articleContentId, ArticlePageContract $articlePage)
     {
-        if ($article = $this->getArticle($articleId)) {
+        if ($article = $this->getArticle($articleContentId)) {
             if ($this->updateArticle($article, $articlePage)) {
                 return $this->syncTocItems($article, $articlePage);
             }
 
-            throw new \RuntimeException("Could not augment the article: $articleId");
+            throw new \RuntimeException("Could not augment the article: $articleContentId");
         }
 
-        throw InvalidArgument::notFound("Article could not be found: $articleId");
+        throw InvalidArgument::notFound("Article could not be found: $articleContentId");
     }
 
     /**
@@ -56,22 +57,22 @@ class Augmentor implements AugmentorContract
      *
      * @param  string $articleId
      *
-     * @return Article
+     * @return ArticleContract
      */
     private function getArticle($articleId)
     {
-        return $this->articleRepo->findByContentId($articleId);
+        return $this->articleRepository->findByContentId($articleId);
     }
 
     /**
      * Updates article entity with values from ArticlePage instance.
      *
-     * @param  Article $article
-     * @param  ArticlePage $articlePage
+     * @param  ArticleContract $article
+     * @param  ArticlePageContract $articlePage
      *
      * @return bool
      */
-    private function updateArticle(Article $article, ArticlePage $articlePage)
+    private function updateArticle(ArticleContract $article, ArticlePageContract $articlePage)
     {
         return $article->fillAndSave($articlePage->toArray());
     }
@@ -79,27 +80,30 @@ class Augmentor implements AugmentorContract
     /**
      * Creates article corresponding TOC entities.
      *
-     * @param  Article $article
-     * @param  ArticlePage $articlePage
+     * @param  ArticleContract $article
+     * @param  ArticlePageContract $articlePage
      *
      * @return bool
      */
-    private function syncTocItems(Article $article, ArticlePage $articlePage)
+    private function syncTocItems(ArticleContract $article, ArticlePageContract $articlePage)
     {
-        if ($articlePage->toc) {
+        if ($toc = $articlePage->getToc()) {
             // First, delete any existing toc items
             $article->deleteToc();
 
             // Then, associate new toc items under a parent wrapper node
-            $articlePage->toc = $this->associateTocItemsWithArticle($articlePage->toc, $article->id);
+            $articlePage->toc(
+                $this->associateTocItemsWithArticle($toc, $article->getId())
+            );
 
             // We need to call the create() method on the Toc entity,
             // as it implements nested sets via traits. If we do call
             // the create() method on the relationship, nested sets
             // won't be considered.
+
             // This createArticleToc() method is just a wrapper around
             // the create().
-            return $this->tocRepo->createArticleToc($articlePage->toc, $article->id);
+            return $this->tocRepository->createArticleToc($articlePage->getToc(), $article->getId());
         }
 
         return true;

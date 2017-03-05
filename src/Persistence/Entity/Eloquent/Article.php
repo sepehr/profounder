@@ -1,8 +1,10 @@
 <?php
 
-namespace Profounder\Entity;
+namespace Profounder\Persistence\Entity\Eloquent;
 
-class Article extends Entity
+use Profounder\Persistence\Entity\ArticleContract;
+
+class Article extends Entity implements ArticleContract
 {
     /**
      * Mass-assignable attributes.
@@ -48,33 +50,31 @@ class Article extends Entity
     }
 
     /**
-     * Finds an article by its content ID.
-     *
-     * @param  string $contentId
-     *
-     * @return Article
+     * @inheritdoc
      */
-    public function findByContentId($contentId)
+    public function getId()
     {
-        return $this->whereContentId($contentId)->first();
+        return $this->id;
     }
 
     /**
-     * Checks whether the article with the passed content ID exists or not.
-     *
-     * @param  string $contentId
-     *
-     * @return bool
+     * @inheritdoc
      */
-    public function existsByContentId($contentId)
+    public function getContentId()
     {
-        return $this->whereContentId($contentId)->exists();
+        return $this->content_id;
     }
 
     /**
-     * Deletes associated Toc records.
-     *
-     * @return bool
+     * @inheritdoc
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function deleteToc()
     {

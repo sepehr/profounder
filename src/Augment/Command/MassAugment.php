@@ -2,14 +2,16 @@
 
 namespace Profounder\Augment\Command;
 
+use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Profounder\Augment\Command\Concern\AugmentableInputOptions;
 use Profounder\Core\Concern\Benchmarkable;
 use Profounder\Core\Console\ContainerAwareCommand;
-use Profounder\Entity\Article;
+use Profounder\Augment\Command\Concern\AugmentableInputOptions;
+use Profounder\Persistence\Entity\ArticleContract;
+use Profounder\Persistence\Repository\ArticleRepositoryContract;
 
 class MassAugment extends ContainerAwareCommand
 {
@@ -18,7 +20,7 @@ class MassAugment extends ContainerAwareCommand
     /**
      * Article repository instance.
      *
-     * @var Article
+     * @var ArticleRepositoryContract
      */
     private $repository;
 
@@ -32,9 +34,9 @@ class MassAugment extends ContainerAwareCommand
     /**
      * BulkAugment constructor.
      *
-     * @param  Article $repository
+     * @param  ArticleRepositoryContract  $repository
      */
-    public function __construct(Article $repository)
+    public function __construct(ArticleRepositoryContract $repository)
     {
         $this->repository = $repository;
 
@@ -76,43 +78,24 @@ class MassAugment extends ContainerAwareCommand
         // Query builder's chunk() does not respect the set offset and limit,
         // so as a workaround, we use minimum and maximum IDs. See:
         // https://github.com/laravel/internals/issues/103
-        $minId = $this->getArticleId($options['offset'] - 1);
-        $maxId = $this->getArticleId($options['offset'] + $options['limit']);
+        $minId = $this->repository->getNonAugmentedIdByOffset($options['offset']);
+        $maxId = $this->repository->getNonAugmentedIdByOffset($options['offset'] + $options['limit'] - 1);
 
-        $this
-            ->repository
-            ->select('id', 'content_id')
-            ->whereNull('length')
-            ->whereBetween('id', [$minId, $maxId])
-            ->orderBy('id')
-            ->chunk($options['chunk'], function ($articles) use ($command, $commandInput, $output, &$count) {
-                $articles->each(function ($article) use ($command, $commandInput, $output, &$count) {
-                    $commandInput['content-id'] = $article->content_id;
+        $this->repository->executeOnNonAugmentedWithin(
+            $minId,
+            $maxId,
+            $options['chunk'],
+            function (Collection $articles) use ($command, $commandInput, $output, &$count) {
+                $articles->each(function (ArticleContract $article) use ($command, $commandInput, $output, &$count) {
+                    $commandInput['content-id'] = $article->getContentId();
 
-                    $output->writeln("\n>> Processing article #{$article->id} ({$article->content_id})");
+                    $output->writeln("\n>> Processing article #{$article->getId()} ({$article->getContentId()})");
 
                     $command->run($this->make(ArrayInput::class, $commandInput), $output) or $count++;
                 });
-            });
+            }
+        );
 
         $output->writeln("\nDone! Augmented $count articles.");
-    }
-
-    /**
-     * Returns article ID based on passed limit.
-     *
-     * @param  int $limit
-     *
-     * @return int
-     */
-    private function getArticleId($limit)
-    {
-        return $this
-            ->repository
-            ->whereNull('length')
-            ->orderBy('id')
-            ->skip($limit)
-            ->take(1)
-            ->value('id');
     }
 }

@@ -9,7 +9,13 @@ use Profounder\Foundation\Http\Parser\ParsedObject;
  *
  * @property  array $cookie
  */
-class Session extends ParsedObject
+class Session extends ParsedObject implements SessionContract
 {
-    //
+    /**
+     * @inheritdoc
+     */
+    public function getCookie($key = null)
+    {
+        return $this->cookie[$key] ?? $this->cookie;
+    }
 }

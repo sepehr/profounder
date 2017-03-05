@@ -16,7 +16,7 @@ use Profounder\Foundation\Http\Parser\ParsedObject;
  * @property  string $content_id
  * @property  string $internal_id
  */
-class CollectedArticle extends ParsedObject
+class CollectedArticle extends ParsedObject implements CollectedArticleContract
 {
     /**
      * CollectedArticle constructor.
@@ -26,6 +26,72 @@ class CollectedArticle extends ParsedObject
     public function __construct(array $attributes)
     {
         parent::__construct($this->prepareAttributes($attributes));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withoutPublisher()
+    {
+        unset($this->publisher);
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPublisher()
+    {
+        return $this->publisher;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContentId()
+    {
+        return $this->content_id;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getInternalId()
+    {
+        return $this->internal_id;
     }
 
     /**

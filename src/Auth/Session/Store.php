@@ -33,7 +33,7 @@ class Store implements StoreContract
     /**
      * @inheritdoc
      */
-    public function save(Session $session)
+    public function save(SessionContract $session)
     {
         return $this->storage->put(
             $this->sessionFile,
@@ -56,11 +56,11 @@ class Store implements StoreContract
     /**
      * Serializes a Session instance.
      *
-     * @param  Session $session
+     * @param  SessionContract $session
      *
      * @return string
      */
-    private function serialize($session)
+    private function serialize(SessionContract $session)
     {
         return serialize($session);
     }
@@ -70,7 +70,7 @@ class Store implements StoreContract
      *
      * @param  string $serializedSession
      *
-     * @return Session
+     * @return SessionContract
      */
     private function unserialize($serializedSession)
     {

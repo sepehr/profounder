@@ -19,8 +19,8 @@ class Request extends AuthenticatedRequest implements RequestContract
     /**
      * @inheritdoc
      */
-    public function withArticle($articleId)
+    public function withArticle($articleContentId)
     {
-        return $this->withData('pidlist', $articleId);
+        return $this->withData('pidlist', $articleContentId);
     }
 }

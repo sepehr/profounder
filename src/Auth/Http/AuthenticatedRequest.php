@@ -21,14 +21,14 @@ abstract class AuthenticatedRequest extends Request implements RequestContract
     /**
      * Session instance.
      *
-     * @var \Profounder\Auth\Session\Session|null
+     * @var \Profounder\Auth\Session\SessionContract|null
      */
     protected $session;
 
     /**
      * @inheritdoc
      *
-     * @param  StoreContract $store
+     * @param  StoreContract  $store
      */
     public function __construct(StoreContract $store, ClientInterface $client, CookieJarInterface $cookieJar)
     {
@@ -46,7 +46,7 @@ abstract class AuthenticatedRequest extends Request implements RequestContract
     public function dispatch($delay = null, $cookie = null)
     {
         if ($this->session) {
-            $this->withCookie($this->session->cookie);
+            $this->withCookie($this->session->getCookie());
 
             return parent::dispatch($delay, $cookie);
         }

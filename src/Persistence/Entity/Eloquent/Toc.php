@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder\Entity;
+namespace Profounder\Persistence\Entity\Eloquent;
 
 use Kalnoy\Nestedset\NodeTrait;
 
@@ -23,16 +23,6 @@ class Toc extends Entity
     public $timestamps = false;
 
     /**
-     * Returns scoped fields of the nested set.
-     *
-     * @return array
-     */
-    protected function getScopeAttributes()
-    {
-        return ['article_id'];
-    }
-
-    /**
      * A TOC belongs to an article.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -43,18 +33,12 @@ class Toc extends Entity
     }
 
     /**
-     * Creates a Toc associated with the passed article ID.
+     * Returns scoped fields of the nested set.
      *
-     * @param  array $toc
-     * @param  int $articleId
-     *
-     * @return bool
+     * @return array
      */
-    public function createArticleToc(array $toc, $articleId)
+    protected function getScopeAttributes()
     {
-        return (bool) $this->create([
-            'children'   => $toc,
-            'article_id' => $articleId,
-        ]);
+        return ['article_id'];
     }
 }

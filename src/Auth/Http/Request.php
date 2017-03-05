@@ -2,14 +2,14 @@
 
 namespace Profounder\Auth\Http;
 
-use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Cookie\CookieJarInterface;
-use Profounder\Service\Identity\Identity;
+use Psr\Http\Message\ResponseInterface;
 use Profounder\Exception\InvalidResponse;
-use Profounder\Foundation\Http\Stateful\State;
-use Profounder\Foundation\Http\Stateful\StateParser;
+use Profounder\Service\Identity\IdentityContract;
+use Profounder\Foundation\Http\Stateful\StateContract;
 use Profounder\Foundation\Http\Stateful\StatefulRequest;
+use Profounder\Foundation\Http\Stateful\StateParserContract;
 
 class Request extends StatefulRequest implements RequestContract
 {
@@ -56,13 +56,13 @@ class Request extends StatefulRequest implements RequestContract
     /**
      * @inheritdoc
      *
-     * @param  Identity $identity
+     * @param  IdentityContract $identity
      */
     public function __construct(
         ClientInterface $client,
         CookieJarInterface $cookieJar,
-        StateParser $parser,
-        Identity $identity
+        StateParserContract $parser,
+        IdentityContract $identity
     ) {
         $this->actAs($identity);
 
@@ -72,10 +72,10 @@ class Request extends StatefulRequest implements RequestContract
     /**
      * @inheritdoc
      */
-    public function actAs(Identity $identity)
+    public function actAs(IdentityContract $identity)
     {
-        $this->data['LoginBox$txtUserId']   = $identity->username;
-        $this->data['LoginBox$txtPassword'] = $identity->password;
+        $this->data['LoginBox$txtUserId']   = $identity->getUsername();
+        $this->data['LoginBox$txtPassword'] = $identity->getPassword();
 
         return $this;
     }
@@ -85,7 +85,7 @@ class Request extends StatefulRequest implements RequestContract
      *
      * @throws InvalidResponse
      */
-    protected function validateState(State $state, ResponseInterface $response)
+    protected function validateState(StateContract $state, ResponseInterface $response)
     {
         if (! $this->validateStateData($state) || ! $this->validateStateCookies($state)) {
             throw new InvalidResponse('Could not fetch the required state data and/or cookies.');
@@ -95,24 +95,24 @@ class Request extends StatefulRequest implements RequestContract
     /**
      * Validates state data.
      *
-     * @param  State $state
+     * @param  StateContract $state
      *
      * @return bool
      */
-    private function validateStateData(State $state)
+    private function validateStateData(StateContract $state)
     {
-        return ! empty($state->data['__VIEWSTATE']);
+        return ! empty($state->getData('__VIEWSTATE'));
     }
 
     /**
      * Validates state cookies.
      *
-     * @param  State $state
+     * @param  StateContract $state
      *
      * @return bool
      */
-    private function validateStateCookies(State $state)
+    private function validateStateCookies(StateContract $state)
     {
-        return ! empty($state->cookie);
+        return ! empty($state->getCookie());
     }
 }

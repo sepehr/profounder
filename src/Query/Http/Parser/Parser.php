@@ -39,7 +39,7 @@ class Parser extends JsonParser implements ParserContract
     }
 
     /**
-     * Creates a collection of CollectedArticle objects out of the JSON results.
+     * Creates a collection of CollectedArticle instances out of the JSON results.
      *
      * @param  array $parsedJson
      *

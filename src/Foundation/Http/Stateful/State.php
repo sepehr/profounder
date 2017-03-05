@@ -2,7 +2,7 @@
 
 namespace Profounder\Foundation\Http\Stateful;
 
-use Illuminate\Support\Fluent;
+use Profounder\Foundation\Http\Parser\ParsedObject;
 
 /**
  * Class representing a request state data and cookie.
@@ -10,17 +10,21 @@ use Illuminate\Support\Fluent;
  * @property  array $data
  * @property  array $cookie
  */
-class State extends Fluent
+class State extends ParsedObject implements StateContract
 {
     /**
-     * Static factory method.
-     *
-     * @param  array $args
-     *
-     * @return $this
+     * @inheritdoc
      */
-    public static function create(...$args)
+    public function getData($key = null)
     {
-        return new static(...$args);
+        return $this->data[$key] ?? $this->data;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCookie($key = null)
+    {
+        return $this->cookie[$key] ?? $this->cookie;
     }
 }

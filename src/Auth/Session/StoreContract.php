@@ -7,16 +7,16 @@ interface StoreContract
     /**
      * Stores Session instance into the store.
      *
-     * @param  Session $session
+     * @param  SessionContract $session
      *
      * @return bool
      */
-    public function save(Session $session);
+    public function save(SessionContract $session);
 
     /**
      * Retrieves Session instance from store.
      *
-     * @return Session|null
+     * @return SessionContract|null
      */
     public function retrieve();
 }

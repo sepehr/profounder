@@ -9,8 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Profounder\Core\Concern\Benchmarkable;
 use Profounder\Core\Console\ContainerAwareCommand;
 use Profounder\Augment\Http\RequestContract;
-use Profounder\Augment\Http\Parser\ArticlePage;
 use Profounder\Augment\Http\Parser\ParserContract;
+use Profounder\Augment\Http\Parser\ArticlePageContract;
 use Profounder\Augment\Augmentor\AugmentorContract;
 use Profounder\Augment\Command\Concern\AugmentableInputOptions;
 
@@ -51,7 +51,7 @@ class Augment extends ContainerAwareCommand
      *
      * @var string
      */
-    private $articleId;
+    private $articleContentId;
 
     /**
      * Augment command constructor.
@@ -87,7 +87,7 @@ class Augment extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->options   = (object) $input->getOptions();
-        $this->articleId = $input->getArgument('content-id');
+        $this->articleContentId = $input->getArgument('content-id');
 
         $this->benchmark(function () use ($output) {
             $articlePage = $this->getArticlePage();
@@ -108,21 +108,21 @@ class Augment extends ContainerAwareCommand
     /**
      * Augments the article entity with the data from an ArticlePage.
      *
-     * @param  ArticlePage $articlePage
+     * @param  ArticlePageContract  $articlePage
      *
      * @return bool
      */
-    private function augmentArticleWith(ArticlePage $articlePage)
+    private function augmentArticleWith(ArticlePageContract $articlePage)
     {
         return $this->benchmark(function () use ($articlePage) {
-            return $this->augmentor->augment($this->articleId, $articlePage);
+            return $this->augmentor->augment($this->articleContentId, $articlePage);
         });
     }
 
     /**
      * Fetches the article page and parses it into an ArticlePage.
      *
-     * @return ArticlePage
+     * @return ArticlePageContract
      */
     private function getArticlePage()
     {
@@ -139,7 +139,7 @@ class Augment extends ContainerAwareCommand
     private function requestArticlePage()
     {
         return $this->request
-            ->withArticle($this->articleId)
+            ->withArticle($this->articleContentId)
             ->dispatch($this->options->delay);
     }
 
@@ -148,7 +148,7 @@ class Augment extends ContainerAwareCommand
      *
      * @param  ResponseInterface $response
      *
-     * @return ArticlePage
+     * @return ArticlePageContract
      */
     private function parseResponse(ResponseInterface $response)
     {

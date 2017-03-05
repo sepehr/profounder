@@ -5,7 +5,7 @@ namespace Profounder\Foundation\Http\Stateful;
 use Symfony\Component\DomCrawler\Crawler;
 use Profounder\Foundation\Http\Parser\CrawlableParser;
 
-class StateParser extends CrawlableParser
+class StateParser extends CrawlableParser implements StateParserContract
 {
     /**
      * State fields CSS selector.

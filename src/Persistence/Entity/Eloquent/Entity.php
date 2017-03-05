@@ -1,17 +1,13 @@
 <?php
 
-namespace Profounder\Entity;
+namespace Profounder\Persistence\Entity\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 
-abstract class Entity extends Model
+abstract class Entity extends Model implements EntityContract
 {
     /**
-     * Fills an entity with data from an array and updates it.
-     *
-     * @param  array $attributes
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function fillAndSave(array $attributes)
     {
@@ -19,11 +15,7 @@ abstract class Entity extends Model
     }
 
     /**
-     * Creates an entity only if not exists.
-     *
-     * @param  array $attributes
-     *
-     * @return static
+     * @inheritdoc
      */
     public function existsOrCreate(array $attributes)
     {

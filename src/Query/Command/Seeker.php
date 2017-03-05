@@ -28,7 +28,7 @@ class Seeker extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('profounder:seek')
+            ->setName('profounder:query:seek')
             ->setDescription('Runs the profounder command with the configured date range.')
             ->addOption('start', 's', InputOption::VALUE_OPTIONAL, 'Date to start from (Y-m-d).', '1994-01-01')
             ->addOption('end', 'e', InputOption::VALUE_OPTIONAL, 'Seek until this date (Y-m-d).', date('Y-m-d'))

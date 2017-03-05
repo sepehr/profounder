@@ -3,36 +3,37 @@
 namespace Profounder\Query\Storer;
 
 use Illuminate\Support\Collection;
-use Profounder\Entity\Article;
-use Profounder\Entity\Publisher;
-use Profounder\Query\Http\Parser\CollectedArticle;
+use Profounder\Persistence\Entity\PublisherContract;
+use Profounder\Query\Http\Parser\CollectedArticleContract;
+use Profounder\Persistence\Repository\ArticleRepositoryContract;
+use Profounder\Persistence\Repository\PublisherRepositoryContract;
 
 class Storer implements StorerContract
 {
     /**
      * Article repository instance.
      *
-     * @var Article
+     * @var ArticleRepositoryContract
      */
-    private $articleRepo;
+    private $articleRepository;
 
     /**
      * Publisher repository instance.
      *
-     * @var Publisher
+     * @var PublisherRepositoryContract
      */
-    private $publisherRepo;
+    private $publisherRepository;
 
     /**
      * Storer constructor.
      *
-     * @param  Article $articleRepo
-     * @param  Publisher $publisherRepo
+     * @param  ArticleRepositoryContract  $articleRepo
+     * @param  PublisherRepositoryContract  $publisherRepo
      */
-    public function __construct(Article $articleRepo, Publisher $publisherRepo)
+    public function __construct(ArticleRepositoryContract $articleRepo, PublisherRepositoryContract $publisherRepo)
     {
-        $this->articleRepo   = $articleRepo;
-        $this->publisherRepo = $publisherRepo;
+        $this->articleRepository   = $articleRepo;
+        $this->publisherRepository = $publisherRepo;
     }
 
     /**
@@ -49,7 +50,7 @@ class Storer implements StorerContract
     public function store(Collection $articles)
     {
         $count = 0;
-        $articles->each(function (CollectedArticle $article) use (&$count) {
+        $articles->each(function (CollectedArticleContract $article) use (&$count) {
             $this->storeIfNotExists($article) and $count++;
         });
 
@@ -59,11 +60,11 @@ class Storer implements StorerContract
     /**
      * Normalizes and stores the collected article into database, if not exists.
      *
-     * @param  CollectedArticle $article
+     * @param  CollectedArticleContract $article
      *
      * @return bool
      */
-    private function storeIfNotExists(CollectedArticle $article)
+    private function storeIfNotExists(CollectedArticleContract $article)
     {
         return $this->articleExists($article)
             ? false
@@ -73,23 +74,23 @@ class Storer implements StorerContract
     /**
      * Checks if the article exists in the database or not.
      *
-     * @param  CollectedArticle $article
+     * @param  CollectedArticleContract $article
      *
      * @return bool
      */
-    private function articleExists(CollectedArticle $article)
+    private function articleExists(CollectedArticleContract $article)
     {
-        return $this->articleRepo->existsByContentId($article->content_id);
+        return $this->articleRepository->existsByContentId($article->getContentId());
     }
 
     /**
      * Normalizes the CollectedArticle object into Article/Publisher entities and stores them.
      *
-     * @param  CollectedArticle $article
+     * @param  CollectedArticleContract $article
      *
      * @return bool
      */
-    private function normalizeAndStore(CollectedArticle $article)
+    private function normalizeAndStore(CollectedArticleContract $article)
     {
         $publisher = $this->fetchOrCreatePublisher($article);
 
@@ -101,13 +102,13 @@ class Storer implements StorerContract
     /**
      * Fetches publisher from the database or creates a new one.
      *
-     * @param  CollectedArticle $collectedArticle
+     * @param  CollectedArticleContract $collectedArticle
      *
-     * @return Publisher
+     * @return PublisherContract
      */
-    private function fetchOrCreatePublisher(CollectedArticle $collectedArticle)
+    private function fetchOrCreatePublisher(CollectedArticleContract $collectedArticle)
     {
-        return $this->publisherRepo->existsOrCreate(
+        return $this->publisherRepository->existsOrCreate(
             $this->preparePublisher($collectedArticle)
         );
     }
@@ -115,12 +116,12 @@ class Storer implements StorerContract
     /**
      * Creates an article associated with the passed publisher object.
      *
-     * @param  Publisher $publisher
-     * @param  CollectedArticle $collectedArticle
+     * @param  PublisherContract $publisher
+     * @param  CollectedArticleContract $collectedArticle
      *
-     * @return Article
+     * @return \Profounder\Persistence\Entity\Eloquent\Article
      */
-    private function createPublisherArticle(Publisher $publisher, CollectedArticle $collectedArticle)
+    private function createPublisherArticle(PublisherContract $publisher, CollectedArticleContract $collectedArticle)
     {
         return $publisher->createArticle(
             $this->prepareArticle($collectedArticle)
@@ -130,26 +131,24 @@ class Storer implements StorerContract
     /**
      * Prepares an article array for insertion.
      *
-     * @param  CollectedArticle $collectedArticle
+     * @param  CollectedArticleContract $collectedArticle
      *
      * @return array
      */
-    private function prepareArticle(CollectedArticle $collectedArticle)
+    private function prepareArticle(CollectedArticleContract $collectedArticle)
     {
-        unset($collectedArticle->publisher);
-
-        return $collectedArticle->toArray();
+        return $collectedArticle->withoutPublisher()->toArray();
     }
 
     /**
      * Prepares a publisher array for insertion.
      *
-     * @param  CollectedArticle $collectedArticle
+     * @param  CollectedArticleContract $collectedArticle
      *
      * @return array
      */
-    private function preparePublisher(CollectedArticle $collectedArticle)
+    private function preparePublisher(CollectedArticleContract $collectedArticle)
     {
-        return ['name' => $collectedArticle->publisher];
+        return ['name' => $collectedArticle->getPublisher()];
     }
 }

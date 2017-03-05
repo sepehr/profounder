@@ -2,14 +2,12 @@
 
 namespace Profounder\Foundation\Support;
 
-class Fluent extends \Illuminate\Support\Fluent
+use Illuminate\Support\Fluent as IlluminateFluent;
+
+class Fluent extends IlluminateFluent implements FluentContract
 {
     /**
-     * Static factory method.
-     *
-     * @param  array  ...$args
-     *
-     * @return static
+     * @inheritdoc
      */
     public static function create(...$args)
     {

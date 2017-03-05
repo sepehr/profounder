@@ -1,6 +1,6 @@
 <?php
 
-namespace Profounder\Entity;
+namespace Profounder\Persistence\Entity\Eloquent;
 
 class Publisher extends Entity
 {
@@ -29,11 +29,7 @@ class Publisher extends Entity
     }
 
     /**
-     * Creates an associated article.
-     *
-     * @param  array $article
-     *
-     * @return Article
+     * @inheritdoc
      */
     public function createArticle(array $article)
     {

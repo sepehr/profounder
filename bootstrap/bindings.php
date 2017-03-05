@@ -15,6 +15,8 @@ $container->bind(Symfony\Component\Console\Input\ArrayInput::class, function ($c
 // Identity
 $container->bind(\Profounder\Service\Identity\PoolContract::class, \Profounder\Service\Identity\JsonFilePool::class);
 
+$container->bind(\Profounder\Service\Identity\IdentityContract::class, \Profounder\Service\Identity\Identity::class);
+
 $container->bind(\Profounder\Service\Identity\Identity::class, function ($container) {
     return ($container->make(\Profounder\Service\Identity\PoolContract::class))->retrieve();
 });
@@ -36,4 +38,24 @@ $container->bind(\Profounder\Augment\Http\Parser\ParserContract::class, \Profoun
 $container->bind(
     \Profounder\Augment\Augmentor\AugmentorContract::class,
     \Profounder\Augment\Augmentor\Augmentor::class
+);
+
+// Foundation
+$container->bind(
+    \Profounder\Foundation\Http\Stateful\StateParserContract::class,
+    \Profounder\Foundation\Http\Stateful\StateParser::class
+);
+
+// Persistence
+$container->bind(
+    \Profounder\Persistence\Repository\TocRepositoryContract::class,
+    \Profounder\Persistence\Repository\Eloquent\TocRepository::class
+);
+$container->bind(
+    \Profounder\Persistence\Repository\PublisherRepositoryContract::class,
+    \Profounder\Persistence\Repository\Eloquent\PublisherRepository::class
+);
+$container->bind(
+    \Profounder\Persistence\Repository\ArticleRepositoryContract::class,
+    \Profounder\Persistence\Repository\Eloquent\ArticleRepository::class
 );

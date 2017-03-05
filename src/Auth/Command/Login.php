@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Profounder\Core\Console\ContainerAwareCommand;
 use Profounder\Service\Identity\Identity;
+use Profounder\Service\Identity\IdentityContract;
 use Profounder\Auth\Session\Session;
 use Profounder\Auth\Session\StoreContract;
 use Profounder\Auth\Http\RequestContract;
@@ -79,11 +80,11 @@ class Login extends ContainerAwareCommand
     /**
      * Dispatches login request and returns the response.
      *
-     * @param  Identity $identity
+     * @param  IdentityContract  $identity
      *
      * @return ResponseInterface
      */
-    private function dispatchLoginRequest(Identity $identity = null)
+    private function dispatchLoginRequest(IdentityContract $identity = null)
     {
         if ($identity) {
             $this->request->actAs($identity);

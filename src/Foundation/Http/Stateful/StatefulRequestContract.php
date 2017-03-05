@@ -9,7 +9,7 @@ interface StatefulRequestContract extends RequestContract
     /**
      * Returns internal State instance.
      *
-     * @return State
+     * @return StateContract
      */
     public function getState();
 }

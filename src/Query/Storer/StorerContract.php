@@ -15,7 +15,7 @@ interface StorerContract
     public static function create(...$args);
 
     /**
-     * Stores a collection of CollectedArticle objects into the database.
+     * Stores a collection of CollectedArticle instances into the database.
      *
      * @param  Collection $articles
      *

@@ -8,9 +8,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Profounder\Entity\Article;
 use Profounder\Core\Concern\Benchmarkable;
 use Profounder\Core\Console\ContainerAwareCommand;
+use Profounder\Persistence\Entity\ArticleContract;
+use Profounder\Persistence\Repository\ArticleRepositoryContract;
 
 class Dumper extends ContainerAwareCommand
 {
@@ -19,7 +20,7 @@ class Dumper extends ContainerAwareCommand
     /**
      * Article repository instance.
      *
-     * @var Article
+     * @var ArticleRepositoryContract
      */
     private $repository;
 
@@ -33,10 +34,10 @@ class Dumper extends ContainerAwareCommand
     /**
      * Dumper constructor.
      *
-     * @param  Article $repository
+     * @param  ArticleRepositoryContract $repository
      * @param  Filesystem $filesystem
      */
-    public function __construct(Article $repository, Filesystem $filesystem)
+    public function __construct(ArticleRepositoryContract $repository, Filesystem $filesystem)
     {
         $this->repository = $repository;
         $this->filesystem = $filesystem;
@@ -91,18 +92,7 @@ class Dumper extends ContainerAwareCommand
      */
     private function dumpSku($file)
     {
-        $this->filesystem->put($file, '');
-
-        $this
-            ->repository
-            ->select('sku')
-            ->chunk(1000, function (Collection $skus) use ($file) {
-                $skus = $skus->reduce(function ($carry, $item) {
-                    return $carry .= $item->sku . PHP_EOL;
-                }, '');
-
-                $this->filesystem->append($file, $skus);
-            });
+        $this->filesystem->put($file, $this->repository->dumpSku());
     }
 
     /**
@@ -114,17 +104,6 @@ class Dumper extends ContainerAwareCommand
      */
     private function dumpCsv($file)
     {
-        $this->filesystem->put($file, 'ContentID,Title,Date,Price,SKU,Length' . PHP_EOL);
-
-        $this
-            ->repository
-            ->select('content_id', 'title', 'date', 'price', 'sku', 'length')
-            ->chunk(1000, function (Collection $articles) use ($file) {
-                $articles = $articles->reduce(function ($carry, $item) {
-                    return $carry .= '"' . implode('","', $item->toArray()) . '"' . PHP_EOL;
-                }, '');
-
-                $this->filesystem->append($file, $articles);
-            });
+        $this->filesystem->put($file, $this->repository->dumpCsv());
     }
 }
