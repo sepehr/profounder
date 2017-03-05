@@ -9,8 +9,8 @@ interface IdentityContract extends FluentContract
     /**
      * Static factory method to create an instance with username and password.
      *
-     * @param  string  $username
-     * @param  string  $password
+     * @param string $username
+     * @param string $password
      *
      * @return static
      */

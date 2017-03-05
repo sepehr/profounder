@@ -56,9 +56,9 @@ class Augment extends ContainerAwareCommand
     /**
      * Augment command constructor.
      *
-     * @param  ParserContract $parser
-     * @param  RequestContract $request
-     * @param  AugmentorContract $augmentor
+     * @param ParserContract    $parser
+     * @param RequestContract   $request
+     * @param AugmentorContract $augmentor
      */
     public function __construct(ParserContract $parser, RequestContract $request, AugmentorContract $augmentor)
     {
@@ -108,7 +108,7 @@ class Augment extends ContainerAwareCommand
     /**
      * Augments the article entity with the data from an ArticlePage.
      *
-     * @param  ArticlePageContract  $articlePage
+     * @param ArticlePageContract $articlePage
      *
      * @return bool
      */
@@ -146,7 +146,7 @@ class Augment extends ContainerAwareCommand
     /**
      * Parses the response into an array.
      *
-     * @param  ResponseInterface $response
+     * @param ResponseInterface $response
      *
      * @return ArticlePageContract
      */

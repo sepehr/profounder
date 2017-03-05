@@ -9,7 +9,7 @@ interface ArticlePageContract extends ParsedObjectContract
     /**
      * Setter for toc property.
      *
-     * @param  null  $value
+     * @param null $value
      *
      * @return $this
      */

@@ -8,7 +8,7 @@ interface PoolContract
     /**
      * Sets pool.
      *
-     * @param  array $pool
+     * @param array $pool
      *
      * @return PoolContract
      */
@@ -17,11 +17,11 @@ interface PoolContract
     /**
      * Returns an Identity instance by ID.
      *
-     * @param  int $id
-     *
-     * @return Identity
+     * @param int $id
      *
      * @throws InvalidSession
+     *
+     * @return Identity
      */
     public function retrieve($id = 0);
 

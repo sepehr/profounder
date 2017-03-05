@@ -7,7 +7,7 @@ interface ParserContract extends \Profounder\Foundation\Http\Parser\ParserContra
     /**
      * Sets defaults property.
      *
-     * @param  array  $defaults
+     * @param array $defaults
      *
      * @return $this
      */

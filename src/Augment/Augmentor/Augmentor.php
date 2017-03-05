@@ -27,8 +27,8 @@ class Augmentor implements AugmentorContract
     /**
      * Augmentor constructor.
      *
-     * @param  TocRepositoryContract $tocRepository
-     * @param  ArticleRepositoryContract $articleRepository
+     * @param TocRepositoryContract     $tocRepository
+     * @param ArticleRepositoryContract $articleRepository
      */
     public function __construct(TocRepositoryContract $tocRepository, ArticleRepositoryContract $articleRepository)
     {
@@ -55,7 +55,7 @@ class Augmentor implements AugmentorContract
     /**
      * Returns article from the database by its content ID.
      *
-     * @param  string $articleId
+     * @param string $articleId
      *
      * @return ArticleContract
      */
@@ -67,8 +67,8 @@ class Augmentor implements AugmentorContract
     /**
      * Updates article entity with values from ArticlePage instance.
      *
-     * @param  ArticleContract $article
-     * @param  ArticlePageContract $articlePage
+     * @param ArticleContract     $article
+     * @param ArticlePageContract $articlePage
      *
      * @return bool
      */
@@ -80,8 +80,8 @@ class Augmentor implements AugmentorContract
     /**
      * Creates article corresponding TOC entities.
      *
-     * @param  ArticleContract $article
-     * @param  ArticlePageContract $articlePage
+     * @param ArticleContract     $article
+     * @param ArticlePageContract $articlePage
      *
      * @return bool
      */
@@ -112,8 +112,8 @@ class Augmentor implements AugmentorContract
     /**
      * Associates a TOC item with an article ID.
      *
-     * @param  array $toc
-     * @param  int $articleId
+     * @param array $toc
+     * @param int   $articleId
      *
      * @return array
      */

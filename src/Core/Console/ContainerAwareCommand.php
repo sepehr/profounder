@@ -14,8 +14,8 @@ abstract class ContainerAwareCommand extends Command
     /**
      * Resolves a resource out of the container.
      *
-     * @param  string $abstract
-     * @param  array $params
+     * @param string $abstract
+     * @param array  $params
      *
      * @return mixed
      */
@@ -27,9 +27,9 @@ abstract class ContainerAwareCommand extends Command
     /**
      * Resolves a callable dependencies out of the container and calls it.
      *
-     * @param  callable|string $callback
-     * @param  array $params
-     * @param  string|null $defaultMethod
+     * @param callable|string $callback
+     * @param array           $params
+     * @param string|null     $defaultMethod
      *
      * @return mixed
      */
@@ -41,7 +41,7 @@ abstract class ContainerAwareCommand extends Command
     /**
      * Magic container resource accessor.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */

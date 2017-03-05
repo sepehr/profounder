@@ -7,7 +7,7 @@ interface StoreContract
     /**
      * Stores Session instance into the store.
      *
-     * @param  SessionContract $session
+     * @param SessionContract $session
      *
      * @return bool
      */

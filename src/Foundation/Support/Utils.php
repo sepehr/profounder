@@ -7,7 +7,7 @@ class Utils
     /**
      * Converts a price string to an equivalent integer.
      *
-     * @param  string|null $price
+     * @param string|null $price
      *
      * @return int|null
      */
@@ -21,8 +21,8 @@ class Utils
     /**
      * Reformats a valid date string.
      *
-     * @param  string $date
-     * @param  string $format
+     * @param string $date
+     * @param string $format
      *
      * @return string
      */
@@ -34,7 +34,7 @@ class Utils
     /**
      * Strips HTML tags from string.
      *
-     * @param  string $string
+     * @param string $string
      *
      * @return string
      */
@@ -46,7 +46,7 @@ class Utils
     /**
      * Normalizes whitespace characters in a string.
      *
-     * @param  string $string
+     * @param string $string
      *
      * @return string
      */

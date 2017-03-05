@@ -8,7 +8,7 @@ interface StorerContract
     /**
      * Static factory method.
      *
-     * @param  array $args
+     * @param array $args
      *
      * @return StorerContract
      */
@@ -17,9 +17,9 @@ interface StorerContract
     /**
      * Stores a collection of CollectedArticle instances into the database.
      *
-     * @param  Collection $articles
+     * @param Collection $articles
      *
-     * @return int Number of successful inserts.
+     * @return int number of successful inserts
      */
     public function store(Collection $articles);
 }

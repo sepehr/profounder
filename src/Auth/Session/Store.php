@@ -23,7 +23,7 @@ class Store implements StoreContract
     /**
      * Store constructor.
      *
-     * @param  StorageContract $storage
+     * @param StorageContract $storage
      */
     public function __construct(StorageContract $storage)
     {
@@ -56,7 +56,7 @@ class Store implements StoreContract
     /**
      * Serializes a Session instance.
      *
-     * @param  SessionContract $session
+     * @param SessionContract $session
      *
      * @return string
      */
@@ -68,7 +68,7 @@ class Store implements StoreContract
     /**
      * Unserializes a Session instance.
      *
-     * @param  string $serializedSession
+     * @param string $serializedSession
      *
      * @return SessionContract
      */

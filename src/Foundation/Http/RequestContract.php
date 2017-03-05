@@ -10,7 +10,7 @@ interface RequestContract
     /**
      * Static factory method.
      *
-     * @param  array $args
+     * @param array $args
      *
      * @return Request
      */
@@ -21,10 +21,10 @@ interface RequestContract
      *
      * Knows how to init a request to profound.com's search endpoint with proper defaults.
      *
-     * @param  array $headers
-     * @param  array $data
-     * @param  string|null $uri
-     * @param  int|float|null $delay
+     * @param array          $headers
+     * @param array          $data
+     * @param string|null    $uri
+     * @param int|float|null $delay
      *
      * @return $this
      */
@@ -33,8 +33,8 @@ interface RequestContract
     /**
      * Request dispatcher.
      *
-     * @param  int|float|null $delay
-     * @param  array|string|null $cookie
+     * @param int|float|null    $delay
+     * @param array|string|null $cookie
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -43,8 +43,8 @@ interface RequestContract
     /**
      * Sets a single data item, or an array of them.
      *
-     * @param  string|array $key
-     * @param  mixed|null $value
+     * @param string|array $key
+     * @param mixed|null   $value
      *
      * @return $this
      */
@@ -53,8 +53,8 @@ interface RequestContract
     /**
      * Sets a single header, or an array of them.
      *
-     * @param  string|array $key
-     * @param  mixed|null $value
+     * @param string|array $key
+     * @param mixed|null   $value
      *
      * @return $this
      */
@@ -63,7 +63,7 @@ interface RequestContract
     /**
      * Sets request cookie(s).
      *
-     * @param  array|string|null $cookie
+     * @param array|string|null $cookie
      *
      * @return $this
      */
@@ -72,7 +72,7 @@ interface RequestContract
     /**
      * Sets User-Agent header.
      *
-     * @param  string|null $ua
+     * @param string|null $ua
      *
      * @return $this
      */
@@ -81,7 +81,7 @@ interface RequestContract
     /**
      * Sets HTTP client instance.
      *
-     * @param  ClientInterface $client
+     * @param ClientInterface $client
      *
      * @return $this
      */
@@ -90,7 +90,7 @@ interface RequestContract
     /**
      * Sets CookieJar instance.
      *
-     * @param  CookieJarInterface $cookieJar
+     * @param CookieJarInterface $cookieJar
      *
      * @return $this
      */
@@ -99,7 +99,7 @@ interface RequestContract
     /**
      * Sets request headers.
      *
-     * @param  array $headers
+     * @param array $headers
      *
      * @return $this
      */
@@ -108,7 +108,7 @@ interface RequestContract
     /**
      * Sets request data.
      *
-     * @param  array $data
+     * @param array $data
      *
      * @return $this
      */
@@ -117,7 +117,7 @@ interface RequestContract
     /**
      * Sets request target URI.
      *
-     * @param  string $uri
+     * @param string $uri
      *
      * @return $this
      */
@@ -126,7 +126,7 @@ interface RequestContract
     /**
      * Sets request delay.
      *
-     * @param  int|float $delay
+     * @param int|float $delay
      *
      * @return $this
      */

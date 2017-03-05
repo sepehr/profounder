@@ -27,8 +27,8 @@ class Storer implements StorerContract
     /**
      * Storer constructor.
      *
-     * @param  ArticleRepositoryContract  $articleRepo
-     * @param  PublisherRepositoryContract  $publisherRepo
+     * @param ArticleRepositoryContract   $articleRepo
+     * @param PublisherRepositoryContract $publisherRepo
      */
     public function __construct(ArticleRepositoryContract $articleRepo, PublisherRepositoryContract $publisherRepo)
     {
@@ -60,7 +60,7 @@ class Storer implements StorerContract
     /**
      * Normalizes and stores the collected article into database, if not exists.
      *
-     * @param  CollectedArticleContract $article
+     * @param CollectedArticleContract $article
      *
      * @return bool
      */
@@ -74,7 +74,7 @@ class Storer implements StorerContract
     /**
      * Checks if the article exists in the database or not.
      *
-     * @param  CollectedArticleContract $article
+     * @param CollectedArticleContract $article
      *
      * @return bool
      */
@@ -86,7 +86,7 @@ class Storer implements StorerContract
     /**
      * Normalizes the CollectedArticle object into Article/Publisher entities and stores them.
      *
-     * @param  CollectedArticleContract $article
+     * @param CollectedArticleContract $article
      *
      * @return bool
      */
@@ -102,7 +102,7 @@ class Storer implements StorerContract
     /**
      * Fetches publisher from the database or creates a new one.
      *
-     * @param  CollectedArticleContract $collectedArticle
+     * @param CollectedArticleContract $collectedArticle
      *
      * @return PublisherContract
      */
@@ -116,8 +116,8 @@ class Storer implements StorerContract
     /**
      * Creates an article associated with the passed publisher object.
      *
-     * @param  PublisherContract $publisher
-     * @param  CollectedArticleContract $collectedArticle
+     * @param PublisherContract        $publisher
+     * @param CollectedArticleContract $collectedArticle
      *
      * @return \Profounder\Persistence\Entity\Eloquent\Article
      */
@@ -131,7 +131,7 @@ class Storer implements StorerContract
     /**
      * Prepares an article array for insertion.
      *
-     * @param  CollectedArticleContract $collectedArticle
+     * @param CollectedArticleContract $collectedArticle
      *
      * @return array
      */
@@ -143,7 +143,7 @@ class Storer implements StorerContract
     /**
      * Prepares a publisher array for insertion.
      *
-     * @param  CollectedArticleContract $collectedArticle
+     * @param CollectedArticleContract $collectedArticle
      *
      * @return array
      */

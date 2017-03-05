@@ -56,7 +56,7 @@ class Request extends StatefulRequest implements RequestContract
     /**
      * @inheritdoc
      *
-     * @param  IdentityContract $identity
+     * @param IdentityContract $identity
      */
     public function __construct(
         ClientInterface $client,
@@ -95,7 +95,7 @@ class Request extends StatefulRequest implements RequestContract
     /**
      * Validates state data.
      *
-     * @param  StateContract $state
+     * @param StateContract $state
      *
      * @return bool
      */
@@ -107,7 +107,7 @@ class Request extends StatefulRequest implements RequestContract
     /**
      * Validates state cookies.
      *
-     * @param  StateContract $state
+     * @param StateContract $state
      *
      * @return bool
      */

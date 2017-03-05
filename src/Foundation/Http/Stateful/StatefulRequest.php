@@ -54,9 +54,9 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
     /**
      * StatefulRequest constructor.
      *
-     * @param  ClientInterface  $client
-     * @param  CookieJarInterface  $cookieJar
-     * @param  StateParserContract  $parser
+     * @param ClientInterface     $client
+     * @param CookieJarInterface  $cookieJar
+     * @param StateParserContract $parser
      */
     public function __construct(ClientInterface $client, CookieJarInterface $cookieJar, StateParserContract $parser)
     {
@@ -92,10 +92,8 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
     /**
      * Validates the extracted state instance and the response.
      *
-     * @param  StateContract  $state
-     * @param  ResponseInterface $response
-     *
-     * @return void
+     * @param StateContract     $state
+     * @param ResponseInterface $response
      */
     protected function validateState(StateContract $state, ResponseInterface $response)
     {
@@ -119,7 +117,7 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
     /**
      * Parses the state response and returns an State instance.
      *
-     * @param  ResponseInterface $response
+     * @param ResponseInterface $response
      *
      * @return StateContract
      */
@@ -130,8 +128,6 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
 
     /**
      * Initializes state properties only if they're not set.
-     *
-     * @return void
      */
     private function initializeStateProperties()
     {

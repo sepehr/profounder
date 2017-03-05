@@ -12,7 +12,7 @@ interface BuilderContract
     /**
      * Static factory method.
      *
-     * @param  array $args
+     * @param array $args
      *
      * @return BuilderContract
      */
@@ -21,7 +21,7 @@ interface BuilderContract
     /**
      * Builds the query in one go.
      *
-     * @param  array $params
+     * @param array $params
      *
      * @return string
      */
@@ -30,7 +30,7 @@ interface BuilderContract
     /**
      * Initializes class properties.
      *
-     * @param  array $params
+     * @param array $params
      *
      * @return BuilderContract
      */
@@ -39,7 +39,7 @@ interface BuilderContract
     /**
      * Sets query keyword.
      *
-     * @param  string $keyword
+     * @param string $keyword
      *
      * @return BuilderContract
      */
@@ -48,8 +48,8 @@ interface BuilderContract
     /**
      * Sets query order.
      *
-     * @param  string $field
-     * @param  string $direction Accepted values are: asc, desc
+     * @param string $field
+     * @param string $direction Accepted values are: asc, desc
      *
      * @return BuilderContract
      */
@@ -58,7 +58,7 @@ interface BuilderContract
     /**
      * Sets query offset.
      *
-     * @param  int $offset
+     * @param int $offset
      *
      * @return BuilderContract
      */
@@ -67,7 +67,7 @@ interface BuilderContract
     /**
      * Sets query limit.
      *
-     * @param  int $limit
+     * @param int $limit
      *
      * @return BuilderContract
      */
@@ -76,8 +76,8 @@ interface BuilderContract
     /**
      * Sets query date condition.
      *
-     * @param  Carbon $start
-     * @param  Carbon|null $end
+     * @param Carbon      $start
+     * @param Carbon|null $end
      *
      * @return BuilderContract
      */
@@ -86,22 +86,22 @@ interface BuilderContract
     /**
      * Sets query date condition string.
      *
-     * @param  string $date Format: {start-date-string-1}[{$glue}{end-date-string}]
-     *
-     * @return BuilderContract
+     * @param string $date Format: {start-date-string-1}[{$glue}{end-date-string}]
      *
      * @throws \Profounder\Exception\InvalidArgument
+     *
+     * @return BuilderContract
      */
     public function byDateString($date);
 
     /**
      * Slightly more flexible date setter.
      *
-     * @param  string|array|Carbon $date
-     *
-     * @return BuilderContract
+     * @param string|array|Carbon $date
      *
      * @throws \Profounder\Exception\InvalidArgument
+     *
+     * @return BuilderContract
      */
     public function setDate($date);
 

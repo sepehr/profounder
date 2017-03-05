@@ -9,7 +9,7 @@ class Container extends IlluminateContainer
     /**
      * Returns application base path.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      */

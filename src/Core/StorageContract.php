@@ -7,7 +7,7 @@ interface StorageContract
     /**
      * Checks whether a path exists or not.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return bool
      */
@@ -16,9 +16,9 @@ interface StorageContract
     /**
      * Write the contents of a file.
      *
-     * @param  string $path
-     * @param  string $contents
-     * @param  bool $lock
+     * @param string $path
+     * @param string $contents
+     * @param bool   $lock
      *
      * @return int
      */
@@ -27,8 +27,8 @@ interface StorageContract
     /**
      * Get the contents of a file.
      *
-     * @param  string $path
-     * @param  bool $lock
+     * @param string $path
+     * @param bool   $lock
      *
      * @return string
      */
@@ -37,7 +37,7 @@ interface StorageContract
     /**
      * Delete the file at a given path.
      *
-     * @param  string|array $paths
+     * @param string|array $paths
      *
      * @return bool
      */
@@ -46,8 +46,8 @@ interface StorageContract
     /**
      * Move a file to a new location.
      *
-     * @param  string $path
-     * @param  string $target
+     * @param string $path
+     * @param string $target
      *
      * @return bool
      */

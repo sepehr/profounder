@@ -9,7 +9,7 @@ interface FluentContract extends \ArrayAccess, \JsonSerializable, Arrayable, Jso
     /**
      * Static factory method.
      *
-     * @param  array  ...$args
+     * @param array ...$args
      *
      * @return static
      */

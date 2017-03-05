@@ -7,7 +7,7 @@ interface PublisherContract extends EntityContract
     /**
      * Creates an associated article.
      *
-     * @param  array $article
+     * @param array $article
      *
      * @return \Profounder\Persistence\Entity\ArticleContract
      */

@@ -28,7 +28,7 @@ abstract class AuthenticatedRequest extends Request implements RequestContract
     /**
      * @inheritdoc
      *
-     * @param  StoreContract  $store
+     * @param StoreContract $store
      */
     public function __construct(StoreContract $store, ClientInterface $client, CookieJarInterface $cookieJar)
     {

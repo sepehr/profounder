@@ -16,7 +16,7 @@ interface RepositoryContract extends BaseRepositoryContract
     /**
      * Persists entity data.
      *
-     * @param  array $attributes
+     * @param array $attributes
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -25,7 +25,7 @@ interface RepositoryContract extends BaseRepositoryContract
     /**
      * Persists mutltiple entitys data.
      *
-     * @param  array $records
+     * @param array $records
      *
      * @return \Illuminate\Database\Eloquent\Model[]
      */
@@ -34,8 +34,8 @@ interface RepositoryContract extends BaseRepositoryContract
     /**
      * Update the entity in the database.
      *
-     * @param  array $attributes
-     * @param  array $options
+     * @param array $attributes
+     * @param array $options
      *
      * @return bool
      */
@@ -44,7 +44,7 @@ interface RepositoryContract extends BaseRepositoryContract
     /**
      * Creates an entity only if not exists.
      *
-     * @param  array $attributes
+     * @param array $attributes
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -53,7 +53,7 @@ interface RepositoryContract extends BaseRepositoryContract
     /**
      * Deletes entity from database.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return bool|null
      */
@@ -62,8 +62,8 @@ interface RepositoryContract extends BaseRepositoryContract
     /**
      * Finds entity by its primary ID.
      *
-     * @param  int $id
-     * @param  array $columns
+     * @param int   $id
+     * @param array $columns
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
      */
@@ -72,9 +72,9 @@ interface RepositoryContract extends BaseRepositoryContract
     /**
      * Finds entity by passed conditions.
      *
-     * @param  string $attribute
-     * @param  mixed $value
-     * @param  array $columns
+     * @param string $attribute
+     * @param mixed  $value
+     * @param array  $columns
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
      */
@@ -83,7 +83,7 @@ interface RepositoryContract extends BaseRepositoryContract
     /**
      * Returns all entries from the underlying entity.
      *
-     * @param  array $columns Array of column names to retrieve.
+     * @param array $columns array of column names to retrieve
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */

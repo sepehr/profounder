@@ -21,7 +21,7 @@ class CollectedArticle extends ParsedObject implements CollectedArticleContract
     /**
      * CollectedArticle constructor.
      *
-     * @param  array $attributes
+     * @param array $attributes
      */
     public function __construct(array $attributes)
     {
@@ -97,7 +97,7 @@ class CollectedArticle extends ParsedObject implements CollectedArticleContract
     /**
      * Prepares CollectedArticle attributes.
      *
-     * @param  array $attributes
+     * @param array $attributes
      *
      * @return array
      */

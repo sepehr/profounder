@@ -16,7 +16,7 @@ class Storage implements StorageContract
     /**
      * Storage constructor.
      *
-     * @param  Filesystem $filesystem
+     * @param Filesystem $filesystem
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -66,7 +66,7 @@ class Storage implements StorageContract
     /**
      * Returns storage path.
      *
-     * @param  string|array $path
+     * @param string|array $path
      *
      * @return string|array
      */

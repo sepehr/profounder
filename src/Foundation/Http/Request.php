@@ -84,8 +84,8 @@ abstract class Request implements RequestContract
     /**
      * Request constructor.
      *
-     * @param  ClientInterface $client
-     * @param  CookieJarInterface $cookieJar
+     * @param ClientInterface    $client
+     * @param CookieJarInterface $cookieJar
      */
     public function __construct(ClientInterface $client, CookieJarInterface $cookieJar)
     {
@@ -244,9 +244,9 @@ abstract class Request implements RequestContract
     /**
      * Request dispatch helper.
      *
-     * @param  string $method
-     * @param  string $uri
-     * @param  array|null $options
+     * @param string     $method
+     * @param string     $uri
+     * @param array|null $options
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -281,7 +281,7 @@ abstract class Request implements RequestContract
      * Derived classes may override this method to manipulate the response object;
      * whatever they do, they must return an instance of ResponseInterface.
      *
-     * @param  ResponseInterface $response
+     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
@@ -293,7 +293,7 @@ abstract class Request implements RequestContract
     /**
      * Ensures that the cookie string contains a Domain part.
      *
-     * @param  string $cookieString
+     * @param string $cookieString
      *
      * @return string
      */

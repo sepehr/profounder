@@ -17,7 +17,7 @@ abstract class CrawlableParser extends Parser
     /**
      * CrawlableParser constructor.
      *
-     * @param  Crawler $crawler
+     * @param Crawler $crawler
      */
     public function __construct(Crawler $crawler)
     {

@@ -7,7 +7,7 @@ interface RequestContract extends \Profounder\Foundation\Http\RequestContract
     /**
      * Sets "SearchFilter" data parameter.
      *
-     * @param  string $query
+     * @param string $query
      *
      * @return $this
      */

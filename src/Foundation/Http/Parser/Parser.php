@@ -47,7 +47,7 @@ class Parser implements ParserContract
      *
      * Derived classes may override this method to implement their own parsing logic.
      *
-     * @param  mixed $body
+     * @param mixed $body
      *
      * @return mixed
      */
@@ -59,7 +59,6 @@ class Parser implements ParserContract
     /**
      * Runs basic checks against response instance.
      *
-     * @return void
      *
      * @throws InvalidResponse
      * @throws InvalidSession
@@ -102,7 +101,7 @@ class Parser implements ParserContract
     /**
      * Checks if the response body contains a specific substring.
      *
-     * @param  string $needle
+     * @param string $needle
      *
      * @return bool
      */
@@ -114,7 +113,7 @@ class Parser implements ParserContract
     /**
      * Matches the response body text against the passed pattern.
      *
-     * @param  string $regex
+     * @param string $regex
      *
      * @return bool
      */

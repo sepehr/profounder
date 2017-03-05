@@ -57,10 +57,10 @@ class Query extends ContainerAwareCommand
     /**
      * Query constructor.
      *
-     * @param  StorerContract $storer
-     * @param  ParserContract $parser
-     * @param  BuilderContract $builder
-     * @param  RequestContract $request
+     * @param StorerContract  $storer
+     * @param ParserContract  $parser
+     * @param BuilderContract $builder
+     * @param RequestContract $request
      */
     public function __construct(
         StorerContract $storer,
@@ -137,7 +137,7 @@ class Query extends ContainerAwareCommand
     /**
      * Stores the query results.
      *
-     * @param  Collection $results
+     * @param Collection $results
      *
      * @return int
      */
@@ -167,8 +167,8 @@ class Query extends ContainerAwareCommand
     /**
      * Dispatches the query request.
      *
-     * @param  string $query
-     * @param  int|float $delay
+     * @param string    $query
+     * @param int|float $delay
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -180,7 +180,7 @@ class Query extends ContainerAwareCommand
     /**
      * Parses the response into a collection of CollectedArticle instances.
      *
-     * @param  ResponseInterface $response
+     * @param ResponseInterface $response
      *
      * @return Collection
      */
@@ -192,10 +192,8 @@ class Query extends ContainerAwareCommand
     /**
      * Outputs debug information about the query.
      *
-     * @param  OutputInterface $output
-     * @param  Collection|null $results
-     *
-     * @return void
+     * @param OutputInterface $output
+     * @param Collection|null $results
      */
     private function outputDebug(OutputInterface $output, Collection $results = null)
     {

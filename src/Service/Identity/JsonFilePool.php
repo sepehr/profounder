@@ -23,8 +23,8 @@ class JsonFilePool extends Pool
     /**
      * JsonFilePool constructor.
      *
-     * @param  StorageContract $storage
-     * @param  array $pool
+     * @param StorageContract $storage
+     * @param array           $pool
      */
     public function __construct(StorageContract $storage, array $pool = null)
     {
@@ -35,8 +35,6 @@ class JsonFilePool extends Pool
 
     /**
      * Fills session pool from file.
-     *
-     * @return void
      */
     protected function loadFromFile()
     {

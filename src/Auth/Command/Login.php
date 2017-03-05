@@ -40,9 +40,9 @@ class Login extends ContainerAwareCommand
     /**
      * Login constructor.
      *
-     * @param  RequestContract $request
-     * @param  ParserContract $parser
-     * @param  StoreContract $store
+     * @param RequestContract $request
+     * @param ParserContract  $parser
+     * @param StoreContract   $store
      */
     public function __construct(RequestContract $request, ParserContract $parser, StoreContract $store)
     {
@@ -80,7 +80,7 @@ class Login extends ContainerAwareCommand
     /**
      * Dispatches login request and returns the response.
      *
-     * @param  IdentityContract  $identity
+     * @param IdentityContract $identity
      *
      * @return ResponseInterface
      */
@@ -96,7 +96,7 @@ class Login extends ContainerAwareCommand
     /**
      * Creates an Identity instance from the input options.
      *
-     * @param  InputInterface $input
+     * @param InputInterface $input
      *
      * @return Identity|null
      */
@@ -112,7 +112,7 @@ class Login extends ContainerAwareCommand
     /**
      * Extracts the session from the response and stores it.
      *
-     * @param  ResponseInterface $response
+     * @param ResponseInterface $response
      *
      * @return bool
      */
@@ -124,7 +124,7 @@ class Login extends ContainerAwareCommand
     /**
      * Extracts a Session instance from the response.
      *
-     * @param  ResponseInterface $response
+     * @param ResponseInterface $response
      *
      * @return Session
      */

@@ -44,9 +44,7 @@ class JsonParser extends Parser
      *
      * Derived classes may override this method to implement their JSON validation checks.
      *
-     * @param  array $parsedJson
-     *
-     * @return void
+     * @param array $parsedJson
      */
     protected function validateJson(array $parsedJson)
     {

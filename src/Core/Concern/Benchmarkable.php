@@ -23,8 +23,8 @@ trait Benchmarkable
     /**
      * Benchmarks the callable.
      *
-     * @param  \Closure $closure
-     * @param  null $eventName
+     * @param \Closure $closure
+     * @param null     $eventName
      *
      * @return mixed
      */
@@ -42,7 +42,7 @@ trait Benchmarkable
     /**
      * Return an event's diration in milliseconds.
      *
-     * @param  null $eventName
+     * @param null $eventName
      *
      * @return int
      */

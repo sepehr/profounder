@@ -9,7 +9,7 @@ interface EntityContract extends Arrayable
     /**
      * Persists entity data.
      *
-     * @param  array $attributes
+     * @param array $attributes
      *
      * @return EntityContract
      */
@@ -18,7 +18,7 @@ interface EntityContract extends Arrayable
     /**
      * Fills an entity with data from an array and updates it.
      *
-     * @param  array $attributes
+     * @param array $attributes
      *
      * @return bool
      */
@@ -27,7 +27,7 @@ interface EntityContract extends Arrayable
     /**
      * Creates an entity only if not exists.
      *
-     * @param  array $attributes
+     * @param array $attributes
      *
      * @return static
      */

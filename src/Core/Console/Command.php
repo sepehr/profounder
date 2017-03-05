@@ -10,7 +10,7 @@ abstract class Command extends SymfonyConsoleCommand
     /**
      * Command constructor.
      *
-     * @param string|null $name Command name.
+     * @param string|null $name command name
      */
     public function __construct($name = null)
     {
@@ -20,9 +20,7 @@ abstract class Command extends SymfonyConsoleCommand
     /**
      * Prints app figlet.
      *
-     * @param  OutputInterface $output
-     *
-     * @return void
+     * @param OutputInterface $output
      */
     protected function outputFiglet(OutputInterface $output)
     {

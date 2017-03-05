@@ -10,7 +10,7 @@ trait QueryableInputOptions
     /**
      * Registers query command input options.
      *
-     * @param  bool $addDateOption
+     * @param bool $addDateOption
      *
      * @return $this
      */

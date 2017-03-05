@@ -34,8 +34,8 @@ class Dumper extends ContainerAwareCommand
     /**
      * Dumper constructor.
      *
-     * @param  ArticleRepositoryContract $repository
-     * @param  Filesystem $filesystem
+     * @param ArticleRepositoryContract $repository
+     * @param Filesystem                $filesystem
      */
     public function __construct(ArticleRepositoryContract $repository, Filesystem $filesystem)
     {
@@ -86,9 +86,7 @@ class Dumper extends ContainerAwareCommand
     /**
      * Dumps article SKUs to file.
      *
-     * @param  string $file File path to dump to.
-     *
-     * @return void
+     * @param string $file file path to dump to
      */
     private function dumpSku($file)
     {
@@ -98,9 +96,7 @@ class Dumper extends ContainerAwareCommand
     /**
      * Dumps articles to CSV file.
      *
-     * @param  string $file File path to dump to.
-     *
-     * @return void
+     * @param string $file file path to dump to
      */
     private function dumpCsv($file)
     {

@@ -8,7 +8,7 @@ interface StateContract extends ParsedObjectContract
     /**
      * Getter for data property.
      *
-     * @param  string|null  $key
+     * @param string|null $key
      *
      * @return array|string
      */
@@ -17,7 +17,7 @@ interface StateContract extends ParsedObjectContract
     /**
      * Getter for cookie property.
      *
-     * @param  string|null  $key
+     * @param string|null $key
      *
      * @return array|string
      */

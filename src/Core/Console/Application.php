@@ -18,9 +18,9 @@ class Application extends SymfonyConsoleApp
     /**
      * Application constructor.
      *
-     * @param  Container $container
-     * @param  string $name
-     * @param  string $version
+     * @param Container $container
+     * @param string    $name
+     * @param string    $version
      */
     public function __construct(Container $container, $name = 'UNKNOWN', $version = 'UNKNOWN')
     {
@@ -32,7 +32,7 @@ class Application extends SymfonyConsoleApp
     /**
      * Sets the internal container instance.
      *
-     * @param  Container $container
+     * @param Container $container
      */
     public function setContainer(Container $container)
     {

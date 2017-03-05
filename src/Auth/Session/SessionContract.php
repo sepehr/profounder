@@ -9,7 +9,7 @@ interface SessionContract extends ParsedObjectContract
     /**
      * Getter for cookie property.
      *
-     * @param  null $key
+     * @param null $key
      *
      * @return array|string
      */

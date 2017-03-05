@@ -34,7 +34,7 @@ class MassAugment extends ContainerAwareCommand
     /**
      * BulkAugment constructor.
      *
-     * @param  ArticleRepositoryContract  $repository
+     * @param ArticleRepositoryContract $repository
      */
     public function __construct(ArticleRepositoryContract $repository)
     {

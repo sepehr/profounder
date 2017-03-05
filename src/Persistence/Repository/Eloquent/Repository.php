@@ -43,8 +43,8 @@ abstract class Repository extends BaseRepository implements RepositoryContract
     /**
      * Reroute calls to the underlying entity's query builder.
      *
-     * @param  string $method
-     * @param  array $args
+     * @param string $method
+     * @param array  $args
      *
      * @return mixed
      */
@@ -132,8 +132,6 @@ abstract class Repository extends BaseRepository implements RepositoryContract
 
     /**
      * Creates and sets the instance of underlying entity.
-     *
-     * @return void
      */
     private function createEntity()
     {

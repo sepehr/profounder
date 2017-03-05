@@ -31,7 +31,7 @@ class Builder implements BuilderContract
     /**
      * Query constructor.
      *
-     * @param  array $params
+     * @param array $params
      */
     public function __construct(array $params = [])
     {
@@ -194,8 +194,8 @@ class Builder implements BuilderContract
     /**
      * Prepares date parameters for the query.
      *
-     * @param  Carbon $start
-     * @param  Carbon|null $end
+     * @param Carbon      $start
+     * @param Carbon|null $end
      *
      * @return string
      */

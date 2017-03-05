@@ -36,8 +36,8 @@ class Parser extends CrawlableParser implements ParserContract
     /**
      * Parser constructor.
      *
-     * @param  Crawler $crawler
-     * @param  Utils $utils
+     * @param Crawler $crawler
+     * @param Utils   $utils
      */
     public function __construct(Crawler $crawler, Utils $utils)
     {
@@ -154,7 +154,7 @@ class Parser extends CrawlableParser implements ParserContract
     /**
      * Builds an array out of TOC html structure.
      *
-     * @param  Crawler $item
+     * @param Crawler $item
      *
      * @return array
      */
@@ -172,7 +172,7 @@ class Parser extends CrawlableParser implements ParserContract
     /**
      * Builds a TOC item array.
      *
-     * @param  Crawler $item
+     * @param Crawler $item
      *
      * @return array
      */
@@ -193,7 +193,7 @@ class Parser extends CrawlableParser implements ParserContract
     /**
      * Prepares TOC item title.
      *
-     * @param  Crawler $item
+     * @param Crawler $item
      *
      * @return string
      */
@@ -207,7 +207,7 @@ class Parser extends CrawlableParser implements ParserContract
     /**
      * Prepares TOC item price.
      *
-     * @param  Crawler $item
+     * @param Crawler $item
      *
      * @return string|null
      */

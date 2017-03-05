@@ -8,7 +8,7 @@ class InvalidArgument extends Exception
     /**
      * Static factory method for not-found entities.
      *
-     * @param  string|null $message
+     * @param string|null $message
      *
      * @return InvalidArgument
      */

@@ -9,7 +9,7 @@ interface RequestContract extends \Profounder\Foundation\Http\RequestContract
     /**
      * Updates request data based on the passed Identity instance.
      *
-     * @param  IdentityContract  $identity
+     * @param IdentityContract $identity
      *
      * @return RequestContract
      */

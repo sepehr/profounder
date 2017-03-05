@@ -18,8 +18,8 @@ class TocRepository extends Repository implements TocRepositoryContract
     /**
      * Creates a Toc associated with the passed article ID.
      *
-     * @param  array  $toc
-     * @param  int  $articleId
+     * @param array $toc
+     * @param int   $articleId
      *
      * @return bool
      */

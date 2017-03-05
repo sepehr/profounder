@@ -9,19 +9,19 @@ interface ParserContract
     /**
      * Validates and parses a response instance.
      *
-     * @param  ResponseInterface|null $response
-     * @param  bool $validate
-     *
-     * @return mixed
+     * @param ResponseInterface|null $response
+     * @param bool                   $validate
      *
      * @throws \Profounder\Exception\ExceptionContract
+     *
+     * @return mixed
      */
     public function parse(ResponseInterface $response = null, $validate = true);
 
     /**
      * Sets response instance.
      *
-     * @param  ResponseInterface $response
+     * @param ResponseInterface $response
      *
      * @return ParserContract
      */

@@ -37,7 +37,7 @@ class InvalidResponse extends Exception
     /**
      * Static factory method for invalid responses with custom remote error message.
      *
-     * @param  string $error
+     * @param string $error
      *
      * @return InvalidResponse
      */
