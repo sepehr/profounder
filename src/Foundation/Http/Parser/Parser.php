@@ -29,7 +29,7 @@ class Parser implements ParserContract
 
         $validate and $this->validate();
 
-        return $this->parseResponse($this->prepareResopnseForParse());
+        return $this->parseResponse($this->prepareResponseForParse());
     }
 
     /**
@@ -83,7 +83,7 @@ class Parser implements ParserContract
      *
      * @return mixed
      */
-    protected function prepareResopnseForParse()
+    protected function prepareResponseForParse()
     {
         return $this->responseBody();
     }
