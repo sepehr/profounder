@@ -90,6 +90,15 @@ abstract class StatefulRequest extends Request implements StatefulRequestContrac
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function alterResponse(ResponseInterface $response)
+    {
+        // Let the handler also collect cookies from the state request, if required
+        return $response->withAddedHeader('Set-Cookie', $this->state->getCookie());
+    }
+
+    /**
      * Validates the extracted state instance and the response.
      *
      * @param StateContract     $state
